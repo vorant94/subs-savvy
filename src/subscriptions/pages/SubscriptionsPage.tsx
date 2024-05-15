@@ -1,28 +1,34 @@
-import { SplitLayout, SplitLayoutHeader } from '@/ui/layouts/SplitLayout.tsx';
-import { useState, type FC } from 'react';
+import {
+  SplitLayout,
+  SplitLayoutContextProvider,
+  SplitLayoutHeader,
+} from '@/ui/layouts/SplitLayout.tsx';
+import { type FC } from 'react';
 import { SubscriptionList } from '../components/SubscriptionList.tsx';
-import { SubscriptionUpsert } from '../components/SubscriptionUpsert.tsx';
+import {
+  SubscriptionUpsert,
+  SubscriptionUpsertContext,
+  SubscriptionUpsertContextProvider,
+} from '../components/SubscriptionUpsert.tsx';
 
-export const SubscriptionsPage: FC = function () {
-  const [isUpsertActive, setIsUpsertActive] = useState(false);
-
-  const header = (
-    <SplitLayoutHeader
-      actions={
-        <div>
-          <button onClick={() => setIsUpsertActive(!isUpsertActive)}>
-            add sub
-          </button>
-        </div>
-      }
-    />
-  );
-
+export const SubscriptionsPage: FC = () => {
   return (
-    <SplitLayout
-      header={header}
-      left={<SubscriptionList />}
-      right={isUpsertActive ? <SubscriptionUpsert /> : null}
-    />
+    <SplitLayoutContextProvider>
+      <SubscriptionUpsertContextProvider>
+        <SubscriptionUpsertContext.Consumer>
+          {({ open }) => (
+            <SplitLayout
+              header={
+                <SplitLayoutHeader
+                  actions={<button onClick={() => open()}>add sub</button>}
+                />
+              }
+              left={<SubscriptionList />}
+              right={<SubscriptionUpsert />}
+            />
+          )}
+        </SubscriptionUpsertContext.Consumer>
+      </SubscriptionUpsertContextProvider>
+    </SplitLayoutContextProvider>
   );
 };
