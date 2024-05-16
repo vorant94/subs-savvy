@@ -35,7 +35,7 @@ export interface SplitLayoutProps {
 export const SplitLayoutHeader: FC<SplitLayoutHeaderProps> = ({ actions }) => {
   return (
     <header className={cn(`flex flex-row items-center bg-red-500 h-16 px-8`)}>
-      <div className={cn(`flex-1`)}></div>
+      <div className={cn(`flex-1`)} />
       <div>{actions ? actions : null}</div>
     </header>
   );

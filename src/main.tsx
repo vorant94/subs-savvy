@@ -1,4 +1,4 @@
-import { SubscriptionsPage } from '@/subscriptions/pages/SubscriptionsPage.tsx';
+import { SubscriptionsPage } from '@/subscriptions/pages/subscriptions.page.tsx';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
