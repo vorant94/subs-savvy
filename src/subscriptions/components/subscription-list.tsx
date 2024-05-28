@@ -1,11 +1,13 @@
 import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useContext, type FC } from 'react';
-import { subscriptionsMock } from '../models/subscription.mock.ts';
+import { findSubscriptions } from '../models/subscription.table.ts';
 import { SubscriptionListItem } from './subscription-list-item.tsx';
 
 export const SubscriptionList: FC = () => {
   const layout = useContext(SplitLayoutContext);
+  const subscriptions = useLiveQuery(() => findSubscriptions());
 
   return (
     <div
@@ -13,12 +15,16 @@ export const SubscriptionList: FC = () => {
         `grid gap-4`,
         layout.isSplit ? `grid-cols-2` : `grid-cols-4`,
       )}>
-      {subscriptionsMock.map((subscription) => (
-        <SubscriptionListItem
-          key={subscription.id}
-          subscription={subscription}
-        />
-      ))}
+      {subscriptions && subscriptions.length > 0 ? (
+        subscriptions.map((subscription) => (
+          <SubscriptionListItem
+            key={subscription.id}
+            subscription={subscription}
+          />
+        ))
+      ) : (
+        <div>No Subscriptions</div>
+      )}
     </div>
   );
 };

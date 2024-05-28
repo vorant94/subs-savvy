@@ -2,20 +2,80 @@ import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import {
   createContext,
+  useCallback,
   useContext,
+  useEffect,
   useReducer,
   type Dispatch,
   type FC,
+  type FormEvent,
   type PropsWithChildren,
   type Reducer,
 } from 'react';
-import type { SubscriptionModel } from '../models/subscription.model.ts';
+import { type SubscriptionModel } from '../models/subscription.model.ts';
+import { insertSubscription } from '../models/subscription.table.ts';
 
 export const SubscriptionUpsert: FC = () => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
 
+  const onSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    await insertSubscription(event.currentTarget);
+
+    // TODO switch to update mode with newly created subscription
+  }, []);
+
   return (
     <div className={cn(`flex-1 flex flex-col`)}>
+      <form
+        onSubmit={onSubmit}
+        className={cn('flex flex-col gap-2')}>
+        <div className={cn(`flex flex-col`)}>
+          <label htmlFor="name">Name</label>
+          <input
+            placeholder="name"
+            name="name"
+            id="name"
+            type="text"
+            autoComplete="off"
+          />
+        </div>
+
+        <div className={cn(`flex flex-col`)}>
+          <label htmlFor="description">Description</label>
+          <textarea
+            placeholder="description"
+            name="description"
+            id="description"
+            autoComplete="off"
+          />
+        </div>
+
+        <div className={cn(`flex flex-col`)}>
+          <label htmlFor="icon">Icon</label>
+          <input
+            placeholder="icon"
+            name="icon"
+            id="icon"
+            type="text"
+            autoComplete="off"
+          />
+        </div>
+
+        <div className={cn(`flex flex-col`)}>
+          <label htmlFor="price">Price</label>
+          <input
+            placeholder="price"
+            name="price"
+            id="price"
+            type="number"
+            autoComplete="off"
+          />
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
       <div>{state.mode} mode</div>
       <div>{state.subscription?.name} subscription</div>
       <div className={cn(`flex-1`)} />
@@ -46,8 +106,6 @@ export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
     (state, action) => {
       switch (action.type) {
         case 'open': {
-          layout.setIsSplit(true);
-
           return {
             ...state,
             subscription: action.subscription ?? null,
@@ -55,8 +113,6 @@ export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
           };
         }
         case 'close': {
-          layout.setIsSplit(false);
-
           return {
             ...state,
             subscription: null,
@@ -67,6 +123,10 @@ export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
     },
     { mode: null, subscription: null },
   );
+
+  useEffect(() => {
+    layout.setIsSplit(!!state.mode);
+  }, [state]);
 
   return (
     <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
