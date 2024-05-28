@@ -20,6 +20,7 @@ import {
   type UpsertSubscriptionModel,
 } from '../models/subscription.model.ts';
 import {
+  deleteSubscription,
   insertSubscription,
   updateSubscription,
 } from '../models/subscription.table.ts';
@@ -28,27 +29,47 @@ export const SubscriptionUpsert: FC = () => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
   const { register, handleSubmit, reset } = useForm<UpsertSubscriptionModel>();
 
-  const onSubmit = useCallback(async (raw) => {
-    const subscription = await (state.mode === 'update'
-      ? updateSubscription(raw as UpdateSubscriptionModel)
-      : insertSubscription(raw as InsertSubscriptionModel));
+  const onSubmit = useCallback(
+    async (raw) => {
+      const subscription =
+        state.mode === 'update'
+          ? await updateSubscription(raw as UpdateSubscriptionModel)
+          : await insertSubscription(raw as InsertSubscriptionModel);
 
-    if (state.mode === 'update') {
-      return;
+      if (state.mode === 'update') {
+        return;
+      }
+
+      dispatch({ type: 'open', subscription });
+    },
+    [state],
+  ) satisfies SubmitHandler<UpsertSubscriptionModel>;
+
+  const onDelete = useCallback(async () => {
+    if (state.mode !== 'update') {
+      throw new Error(`Nothing to delete in insert mode!`);
     }
 
-    dispatch({ type: 'open', subscription });
-  }, []) satisfies SubmitHandler<UpsertSubscriptionModel>;
+    await deleteSubscription(state.subscription.id);
+
+    dispatch({ type: 'close' });
+  }, [state]);
+
+  const onClose = useCallback(() => {
+    dispatch({ type: 'close' });
+  }, []);
 
   useEffect(() => {
-    reset(state.subscription ?? defaults);
+    reset(state.mode === 'update' ? state.subscription : formDefaults);
   }, [state]);
 
   return (
-    <div className={cn(`flex-1 flex flex-col`)}>
+    <div className={cn(`flex-1 flex flex-col items-center`)}>
+      <h1>{`${state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}</h1>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={cn('flex flex-col gap-2')}>
+        className={cn('flex flex-col gap-2 self-stretch')}>
         <input
           {...register('id')}
           id="id"
@@ -99,17 +120,29 @@ export const SubscriptionUpsert: FC = () => {
           />
         </div>
 
-        <button type="submit">Submit</button>
+        <div className={cn('flex gap-2 justify-center')}>
+          <button type="submit">
+            {state.mode === 'update' ? 'Update' : 'Insert'}
+          </button>
+          <button
+            type="button"
+            onClick={onClose}>
+            Close
+          </button>
+          {state.mode === 'update' && (
+            <button
+              type="button"
+              onClick={onDelete}>
+              Delete
+            </button>
+          )}
+        </div>
       </form>
-      <div>{state.mode} mode</div>
-      <div>{state.subscription?.name} subscription</div>
-      <div className={cn(`flex-1`)} />
-      <button onClick={() => dispatch({ type: 'close' })}>close</button>
     </div>
   );
 };
 
-const defaults = {
+const formDefaults = {
   id: '',
   name: '',
   description: '',
@@ -128,6 +161,11 @@ export const SubscriptionUpsertStateContext = createContext<{
   dispatch: () => {},
 });
 
+const stateDefaults = {
+  mode: null,
+  subscription: null,
+} satisfies SubscriptionUpsertState;
+
 export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
@@ -135,27 +173,23 @@ export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
 
   const [state, dispatch] = useReducer<
     Reducer<SubscriptionUpsertState, SubscriptionUpsertAction>
-  >(
-    (state, action) => {
-      switch (action.type) {
-        case 'open': {
-          return {
-            ...state,
-            subscription: action.subscription ?? null,
-            mode: action.subscription ? 'update' : 'insert',
-          };
-        }
-        case 'close': {
-          return {
-            ...state,
-            subscription: null,
-            mode: null,
-          };
-        }
+  >((_, action) => {
+    switch (action.type) {
+      case 'open': {
+        return action.subscription
+          ? {
+              subscription: action.subscription,
+              mode: 'update',
+            }
+          : {
+              mode: 'insert',
+            };
       }
-    },
-    { mode: null, subscription: null },
-  );
+      case 'close': {
+        return stateDefaults;
+      }
+    }
+  }, stateDefaults);
 
   useEffect(() => {
     layout.setIsSplit(!!state.mode);
@@ -168,10 +202,18 @@ export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
   );
 };
 
-export interface SubscriptionUpsertState {
-  subscription: SubscriptionModel | null;
-  mode: 'insert' | 'update' | null;
-}
+export type SubscriptionUpsertState =
+  | {
+      subscription: SubscriptionModel;
+      mode: 'update';
+    }
+  | {
+      mode: 'insert';
+    }
+  | {
+      subscription: null;
+      mode: null;
+    };
 
 export interface SubscriptionUpsertOpenAction {
   type: 'open';

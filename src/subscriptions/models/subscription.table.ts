@@ -40,3 +40,7 @@ export async function updateSubscription(
   const id = await db.subscriptions.put(parsed);
   return await getSubscription(id);
 }
+
+export async function deleteSubscription(id: number): Promise<void> {
+  await db.subscriptions.delete(id);
+}
