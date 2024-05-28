@@ -1,5 +1,6 @@
 import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
+import { clsx } from 'clsx';
 import {
   createContext,
   useCallback,
@@ -8,35 +9,59 @@ import {
   useReducer,
   type Dispatch,
   type FC,
-  type FormEvent,
   type PropsWithChildren,
   type Reducer,
 } from 'react';
-import { type SubscriptionModel } from '../models/subscription.model.ts';
-import { insertSubscription } from '../models/subscription.table.ts';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import {
+  type InsertSubscriptionModel,
+  type SubscriptionModel,
+  type UpdateSubscriptionModel,
+  type UpsertSubscriptionModel,
+} from '../models/subscription.model.ts';
+import {
+  insertSubscription,
+  updateSubscription,
+} from '../models/subscription.table.ts';
 
 export const SubscriptionUpsert: FC = () => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
+  const { register, handleSubmit, reset } = useForm<UpsertSubscriptionModel>();
 
-  const onSubmit = useCallback(async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit = useCallback(async (raw) => {
+    const subscription = await (state.mode === 'update'
+      ? updateSubscription(raw as UpdateSubscriptionModel)
+      : insertSubscription(raw as InsertSubscriptionModel));
 
-    await insertSubscription(event.currentTarget);
+    if (state.mode === 'update') {
+      return;
+    }
 
-    // TODO switch to update mode with newly created subscription
-  }, []);
+    dispatch({ type: 'open', subscription });
+  }, []) satisfies SubmitHandler<UpsertSubscriptionModel>;
+
+  useEffect(() => {
+    reset(state.subscription ?? defaults);
+  }, [state]);
 
   return (
     <div className={cn(`flex-1 flex flex-col`)}>
       <form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className={cn('flex flex-col gap-2')}>
+        <input
+          {...register('id')}
+          id="id"
+          type="number"
+          className={clsx('hidden')}
+        />
+
         <div className={cn(`flex flex-col`)}>
           <label htmlFor="name">Name</label>
           <input
-            placeholder="name"
-            name="name"
+            {...register('name')}
             id="name"
+            placeholder="name"
             type="text"
             autoComplete="off"
           />
@@ -45,9 +70,9 @@ export const SubscriptionUpsert: FC = () => {
         <div className={cn(`flex flex-col`)}>
           <label htmlFor="description">Description</label>
           <textarea
-            placeholder="description"
-            name="description"
+            {...register('description')}
             id="description"
+            placeholder="description"
             autoComplete="off"
           />
         </div>
@@ -55,9 +80,9 @@ export const SubscriptionUpsert: FC = () => {
         <div className={cn(`flex flex-col`)}>
           <label htmlFor="icon">Icon</label>
           <input
-            placeholder="icon"
-            name="icon"
+            {...register('icon')}
             id="icon"
+            placeholder="icon"
             type="text"
             autoComplete="off"
           />
@@ -66,9 +91,9 @@ export const SubscriptionUpsert: FC = () => {
         <div className={cn(`flex flex-col`)}>
           <label htmlFor="price">Price</label>
           <input
-            placeholder="price"
-            name="price"
+            {...register('price')}
             id="price"
+            placeholder="price"
             type="number"
             autoComplete="off"
           />
@@ -83,6 +108,14 @@ export const SubscriptionUpsert: FC = () => {
     </div>
   );
 };
+
+const defaults = {
+  id: '',
+  name: '',
+  description: '',
+  icon: '',
+  price: '',
+} as unknown as SubscriptionModel;
 
 export const SubscriptionUpsertStateContext = createContext<{
   state: SubscriptionUpsertState;

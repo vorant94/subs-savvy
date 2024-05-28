@@ -2,7 +2,10 @@ import { db } from '@/db/db.ts';
 import {
   insertSubscriptionSchema,
   subscriptionSchema,
+  updateSubscriptionSchema,
+  type InsertSubscriptionModel,
   type SubscriptionModel,
+  type UpdateSubscriptionModel,
 } from './subscription.model.ts';
 
 export async function findSubscriptions(): Promise<SubscriptionModel[]> {
@@ -11,12 +14,29 @@ export async function findSubscriptions(): Promise<SubscriptionModel[]> {
   return raws.map((raw) => subscriptionSchema.parse(raw));
 }
 
+export async function getSubscription(id: number): Promise<SubscriptionModel> {
+  const raw = await db.subscriptions.get(id);
+  if (!raw) {
+    throw new Error(`Subscription not found!`);
+  }
+
+  return subscriptionSchema.parse(raw);
+}
+
 export async function insertSubscription(
-  form: HTMLFormElement,
-): Promise<string> {
-  const formData = new FormData(form);
-  const raw = Object.fromEntries(formData);
+  raw: InsertSubscriptionModel,
+): Promise<SubscriptionModel> {
   const parsed = insertSubscriptionSchema.parse(raw);
 
-  return await db.subscriptions.add(parsed);
+  const id = await db.subscriptions.add(parsed);
+  return await getSubscription(id);
+}
+
+export async function updateSubscription(
+  raw: UpdateSubscriptionModel,
+): Promise<SubscriptionModel> {
+  const parsed = updateSubscriptionSchema.parse(raw);
+
+  const id = await db.subscriptions.put(parsed);
+  return await getSubscription(id);
 }
