@@ -35,9 +35,9 @@ export async function insertSubscription(
 export async function updateSubscription(
   raw: UpdateSubscriptionModel,
 ): Promise<SubscriptionModel> {
-  const parsed = updateSubscriptionSchema.parse(raw);
+  const { id, ...rest } = updateSubscriptionSchema.parse(raw);
 
-  const id = await db.subscriptions.put(parsed);
+  await db.subscriptions.update(id, rest);
   return await getSubscription(id);
 }
 

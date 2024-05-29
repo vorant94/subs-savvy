@@ -42,7 +42,7 @@ export const SubscriptionUpsert: FC = () => {
 
       dispatch({ type: 'open', subscription });
     },
-    [state],
+    [dispatch, state.mode],
   ) satisfies SubmitHandler<UpsertSubscriptionModel>;
 
   const onDelete = useCallback(async () => {
@@ -53,15 +53,15 @@ export const SubscriptionUpsert: FC = () => {
     await deleteSubscription(state.subscription.id);
 
     dispatch({ type: 'close' });
-  }, [state]);
+  }, [state, dispatch]);
 
   const onClose = useCallback(() => {
     dispatch({ type: 'close' });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     reset(state.mode === 'update' ? state.subscription : formDefaults);
-  }, [state]);
+  }, [reset, state]);
 
   return (
     <div className={cn(`flex-1 flex flex-col items-center`)}>
