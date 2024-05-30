@@ -7,6 +7,15 @@ export const subscriptionSchema = z.object({
   price: z.coerce.number(),
   icon: z.string().min(1),
   description: z.string().nullable().optional(),
+  // Preprocessing is needed because <input/> with type="date" returns empty string as a value and it is not a valid date
+  startedAt: z.preprocess(
+    (value) => (value === '' ? null : value),
+    z.coerce.date().nullable().optional(),
+  ),
+  endedAt: z.preprocess(
+    (value) => (value === '' ? null : value),
+    z.coerce.date().nullable().optional(),
+  ),
 });
 export type SubscriptionModel = z.infer<typeof subscriptionSchema>;
 

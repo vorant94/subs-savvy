@@ -29,8 +29,9 @@ export const SubscriptionUpsert: FC = () => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
   const { register, handleSubmit, reset } = useForm<UpsertSubscriptionModel>();
 
-  const onSubmit = useCallback(
+  const onSubmit: SubmitHandler<UpsertSubscriptionModel> = useCallback(
     async (raw) => {
+      console.log(raw);
       const subscription =
         state.mode === 'update'
           ? await updateSubscription(raw as UpdateSubscriptionModel)
@@ -43,7 +44,7 @@ export const SubscriptionUpsert: FC = () => {
       dispatch({ type: 'open', subscription });
     },
     [dispatch, state.mode],
-  ) satisfies SubmitHandler<UpsertSubscriptionModel>;
+  );
 
   const onDelete = useCallback(async () => {
     if (state.mode !== 'update') {
@@ -60,6 +61,7 @@ export const SubscriptionUpsert: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    // TODO format date here
     reset(state.mode === 'update' ? state.subscription : formDefaults);
   }, [reset, state]);
 
@@ -120,6 +122,28 @@ export const SubscriptionUpsert: FC = () => {
           />
         </div>
 
+        <div className={cn(`flex flex-col`)}>
+          <label htmlFor="price">Started At</label>
+          <input
+            {...register('startedAt')}
+            id="startedAt"
+            placeholder="startedAt"
+            type="date"
+            autoComplete="off"
+          />
+        </div>
+
+        <div className={cn(`flex flex-col`)}>
+          <label htmlFor="price">Ended At</label>
+          <input
+            {...register('endedAt')}
+            id="endedAt"
+            placeholder="endedAt"
+            type="date"
+            autoComplete="off"
+          />
+        </div>
+
         <div className={cn('flex gap-2 justify-center')}>
           <button type="submit">
             {state.mode === 'update' ? 'Update' : 'Insert'}
@@ -148,6 +172,8 @@ const formDefaults = {
   description: '',
   icon: '',
   price: '',
+  startedAt: '',
+  endedAt: '',
 } as unknown as SubscriptionModel;
 
 export const SubscriptionUpsertStateContext = createContext<{
@@ -161,10 +187,10 @@ export const SubscriptionUpsertStateContext = createContext<{
   dispatch: () => {},
 });
 
-const stateDefaults = {
+const stateDefaults: SubscriptionUpsertState = {
   mode: null,
   subscription: null,
-} satisfies SubscriptionUpsertState;
+};
 
 export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
   children,

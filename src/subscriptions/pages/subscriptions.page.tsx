@@ -3,7 +3,9 @@ import {
   SplitLayoutContextProvider,
   SplitLayoutHeader,
 } from '@/ui/layouts/split.layout.tsx';
+import { cn } from '@/ui/utils/cn.ts';
 import { type FC } from 'react';
+import { SubscriptionGraph } from '../components/subscription-graph.tsx';
 import { SubscriptionList } from '../components/subscription-list.tsx';
 import {
   SubscriptionUpsert,
@@ -27,7 +29,12 @@ export const SubscriptionsPage: FC = () => {
                   }
                 />
               }
-              left={<SubscriptionList />}
+              left={
+                <div className={cn(`grid grid-rows-2 items-start`)}>
+                  <SubscriptionGraph />
+                  <SubscriptionList />
+                </div>
+              }
               right={<SubscriptionUpsert />}
             />
           )}
