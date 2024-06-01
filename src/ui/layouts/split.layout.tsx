@@ -1,16 +1,16 @@
 import { cn } from '@/ui/utils/cn.ts';
 import {
   createContext,
+  memo,
   useContext,
   useState,
   type Dispatch,
-  type FC,
   type PropsWithChildren,
   type ReactElement,
   type SetStateAction,
 } from 'react';
 
-export const SplitLayout: FC<SplitLayoutProps> = ({ header, left, right }) => {
+export const SplitLayout = memo(({ header, left, right }: SplitLayoutProps) => {
   const { isSplit } = useContext(SplitLayoutContext);
 
   return (
@@ -24,7 +24,7 @@ export const SplitLayout: FC<SplitLayoutProps> = ({ header, left, right }) => {
       </div>
     </div>
   );
-};
+});
 
 export interface SplitLayoutProps {
   header: ReactElement<ReturnType<typeof SplitLayoutHeader>>;
@@ -32,14 +32,14 @@ export interface SplitLayoutProps {
   right?: ReactElement | null;
 }
 
-export const SplitLayoutHeader: FC<SplitLayoutHeaderProps> = ({ actions }) => {
+export const SplitLayoutHeader = memo(({ actions }: SplitLayoutHeaderProps) => {
   return (
     <header className={cn(`flex flex-row items-center bg-red-500 h-16 px-8`)}>
       <div className={cn(`flex-1`)} />
       <div>{actions ? actions : null}</div>
     </header>
   );
-};
+});
 
 export interface SplitLayoutHeaderProps {
   actions?: ReactElement;
@@ -55,14 +55,14 @@ export interface SplitLayoutContextModel {
   setIsSplit: Dispatch<SetStateAction<boolean>>;
 }
 
-export const SplitLayoutContextProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
-  const [isSplit, setIsSplit] = useState(false);
+export const SplitLayoutContextProvider = memo(
+  ({ children }: PropsWithChildren) => {
+    const [isSplit, setIsSplit] = useState(false);
 
-  return (
-    <SplitLayoutContext.Provider value={{ isSplit, setIsSplit }}>
-      {children}
-    </SplitLayoutContext.Provider>
-  );
-};
+    return (
+      <SplitLayoutContext.Provider value={{ isSplit, setIsSplit }}>
+        {children}
+      </SplitLayoutContext.Provider>
+    );
+  },
+);

@@ -3,12 +3,12 @@ import { cn } from '@/ui/utils/cn.ts';
 import { type ChartData } from 'chart.js';
 import { differenceInCalendarYears } from 'date-fns';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useMemo, type FC } from 'react';
+import { memo, useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 
-export const SubscriptionGraph: FC = () => {
+export const SubscriptionGraph = memo(() => {
   const subscriptions = useLiveQuery(() => findSubscriptions());
 
   const aggregatedSubscriptions = useMemo(
@@ -37,7 +37,7 @@ export const SubscriptionGraph: FC = () => {
       />
     </div>
   );
-};
+});
 
 function aggregateSubscriptionsByMonth(
   subscriptions: Array<SubscriptionModel>,

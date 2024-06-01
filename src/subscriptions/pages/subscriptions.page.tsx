@@ -4,7 +4,7 @@ import {
   SplitLayoutHeader,
 } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
-import { type FC } from 'react';
+import { memo } from 'react';
 import { SubscriptionGraph } from '../components/subscription-graph.tsx';
 import { SubscriptionList } from '../components/subscription-list.tsx';
 import {
@@ -13,7 +13,7 @@ import {
   SubscriptionUpsertStateProvider,
 } from '../components/subscription-upsert.tsx';
 
-export const SubscriptionsPage: FC = () => {
+export const SubscriptionsPage = memo(() => {
   return (
     <SplitLayoutContextProvider>
       <SubscriptionUpsertStateProvider>
@@ -42,4 +42,4 @@ export const SubscriptionsPage: FC = () => {
       </SubscriptionUpsertStateProvider>
     </SplitLayoutContextProvider>
   );
-};
+});

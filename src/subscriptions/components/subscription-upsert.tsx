@@ -3,12 +3,12 @@ import { cn } from '@/ui/utils/cn.ts';
 import { clsx } from 'clsx';
 import {
   createContext,
+  memo,
   useCallback,
   useContext,
   useEffect,
   useReducer,
   type Dispatch,
-  type FC,
   type PropsWithChildren,
   type Reducer,
 } from 'react';
@@ -25,7 +25,7 @@ import {
   updateSubscription,
 } from '../models/subscription.table.ts';
 
-export const SubscriptionUpsert: FC = () => {
+export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
   const { register, handleSubmit, reset } = useForm<UpsertSubscriptionModel>();
 
@@ -164,7 +164,7 @@ export const SubscriptionUpsert: FC = () => {
       </form>
     </div>
   );
-};
+});
 
 const formDefaults = {
   id: '',
@@ -192,41 +192,41 @@ const stateDefaults: SubscriptionUpsertState = {
   subscription: null,
 };
 
-export const SubscriptionUpsertStateProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
-  const layout = useContext(SplitLayoutContext);
+export const SubscriptionUpsertStateProvider = memo(
+  ({ children }: PropsWithChildren) => {
+    const layout = useContext(SplitLayoutContext);
 
-  const [state, dispatch] = useReducer<
-    Reducer<SubscriptionUpsertState, SubscriptionUpsertAction>
-  >((_, action) => {
-    switch (action.type) {
-      case 'open': {
-        return action.subscription
-          ? {
-              subscription: action.subscription,
-              mode: 'update',
-            }
-          : {
-              mode: 'insert',
-            };
+    const [state, dispatch] = useReducer<
+      Reducer<SubscriptionUpsertState, SubscriptionUpsertAction>
+    >((_, action) => {
+      switch (action.type) {
+        case 'open': {
+          return action.subscription
+            ? {
+                subscription: action.subscription,
+                mode: 'update',
+              }
+            : {
+                mode: 'insert',
+              };
+        }
+        case 'close': {
+          return stateDefaults;
+        }
       }
-      case 'close': {
-        return stateDefaults;
-      }
-    }
-  }, stateDefaults);
+    }, stateDefaults);
 
-  useEffect(() => {
-    layout.setIsSplit(!!state.mode);
-  }, [state]);
+    useEffect(() => {
+      layout.setIsSplit(!!state.mode);
+    }, [state]);
 
-  return (
-    <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
-      {children}
-    </SubscriptionUpsertStateContext.Provider>
-  );
-};
+    return (
+      <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
+        {children}
+      </SubscriptionUpsertStateContext.Provider>
+    );
+  },
+);
 
 export type SubscriptionUpsertState =
   | {
