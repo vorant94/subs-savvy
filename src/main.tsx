@@ -8,14 +8,14 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
     <SubscriptionsPage />
-  </React.StrictMode>,
+  </StrictMode>,
 );
