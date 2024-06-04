@@ -66,7 +66,7 @@ export const SubscriptionUpsert = memo(() => {
   }, [reset, state]);
 
   return (
-    <div className={cn(`flex-1 flex flex-col items-center`)}>
+    <div className={cn(`flex flex-1 flex-col items-center`)}>
       <h1>{`${state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}</h1>
 
       <form
@@ -144,7 +144,7 @@ export const SubscriptionUpsert = memo(() => {
           />
         </div>
 
-        <div className={cn('flex gap-2 justify-center')}>
+        <div className={cn('flex justify-center gap-2')}>
           <button type="submit">
             {state.mode === 'update' ? 'Update' : 'Insert'}
           </button>
@@ -218,7 +218,7 @@ export const SubscriptionUpsertStateProvider = memo(
 
     useEffect(() => {
       layout.setIsSplit(!!state.mode);
-    }, [state]);
+    }, [layout, state]);
 
     return (
       <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>

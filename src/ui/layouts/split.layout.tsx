@@ -14,12 +14,12 @@ export const SplitLayout = memo(({ header, left, right }: SplitLayoutProps) => {
   const { isSplit } = useContext(SplitLayoutContext);
 
   return (
-    <div className={cn(`flex flex-col min-h-dvh gap-4`)}>
+    <div className={cn(`flex min-h-dvh flex-col gap-4`)}>
       {header}
-      <div className={cn(`flex-1 flex flex-row gap-4`)}>
-        <div className={cn(`flex flex-col flex-1 bg-blue-500`)}>{left}</div>
+      <div className={cn(`flex flex-1 flex-row gap-4`)}>
+        <div className={cn(`flex flex-1 flex-col`)}>{left}</div>
         {isSplit && right ? (
-          <div className={cn(`flex flex-col flex-1 bg-green-500`)}>{right}</div>
+          <div className={cn(`flex flex-1 flex-col`)}>{right}</div>
         ) : null}
       </div>
     </div>
@@ -34,7 +34,7 @@ export interface SplitLayoutProps {
 
 export const SplitLayoutHeader = memo(({ actions }: SplitLayoutHeaderProps) => {
   return (
-    <header className={cn(`flex flex-row items-center bg-red-500 h-16 px-8`)}>
+    <header className={cn(`flex h-16 flex-row items-center px-8`)}>
       <div className={cn(`flex-1`)} />
       <div>{actions ? actions : null}</div>
     </header>

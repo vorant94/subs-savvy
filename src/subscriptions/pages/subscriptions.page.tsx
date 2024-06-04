@@ -30,7 +30,8 @@ export const SubscriptionsPage = memo(() => {
                 />
               }
               left={
-                <div className={cn(`grid grid-rows-2 items-start`)}>
+                <div
+                  className={cn(`grid flex-1 grid-rows-2 items-start gap-4`)}>
                   <SubscriptionGraph />
                   <SubscriptionList />
                 </div>

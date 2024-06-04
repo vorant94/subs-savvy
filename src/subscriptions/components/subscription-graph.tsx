@@ -1,10 +1,13 @@
-import { monthNames, months, type Month } from '@/date/month.ts';
-import { cn } from '@/ui/utils/cn.ts';
-import { type ChartData } from 'chart.js';
+import {
+  monthToMonthName,
+  months,
+  type Month,
+  type MonthName,
+} from '@/date/month.ts';
 import { differenceInCalendarYears } from 'date-fns';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 
@@ -12,50 +15,42 @@ export const SubscriptionGraph = memo(() => {
   const subscriptions = useLiveQuery(() => findSubscriptions());
 
   const aggregatedSubscriptions = useMemo(
-    () => aggregateSubscriptionsByMonth(subscriptions ?? []),
+    () => Object.entries(aggregateSubscriptionsByMonth(subscriptions ?? [])),
     [subscriptions],
   );
 
-  const data: ChartData<'bar'> = useMemo(
-    () => ({
-      labels: [...monthNames],
-      datasets: [
-        {
-          label: 'Total Price Per Month',
-          data: Object.values(aggregatedSubscriptions),
-        },
-      ],
-    }),
-    [aggregatedSubscriptions],
-  );
-
   return (
-    <div className={cn(`relative flex items-center`)}>
-      <Bar
-        data={data}
-        className={cn(`max-w-full`)}
-      />
-    </div>
+    <ResponsiveContainer
+      width="100%"
+      height="100%">
+      <BarChart data={aggregatedSubscriptions}>
+        <Bar
+          dataKey="1"
+          fill="#8884d8"
+        />
+        <XAxis dataKey="0" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 });
 
 function aggregateSubscriptionsByMonth(
   subscriptions: Array<SubscriptionModel>,
-): Record<Month, number> {
+): Record<MonthName, number> {
   const now = Date.now();
-  const totalPricePerMonth: Record<Month, number> = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
-    11: 0,
+  const totalPricePerMonth: Record<MonthName, number> = {
+    January: 0,
+    February: 0,
+    March: 0,
+    April: 0,
+    May: 0,
+    June: 0,
+    July: 0,
+    August: 0,
+    September: 0,
+    October: 0,
+    November: 0,
+    December: 0,
   };
 
   return subscriptions.reduce((prev, curr) => {
@@ -83,7 +78,7 @@ function aggregateSubscriptionsByMonth(
     }
 
     for (let month = startMonth; month <= endMonth; month++) {
-      prev[month] += curr.price;
+      prev[monthToMonthName[month]] += curr.price;
     }
 
     return prev;

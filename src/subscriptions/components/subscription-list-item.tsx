@@ -11,7 +11,7 @@ export const SubscriptionListItem = memo(
       <div
         onClick={() => upsert.dispatch({ type: 'open', subscription })}
         className={cn(
-          `min-w-60 min-h-40 bg-yellow-500 flex items-center justify-center`,
+          `flex min-h-40 min-w-60 items-center justify-center bg-yellow-500`,
         )}>
         {subscription.name}
       </div>

@@ -7,6 +7,7 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
     "prettier"
   ],
@@ -17,8 +18,11 @@
   },
   "plugins": ["@typescript-eslint", "react"],
   "rules": {
-    "react/react-in-jsx-scope": "off",
     "react/display-name": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
-
