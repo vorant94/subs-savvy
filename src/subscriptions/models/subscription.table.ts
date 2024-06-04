@@ -8,7 +8,7 @@ import {
   type UpdateSubscriptionModel,
 } from './subscription.model.ts';
 
-export async function findSubscriptions(): Promise<SubscriptionModel[]> {
+export async function findSubscriptions(): Promise<Array<SubscriptionModel>> {
   const raws = await db.subscriptions.toArray();
 
   return raws.map((raw) => subscriptionSchema.parse(raw));

@@ -26,4 +26,4 @@ export const subscriptionsMock = [
     price: 5.0,
     icon: 'google',
   },
-] as const satisfies SubscriptionModel[];
+] as const satisfies Array<SubscriptionModel>;

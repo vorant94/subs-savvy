@@ -9,14 +9,26 @@ import {
   type ReactElement,
   type SetStateAction,
 } from 'react';
+import { Link } from 'react-router-dom';
 
 export const SplitLayout = memo(({ header, left, right }: SplitLayoutProps) => {
-  const { isSplit } = useContext(SplitLayoutContext);
+  const { isSplit, navLinks } = useContext(SplitLayoutContext);
 
   return (
     <div className={cn(`flex min-h-dvh flex-col gap-4`)}>
       {header}
       <div className={cn(`flex flex-1 flex-row gap-4`)}>
+        <div className={cn(`min-w-32`)}>
+          <nav>
+            <ol>
+              {navLinks.map((navLink) => (
+                <li key={navLink.path}>
+                  <Link to={navLink.path}>{navLink.label}</Link>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </div>
         <div className={cn(`flex flex-1 flex-col`)}>{left}</div>
         {isSplit && right ? (
           <div className={cn(`flex flex-1 flex-col`)}>{right}</div>
@@ -35,6 +47,7 @@ export interface SplitLayoutProps {
 export const SplitLayoutHeader = memo(({ actions }: SplitLayoutHeaderProps) => {
   return (
     <header className={cn(`flex h-16 flex-row items-center px-8`)}>
+      <h1>Subs Savvy</h1>
       <div className={cn(`flex-1`)} />
       <div>{actions ? actions : null}</div>
     </header>
@@ -48,21 +61,35 @@ export interface SplitLayoutHeaderProps {
 export const SplitLayoutContext = createContext<SplitLayoutContextModel>({
   isSplit: false,
   setIsSplit: () => {},
+  navLinks: [],
 });
 
 export interface SplitLayoutContextModel {
   isSplit: boolean;
   setIsSplit: Dispatch<SetStateAction<boolean>>;
+  navLinks: Array<SplitLayoutNavLink>;
+}
+
+export interface SplitLayoutNavLink {
+  label: string;
+  path: string;
 }
 
 export const SplitLayoutContextProvider = memo(
-  ({ children }: PropsWithChildren) => {
+  ({
+    children,
+    navLinks,
+  }: PropsWithChildren<SplitLayoutContextProviderProps>) => {
     const [isSplit, setIsSplit] = useState(false);
 
     return (
-      <SplitLayoutContext.Provider value={{ isSplit, setIsSplit }}>
+      <SplitLayoutContext.Provider value={{ isSplit, setIsSplit, navLinks }}>
         {children}
       </SplitLayoutContext.Provider>
     );
   },
 );
+
+export interface SplitLayoutContextProviderProps {
+  navLinks: Array<SplitLayoutNavLink>;
+}
