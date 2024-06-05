@@ -3,7 +3,7 @@ import {
   months,
   type Month,
   type MonthName,
-} from '@/date/month.ts';
+} from '@/date/types/month.ts';
 import { differenceInCalendarYears } from 'date-fns';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';

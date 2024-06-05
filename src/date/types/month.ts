@@ -19,7 +19,7 @@ export const monthNames = [
 
 export type MonthName = (typeof monthNames)[number];
 
-export const monthToMonthName: Record<Month, MonthName> = {
+export const monthToMonthName = {
   0: 'January',
   1: 'February',
   2: 'March',
@@ -32,4 +32,4 @@ export const monthToMonthName: Record<Month, MonthName> = {
   9: 'October',
   10: 'November',
   11: 'December',
-};
+} as const satisfies Record<Month, MonthName>;

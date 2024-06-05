@@ -1,3 +1,4 @@
+import type { RawFormValue } from '@/form/types/raw-form-value.ts';
 import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { clsx } from 'clsx';
@@ -22,29 +23,35 @@ import {
 import {
   deleteSubscription,
   insertSubscription,
+  mapSubscriptionToRawValue,
   updateSubscription,
 } from '../models/subscription.table.ts';
 
 export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
-  const { register, handleSubmit, reset } = useForm<UpsertSubscriptionModel>();
+  const { register, handleSubmit, reset } =
+    useForm<RawFormValue<UpsertSubscriptionModel>>();
 
-  const onSubmit: SubmitHandler<UpsertSubscriptionModel> = useCallback(
-    async (raw) => {
-      console.log(raw);
-      const subscription =
-        state.mode === 'update'
-          ? await updateSubscription(raw as UpdateSubscriptionModel)
-          : await insertSubscription(raw as InsertSubscriptionModel);
+  const onSubmit: SubmitHandler<RawFormValue<UpsertSubscriptionModel>> =
+    useCallback(
+      async (raw) => {
+        const subscription =
+          state.mode === 'update'
+            ? await updateSubscription(
+                raw as RawFormValue<UpdateSubscriptionModel>,
+              )
+            : await insertSubscription(
+                raw as RawFormValue<InsertSubscriptionModel>,
+              );
 
-      if (state.mode === 'update') {
-        return;
-      }
+        if (state.mode === 'update') {
+          return;
+        }
 
-      dispatch({ type: 'open', subscription });
-    },
-    [dispatch, state.mode],
-  );
+        dispatch({ type: 'open', subscription });
+      },
+      [dispatch, state.mode],
+    );
 
   const onDelete = useCallback(async () => {
     if (state.mode !== 'update') {
@@ -61,8 +68,11 @@ export const SubscriptionUpsert = memo(() => {
   }, [dispatch]);
 
   useEffect(() => {
-    // TODO format date here
-    reset(state.mode === 'update' ? state.subscription : formDefaults);
+    reset(
+      state.mode === 'update'
+        ? mapSubscriptionToRawValue(state.subscription)
+        : formDefaults,
+    );
   }, [reset, state]);
 
   return (
@@ -174,7 +184,7 @@ const formDefaults = {
   price: '',
   startedAt: '',
   endedAt: '',
-} as unknown as SubscriptionModel;
+} as const satisfies RawFormValue<SubscriptionModel>;
 
 export const SubscriptionUpsertStateContext = createContext<{
   state: SubscriptionUpsertState;

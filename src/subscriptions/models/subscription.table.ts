@@ -1,4 +1,6 @@
-import { db } from '@/db/db.ts';
+import { db } from '@/db/globals/db.ts';
+import type { RawFormValue } from '@/form/types/raw-form-value.ts';
+import { format } from 'date-fns';
 import {
   insertSubscriptionSchema,
   subscriptionSchema,
@@ -24,7 +26,7 @@ export async function getSubscription(id: number): Promise<SubscriptionModel> {
 }
 
 export async function insertSubscription(
-  raw: InsertSubscriptionModel,
+  raw: RawFormValue<InsertSubscriptionModel>,
 ): Promise<SubscriptionModel> {
   const parsed = insertSubscriptionSchema.parse(raw);
 
@@ -33,7 +35,7 @@ export async function insertSubscription(
 }
 
 export async function updateSubscription(
-  raw: UpdateSubscriptionModel,
+  raw: RawFormValue<UpdateSubscriptionModel>,
 ): Promise<SubscriptionModel> {
   const { id, ...rest } = updateSubscriptionSchema.parse(raw);
 
@@ -43,4 +45,21 @@ export async function updateSubscription(
 
 export async function deleteSubscription(id: number): Promise<void> {
   await db.subscriptions.delete(id);
+}
+
+export function mapSubscriptionToRawValue(
+  subscription: SubscriptionModel,
+): RawFormValue<SubscriptionModel> {
+  return {
+    ...subscription,
+    id: `${subscription.id ?? ''}`,
+    description: `${subscription.description ?? ''}`,
+    price: `${subscription.price ?? ''}`,
+    startedAt: subscription.startedAt
+      ? format(subscription.startedAt, 'yyyy-MM-dd')
+      : '',
+    endedAt: subscription.endedAt
+      ? format(subscription.endedAt, 'yyyy-MM-dd')
+      : '',
+  };
 }

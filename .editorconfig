@@ -11,6 +11,15 @@ trim_trailing_whitespace = true
 [*.ts]
 quote_type = single
 
+[*.tsx]
+quote_type = single
+
+[*.mjs]
+quote_type = single
+
+[*.cjs]
+quote_type = single
+
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
