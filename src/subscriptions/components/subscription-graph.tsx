@@ -34,7 +34,10 @@ export const SubscriptionGraph = memo(() => {
   );
 });
 
-function aggregateSubscriptionsByMonth(
+/**
+ * @internal
+ */
+export function aggregateSubscriptionsByMonth(
   subscriptions: Array<SubscriptionModel>,
 ): Record<MonthName, number> {
   const now = Date.now();
@@ -78,7 +81,8 @@ function aggregateSubscriptionsByMonth(
     }
 
     for (let month = startMonth; month <= endMonth; month++) {
-      prev[monthToMonthName[month]] += curr.price;
+      prev[monthToMonthName[month]] =
+        Math.round((prev[monthToMonthName[month]] + curr.price) * 100) / 100;
     }
 
     return prev;
