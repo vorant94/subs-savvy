@@ -3,13 +3,15 @@ import {
   createContext,
   memo,
   useContext,
+  useEffect,
   useState,
   type Dispatch,
   type PropsWithChildren,
   type ReactElement,
   type SetStateAction,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { usePrevious } from 'react-use';
 
 export const SplitLayout = memo(({ header, left, right }: SplitLayoutProps) => {
   const { isSplit, navLinks } = useContext(SplitLayoutContext);
@@ -81,6 +83,14 @@ export const SplitLayoutContextProvider = memo(
     navLinks,
   }: PropsWithChildren<SplitLayoutContextProviderProps>) => {
     const [isSplit, setIsSplit] = useState(false);
+    const { pathname } = useLocation();
+    const prevPathname = usePrevious(pathname);
+
+    useEffect(() => {
+      if (pathname !== prevPathname) {
+        setIsSplit(false);
+      }
+    }, [pathname, prevPathname, setIsSplit]);
 
     return (
       <SplitLayoutContext.Provider value={{ isSplit, setIsSplit, navLinks }}>

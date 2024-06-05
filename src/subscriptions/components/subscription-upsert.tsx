@@ -14,6 +14,7 @@ import {
   type Reducer,
 } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
+import { usePrevious } from 'react-use';
 import {
   type InsertSubscriptionModel,
   type SubscriptionModel,
@@ -61,7 +62,7 @@ export const SubscriptionUpsert = memo(() => {
     await deleteSubscription(state.subscription.id);
 
     dispatch({ type: 'close' });
-  }, [state, dispatch]);
+  }, [dispatch, state]);
 
   const onClose = useCallback(() => {
     dispatch({ type: 'close' });
@@ -205,7 +206,6 @@ const stateDefaults: SubscriptionUpsertState = {
 export const SubscriptionUpsertStateProvider = memo(
   ({ children }: PropsWithChildren) => {
     const layout = useContext(SplitLayoutContext);
-
     const [state, dispatch] = useReducer<
       Reducer<SubscriptionUpsertState, SubscriptionUpsertAction>
     >((_, action) => {
@@ -225,10 +225,19 @@ export const SubscriptionUpsertStateProvider = memo(
         }
       }
     }, stateDefaults);
+    const prevState = usePrevious(state);
 
     useEffect(() => {
-      layout.setIsSplit(!!state.mode);
-    }, [layout, state]);
+      if (state.mode !== prevState?.mode) {
+        layout.setIsSplit(!!state.mode);
+      }
+    }, [layout, prevState, state]);
+
+    useEffect(() => {
+      if (!layout.isSplit) {
+        dispatch({ type: 'close' });
+      }
+    }, [layout, dispatch]);
 
     return (
       <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
