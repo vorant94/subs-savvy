@@ -13,7 +13,9 @@
     "lint:fix": "eslint --fix .",
     "prepare": "husky",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "e2e": "playwright test",
+    "e2e:setup": "playwright install --with-deps"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -30,7 +32,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.1",
     "@total-typescript/ts-reset": "^0.5.1",
+    "@types/node": "^20.14.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
@@ -38,6 +42,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.1",
+    "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.34.2",
