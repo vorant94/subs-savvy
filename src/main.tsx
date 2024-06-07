@@ -1,5 +1,6 @@
 import { App } from '@/App.tsx';
 import { DashboardPage } from '@/dashboard/pages/dashboard.page.tsx';
+import { route } from '@/router/types/route.ts';
 import { SubscriptionsPage } from '@/subscriptions/pages/subscriptions.page.tsx';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: '/',
+        path: route.root,
         element: (
           <Navigate
             to="/dashboard"
@@ -25,11 +26,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/dashboard',
+        path: route.dashboard,
         Component: DashboardPage,
       },
       {
-        path: '/subscriptions',
+        path: route.subscriptions,
         Component: SubscriptionsPage,
       },
     ],

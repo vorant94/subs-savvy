@@ -26,9 +26,8 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run start:dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !env.CI,
   },

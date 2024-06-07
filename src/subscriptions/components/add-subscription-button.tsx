@@ -1,4 +1,5 @@
 import { memo, useCallback, useContext } from 'react';
+import { addSubscriptionButton } from '../globals/subscription.test-id.ts';
 import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
 
 export const AddSubscriptionButton = memo(() => {
@@ -9,5 +10,11 @@ export const AddSubscriptionButton = memo(() => {
     [upsert],
   );
 
-  return <button onClick={onClick}>add sub</button>;
+  return (
+    <button
+      data-testid={addSubscriptionButton}
+      onClick={onClick}>
+      add sub
+    </button>
+  );
 });

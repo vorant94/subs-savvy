@@ -15,6 +15,7 @@ import {
 } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { usePrevious } from 'react-use';
+import { subscriptionUpsertForm } from '../globals/subscription.test-id.ts';
 import {
   type InsertSubscriptionModel,
   type SubscriptionModel,
@@ -81,6 +82,7 @@ export const SubscriptionUpsert = memo(() => {
       <h1>{`${state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}</h1>
 
       <form
+        data-testid={subscriptionUpsertForm}
         onSubmit={handleSubmit(onSubmit)}
         className={cn('flex flex-col gap-2 self-stretch')}>
         <input
