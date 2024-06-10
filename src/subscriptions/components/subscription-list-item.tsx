@@ -17,7 +17,11 @@ export const SubscriptionListItem = memo(
     const upsert = useContext(SubscriptionUpsertStateContext);
 
     return (
-      <Card onClick={() => upsert.dispatch({ type: 'open', subscription })}>
+      <Card
+        as="button"
+        textAlign="start"
+        alignItems="initial"
+        onClick={() => upsert.dispatch({ type: 'open', subscription })}>
         <CardBody>
           <Flex className={cn(`items-center gap-2`)}>
             <Avatar size="sm" />
