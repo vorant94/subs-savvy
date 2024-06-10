@@ -14,4 +14,15 @@ export default defineConfig({
     environment: 'happy-dom',
     root: './src',
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          recharts: ['recharts'],
+          '@chakra-ui/react': ['@chakra-ui/react'],
+          'framer-motion': ['framer-motion'],
+        },
+      },
+    },
+  },
 });
