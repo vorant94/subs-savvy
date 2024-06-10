@@ -1,14 +1,12 @@
 import { App } from '@/App.tsx';
-import { DashboardPage } from '@/dashboard/pages/dashboard.page.tsx';
 import { route } from '@/router/types/route.ts';
-import { SubscriptionsPage } from '@/subscriptions/pages/subscriptions.page.tsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
+  createBrowserRouter,
   Navigate,
   RouterProvider,
-  createBrowserRouter,
 } from 'react-router-dom';
 import './index.css';
 
@@ -28,11 +26,17 @@ const router = createBrowserRouter([
       },
       {
         path: route.dashboard,
-        Component: DashboardPage,
+        lazy: () =>
+          import(`@/dashboard/pages/dashboard.page.tsx`).then((m) => ({
+            Component: m.DashboardPage,
+          })),
       },
       {
         path: route.subscriptions,
-        Component: SubscriptionsPage,
+        lazy: () =>
+          import(`@/subscriptions/pages/subscriptions.page.tsx`).then((m) => ({
+            Component: m.SubscriptionsPage,
+          })),
       },
     ],
   },
