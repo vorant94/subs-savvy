@@ -1,6 +1,14 @@
 import type { RawFormValue } from '@/form/types/raw-form-value.ts';
 import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  Textarea,
+} from '@chakra-ui/react';
 import { clsx } from 'clsx';
 import {
   createContext,
@@ -92,88 +100,95 @@ export const SubscriptionUpsert = memo(() => {
           className={clsx('hidden')}
         />
 
-        <div className={cn(`flex flex-col`)}>
-          <label htmlFor="name">Name</label>
-          <input
+        <FormControl>
+          <FormLabel htmlFor="name">Name</FormLabel>
+          <Input
             {...register('name')}
             id="name"
             placeholder="name"
             type="text"
             autoComplete="off"
           />
-        </div>
+        </FormControl>
 
-        <div className={cn(`flex flex-col`)}>
-          <label htmlFor="description">Description</label>
-          <textarea
+        <FormControl>
+          <FormLabel htmlFor="description">Description</FormLabel>
+          <Textarea
             {...register('description')}
             id="description"
             placeholder="description"
             autoComplete="off"
           />
-        </div>
+        </FormControl>
 
-        <div className={cn(`flex flex-col`)}>
-          <label htmlFor="icon">Icon</label>
-          <input
+        <FormControl>
+          <FormLabel htmlFor="icon">Icon</FormLabel>
+          <Input
             {...register('icon')}
             id="icon"
             placeholder="icon"
             type="text"
             autoComplete="off"
           />
-        </div>
+        </FormControl>
 
-        <div className={cn(`flex flex-col`)}>
-          <label htmlFor="price">Price</label>
-          <input
+        <FormControl>
+          <FormLabel htmlFor="price">Price</FormLabel>
+          <Input
             {...register('price')}
             id="price"
             placeholder="price"
             type="number"
             autoComplete="off"
           />
-        </div>
+        </FormControl>
 
-        <div className={cn(`flex flex-col`)}>
-          <label htmlFor="price">Started At</label>
-          <input
+        <FormControl>
+          <FormLabel htmlFor="price">Started At</FormLabel>
+          <Input
             {...register('startedAt')}
             id="startedAt"
             placeholder="startedAt"
             type="date"
             autoComplete="off"
           />
-        </div>
+        </FormControl>
 
-        <div className={cn(`flex flex-col`)}>
-          <label htmlFor="price">Ended At</label>
-          <input
+        <FormControl>
+          <FormLabel htmlFor="price">Ended At</FormLabel>
+          <Input
             {...register('endedAt')}
             id="endedAt"
             placeholder="endedAt"
             type="date"
             autoComplete="off"
           />
-        </div>
+        </FormControl>
 
-        <div className={cn('flex justify-center gap-2')}>
-          <button type="submit">
+        <Stack
+          spacing={2}
+          direction="row">
+          <Button
+            type="submit"
+            colorScheme="teal">
             {state.mode === 'update' ? 'Update' : 'Insert'}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             type="button"
             onClick={onClose}>
             Close
-          </button>
+          </Button>
           {state.mode === 'update' && (
-            <button
+            <Button
+              colorScheme="red"
+              variant="ghost"
               type="button"
               onClick={onDelete}>
               Delete
-            </button>
+            </Button>
           )}
-        </div>
+        </Stack>
       </form>
     </div>
   );

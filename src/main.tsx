@@ -2,6 +2,7 @@ import { App } from '@/App.tsx';
 import { DashboardPage } from '@/dashboard/pages/dashboard.page.tsx';
 import { route } from '@/router/types/route.ts';
 import { SubscriptionsPage } from '@/subscriptions/pages/subscriptions.page.tsx';
+import { ChakraProvider } from '@chakra-ui/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -39,6 +40,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ChakraProvider>
+      <RouterProvider router={router} />
+    </ChakraProvider>
   </StrictMode>,
 );
