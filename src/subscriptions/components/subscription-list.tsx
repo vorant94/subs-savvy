@@ -2,7 +2,6 @@ import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useContext } from 'react';
-import { noSubscriptionsPlaceholder } from '../globals/subscription.test-id.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 import { SubscriptionListItem } from './subscription-list-item.tsx';
 
@@ -24,7 +23,7 @@ export const SubscriptionList = memo(() => {
           />
         ))
       ) : (
-        <div data-testid={noSubscriptionsPlaceholder}>No Subscriptions</div>
+        <div>No Subscriptions</div>
       )}
     </div>
   );

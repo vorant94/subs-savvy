@@ -1,14 +1,6 @@
 import { cn } from '@/ui/utils/cn.ts';
-import {
-  Avatar,
-  Box,
-  Card,
-  CardBody,
-  Flex,
-  Heading,
-  Text,
-} from '@chakra-ui/react';
-import { memo, useContext } from 'react';
+import { Avatar, Card, CardBody, Heading, Text } from '@chakra-ui/react';
+import { memo, useCallback, useContext } from 'react';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
 
@@ -16,17 +8,22 @@ export const SubscriptionListItem = memo(
   ({ subscription }: SubscriptionListItemProps) => {
     const upsert = useContext(SubscriptionUpsertStateContext);
 
+    const openSubscriptionUpdate = useCallback(
+      () => upsert.dispatch({ type: 'open', subscription }),
+      [subscription, upsert],
+    );
+
     return (
       <Card
         as="button"
         textAlign="start"
         alignItems="initial"
-        onClick={() => upsert.dispatch({ type: 'open', subscription })}>
+        onClick={openSubscriptionUpdate}>
         <CardBody>
-          <Flex className={cn(`items-center gap-2`)}>
+          <div className={cn(`flex items-center gap-2`)}>
             <Avatar size="sm" />
 
-            <Box flex={1}>
+            <div className={cn('flex-1')}>
               <Heading
                 size="xs"
                 textTransform="uppercase">
@@ -36,10 +33,10 @@ export const SubscriptionListItem = memo(
               {subscription.description ? (
                 <Text fontSize="sm">{subscription.description}</Text>
               ) : null}
-            </Box>
+            </div>
 
             <Heading size="md">{subscription.price}</Heading>
-          </Flex>
+          </div>
         </CardBody>
       </Card>
     );

@@ -6,7 +6,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Stack,
   Textarea,
 } from '@chakra-ui/react';
 import { clsx } from 'clsx';
@@ -23,7 +22,6 @@ import {
 } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { usePrevious } from 'react-use';
-import { subscriptionUpsertForm } from '../globals/subscription.test-id.ts';
 import {
   type InsertSubscriptionModel,
   type SubscriptionModel,
@@ -42,26 +40,22 @@ export const SubscriptionUpsert = memo(() => {
   const { register, handleSubmit, reset } =
     useForm<RawFormValue<UpsertSubscriptionModel>>();
 
-  const onSubmit: SubmitHandler<RawFormValue<UpsertSubscriptionModel>> =
-    useCallback(
-      async (raw) => {
-        const subscription =
-          state.mode === 'update'
-            ? await updateSubscription(
-                raw as RawFormValue<UpdateSubscriptionModel>,
-              )
-            : await insertSubscription(
-                raw as RawFormValue<InsertSubscriptionModel>,
-              );
+  const onSubmit: SubmitHandler<RawFormValue<UpsertSubscriptionModel>> = async (
+    raw,
+  ) => {
+    const subscription =
+      state.mode === 'update'
+        ? await updateSubscription(raw as RawFormValue<UpdateSubscriptionModel>)
+        : await insertSubscription(
+            raw as RawFormValue<InsertSubscriptionModel>,
+          );
 
-        if (state.mode === 'update') {
-          return;
-        }
+    if (state.mode === 'update') {
+      return;
+    }
 
-        dispatch({ type: 'open', subscription });
-      },
-      [dispatch, state.mode],
-    );
+    dispatch({ type: 'open', subscription });
+  };
 
   const onDelete = useCallback(async () => {
     if (state.mode !== 'update') {
@@ -90,7 +84,6 @@ export const SubscriptionUpsert = memo(() => {
       <h1>{`${state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}</h1>
 
       <form
-        data-testid={subscriptionUpsertForm}
         onSubmit={handleSubmit(onSubmit)}
         className={cn('flex flex-col gap-2 self-stretch')}>
         <input
@@ -144,7 +137,7 @@ export const SubscriptionUpsert = memo(() => {
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="price">Started At</FormLabel>
+          <FormLabel htmlFor="startedAt">Started At</FormLabel>
           <Input
             {...register('startedAt')}
             id="startedAt"
@@ -155,7 +148,7 @@ export const SubscriptionUpsert = memo(() => {
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="price">Ended At</FormLabel>
+          <FormLabel htmlFor="endedAt">Ended At</FormLabel>
           <Input
             {...register('endedAt')}
             id="endedAt"
@@ -165,9 +158,7 @@ export const SubscriptionUpsert = memo(() => {
           />
         </FormControl>
 
-        <Stack
-          spacing={2}
-          direction="row">
+        <div className={cn('flex gap-2')}>
           <Button
             type="submit"
             colorScheme="teal">
@@ -188,7 +179,7 @@ export const SubscriptionUpsert = memo(() => {
               Delete
             </Button>
           )}
-        </Stack>
+        </div>
       </form>
     </div>
   );
