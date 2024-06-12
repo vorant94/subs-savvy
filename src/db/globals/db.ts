@@ -1,4 +1,4 @@
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
+import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.tsx';
 import Dexie, { type EntityTable } from 'dexie';
 
 export const db = new Dexie('subs-savvy') as Dexie & {

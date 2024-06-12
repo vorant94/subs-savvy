@@ -5,8 +5,8 @@ import type { InsertSubscriptionModel } from '../src/subscriptions/models/subscr
 test('should create subscription', async ({ page }) => {
   const formValue = {
     name: 'Webstorm',
-    description: 'JetBrains',
-    icon: 'webstorm',
+    description: 'JavaScript/TypeScript IDE',
+    icon: 'jetbrains',
     price: '10',
     startedAt: '2024-03-01',
     endedAt: '2024-08-01',
@@ -24,7 +24,7 @@ test('should create subscription', async ({ page }) => {
 
   await page.getByLabel('name').fill(formValue.name);
   await page.getByLabel('description').fill(formValue.description);
-  await page.getByLabel('icon').fill(formValue.icon);
+  await page.getByLabel('icon').selectOption(formValue.icon);
   await page.getByLabel('price').fill(formValue.price);
   await page.getByLabel('started at').fill(formValue.startedAt);
   await page.getByLabel('ended at').fill(formValue.endedAt);

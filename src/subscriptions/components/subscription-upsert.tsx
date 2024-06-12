@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Select,
   Textarea,
 } from '@chakra-ui/react';
 import { clsx } from 'clsx';
@@ -23,11 +24,13 @@ import {
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { usePrevious } from 'react-use';
 import {
+  subscriptionIconToLabel,
+  subscriptionIcons,
   type InsertSubscriptionModel,
   type SubscriptionModel,
   type UpdateSubscriptionModel,
   type UpsertSubscriptionModel,
-} from '../models/subscription.model.ts';
+} from '../models/subscription.model.tsx';
 import {
   deleteSubscription,
   insertSubscription,
@@ -94,68 +97,79 @@ export const SubscriptionUpsert = memo(() => {
         />
 
         <FormControl>
-          <FormLabel htmlFor="name">Name</FormLabel>
-          <Input
-            {...register('name')}
-            id="name"
-            placeholder="name"
-            type="text"
-            autoComplete="off"
-          />
+          <FormLabel>
+            Name
+            <Input
+              {...register('name')}
+              placeholder="Name"
+              type="text"
+              autoComplete="off"
+            />
+          </FormLabel>
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="description">Description</FormLabel>
-          <Textarea
-            {...register('description')}
-            id="description"
-            placeholder="description"
-            autoComplete="off"
-          />
+          <FormLabel>
+            Description
+            <Textarea
+              {...register('description')}
+              placeholder="Description"
+              autoComplete="off"
+            />
+          </FormLabel>
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="icon">Icon</FormLabel>
-          <Input
-            {...register('icon')}
-            id="icon"
-            placeholder="icon"
-            type="text"
-            autoComplete="off"
-          />
+          <FormLabel>
+            Icon
+            <Select
+              {...register('icon')}
+              placeholder="Icon">
+              {subscriptionIcons.map((icon) => (
+                <option
+                  key={icon}
+                  value={icon}>
+                  {subscriptionIconToLabel[icon]}
+                </option>
+              ))}
+            </Select>
+          </FormLabel>
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="price">Price</FormLabel>
-          <Input
-            {...register('price')}
-            id="price"
-            placeholder="price"
-            type="number"
-            autoComplete="off"
-          />
+          <FormLabel>
+            Price
+            <Input
+              {...register('price')}
+              placeholder="Price"
+              type="number"
+              autoComplete="off"
+            />
+          </FormLabel>
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="startedAt">Started At</FormLabel>
-          <Input
-            {...register('startedAt')}
-            id="startedAt"
-            placeholder="startedAt"
-            type="date"
-            autoComplete="off"
-          />
+          <FormLabel>
+            Started At
+            <Input
+              {...register('startedAt')}
+              placeholder="Started At"
+              type="date"
+              autoComplete="off"
+            />
+          </FormLabel>
         </FormControl>
 
         <FormControl>
-          <FormLabel htmlFor="endedAt">Ended At</FormLabel>
-          <Input
-            {...register('endedAt')}
-            id="endedAt"
-            placeholder="endedAt"
-            type="date"
-            autoComplete="off"
-          />
+          <FormLabel>
+            Ended At
+            <Input
+              {...register('endedAt')}
+              placeholder="Ended At"
+              type="date"
+              autoComplete="off"
+            />
+          </FormLabel>
         </FormControl>
 
         <div className={cn('flex gap-2')}>

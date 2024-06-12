@@ -34,6 +34,7 @@
     "react-router-dom": "^6.23.1",
     "react-use": "^17.5.0",
     "recharts": "^2.10.2",
+    "simple-icons": "^12.2.0",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.8"
   },
@@ -45,7 +46,7 @@
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.1",
     "dotenv": "^16.4.5",
@@ -66,6 +67,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-svgr": "^4.2.0",
     "vitest": "^1.6.0"
   },
   "engines": {

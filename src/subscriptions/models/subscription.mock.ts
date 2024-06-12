@@ -1,5 +1,5 @@
 import { setMonth } from 'date-fns';
-import type { SubscriptionModel } from './subscription.model.ts';
+import type { SubscriptionModel } from './subscription.model.tsx';
 
 export const minimalSubscription = {
   id: 1,
@@ -12,7 +12,7 @@ export const subscriptionWithDescription = {
   id: 2,
   name: 'WebStorm',
   price: 5.0,
-  icon: 'intellij',
+  icon: 'jetbrains',
   description: 'Jetbrains',
 } as const satisfies SubscriptionModel;
 
@@ -28,7 +28,7 @@ export const subscriptionWithEndedAt = {
   id: 4,
   name: 'YouTube',
   price: 5.0,
-  icon: 'google',
+  icon: 'youtube',
   endedAt: setMonth(new Date(), 9),
 } as const satisfies SubscriptionModel;
 

@@ -8,7 +8,7 @@ import { differenceInCalendarYears } from 'date-fns';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts';
-import type { SubscriptionModel } from '../models/subscription.model.ts';
+import type { SubscriptionModel } from '../models/subscription.model.tsx';
 import { findSubscriptions } from '../models/subscription.table.ts';
 
 export const SubscriptionGraph = memo(() => {

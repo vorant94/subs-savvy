@@ -1,7 +1,10 @@
 import { cn } from '@/ui/utils/cn.ts';
 import { Avatar, Card, CardBody, Heading, Text } from '@chakra-ui/react';
 import { memo, useCallback, useContext } from 'react';
-import type { SubscriptionModel } from '../models/subscription.model.ts';
+import {
+  subscriptionIconToIconElement,
+  type SubscriptionModel,
+} from '../models/subscription.model.tsx';
 import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
 
 export const SubscriptionListItem = memo(
@@ -21,17 +24,26 @@ export const SubscriptionListItem = memo(
         onClick={openSubscriptionUpdate}>
         <CardBody>
           <div className={cn(`flex items-center gap-2`)}>
-            <Avatar size="sm" />
+            <Avatar
+              bg="transparent"
+              size="sm"
+              icon={subscriptionIconToIconElement[subscription.icon]}
+            />
 
-            <div className={cn('flex-1')}>
+            <div className={cn('flex-1 overflow-hidden')}>
               <Heading
                 size="xs"
+                className={cn(`truncate`)}
                 textTransform="uppercase">
                 {subscription.name}
               </Heading>
 
               {subscription.description ? (
-                <Text fontSize="sm">{subscription.description}</Text>
+                <Text
+                  className={cn(`truncate`)}
+                  fontSize="sm">
+                  {subscription.description}
+                </Text>
               ) : null}
             </div>
 
