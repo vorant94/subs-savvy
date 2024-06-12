@@ -22,33 +22,31 @@ export const SubscriptionListItem = memo(
         textAlign="start"
         alignItems="initial"
         onClick={openSubscriptionUpdate}>
-        <CardBody>
-          <div className={cn(`flex items-center gap-2`)}>
-            <Avatar
-              bg="transparent"
-              size="sm"
-              icon={subscriptionIconToIconElement[subscription.icon]}
-            />
+        <CardBody className={cn(`flex items-center gap-2`)}>
+          <Avatar
+            bg="transparent"
+            size="sm"
+            icon={subscriptionIconToIconElement[subscription.icon]}
+          />
 
-            <div className={cn('flex-1 overflow-hidden')}>
-              <Heading
-                size="xs"
+          <div className={cn('flex-1 overflow-hidden')}>
+            <Heading
+              size="xs"
+              className={cn(`truncate`)}
+              textTransform="uppercase">
+              {subscription.name}
+            </Heading>
+
+            {subscription.description ? (
+              <Text
                 className={cn(`truncate`)}
-                textTransform="uppercase">
-                {subscription.name}
-              </Heading>
-
-              {subscription.description ? (
-                <Text
-                  className={cn(`truncate`)}
-                  fontSize="sm">
-                  {subscription.description}
-                </Text>
-              ) : null}
-            </div>
-
-            <Heading size="md">{subscription.price}</Heading>
+                fontSize="sm">
+                {subscription.description}
+              </Text>
+            ) : null}
           </div>
+
+          <Heading size="md">{subscription.price}</Heading>
         </CardBody>
       </Card>
     );
