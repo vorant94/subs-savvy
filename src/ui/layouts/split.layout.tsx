@@ -46,15 +46,18 @@ export interface SplitLayoutProps {
   right?: ReactElement | null;
 }
 
-export const SplitLayoutHeader = memo(({ actions }: SplitLayoutHeaderProps) => {
-  return (
-    <header className={cn(`flex h-16 flex-row items-center px-8`)}>
-      <h1>Subs Savvy</h1>
-      <div className={cn(`flex-1`)} />
-      <div>{actions ? actions : null}</div>
-    </header>
-  );
-});
+export const SplitLayoutHeader = memo(
+  ({ actions, children }: PropsWithChildren<SplitLayoutHeaderProps>) => {
+    return (
+      <header className={cn(`flex h-16 flex-row items-center gap-4`)}>
+        <h1 className={cn(`min-w-32 pl-8`)}>Subs Savvy</h1>
+        {children ? <div>{children}</div> : null}
+        <div className={cn(`flex-1`)} />
+        {actions ? <div className={cn('pr-8')}>{actions}</div> : null}
+      </header>
+    );
+  },
+);
 
 export interface SplitLayoutHeaderProps {
   actions?: ReactElement;

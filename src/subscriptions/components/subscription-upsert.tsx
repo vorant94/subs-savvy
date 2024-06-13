@@ -9,7 +9,6 @@ import {
   Select,
   Textarea,
 } from '@chakra-ui/react';
-import { clsx } from 'clsx';
 import {
   createContext,
   memo,
@@ -95,7 +94,7 @@ export const SubscriptionUpsert = memo(() => {
           {...register('id')}
           id="id"
           type="number"
-          className={clsx('hidden')}
+          className={cn('hidden')}
         />
 
         <FormControl>
