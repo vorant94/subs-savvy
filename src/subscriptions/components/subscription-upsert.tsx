@@ -145,6 +145,7 @@ export const SubscriptionUpsert = memo(() => {
               {...register('price', { required: true })}
               placeholder="Price"
               type="number"
+              step=".01"
               autoComplete="off"
             />
           </FormLabel>

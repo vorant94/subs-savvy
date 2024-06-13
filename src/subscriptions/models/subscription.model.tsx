@@ -1,7 +1,11 @@
 import { preprocessNullableValue } from '@/form/utils/preprocess-nullable-value.ts';
 import { cn } from '@/ui/utils/cn.ts';
+import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactElement } from 'react';
 import GitHub from 'simple-icons/icons/github.svg?react';
+import GoDaddy from 'simple-icons/icons/godaddy.svg?react';
+import HeadSpace from 'simple-icons/icons/headspace.svg?react';
 import JetBrains from 'simple-icons/icons/jetbrains.svg?react';
 import Netflix from 'simple-icons/icons/netflix.svg?react';
 import Telegram from 'simple-icons/icons/telegram.svg?react';
@@ -14,6 +18,9 @@ export const subscriptionIcons = [
   'jetbrains',
   'github',
   'youtube',
+  'home',
+  'headspace',
+  'godaddy',
 ] as const;
 export type SubscriptionIcon = (typeof subscriptionIcons)[number];
 
@@ -23,6 +30,15 @@ export const subscriptionIconToSvg = {
   jetbrains: <JetBrains className={cn(`fill-[#000000]`)} />,
   github: <GitHub className={cn(`fill-[#181717]`)} />,
   youtube: <YouTube className={cn(`fill-[#FF0000]`)} />,
+  home: (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faHouse}
+      color="#000000"
+    />
+  ),
+  headspace: <HeadSpace className={cn(`fill-[#F47D31]`)} />,
+  godaddy: <GoDaddy className={cn(`fill-[#1BDBDB]`)} />,
 } as const satisfies Record<SubscriptionIcon, ReactElement>;
 
 export const subscriptionIconToLabel = {
@@ -31,6 +47,9 @@ export const subscriptionIconToLabel = {
   jetbrains: 'JetBrains',
   github: 'GitHub',
   youtube: 'YouTube',
+  home: 'Home',
+  headspace: 'HeadSpace',
+  godaddy: 'GoDaddy',
 } as const satisfies Record<SubscriptionIcon, string>;
 
 export const subscriptionCyclePeriods = ['monthly', 'yearly'] as const;
