@@ -1,4 +1,5 @@
 import { preprocessNullableValue } from '@/form/utils/preprocess-nullable-value.ts';
+import { tagSchema } from '@/tags/models/tag.model.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -77,13 +78,16 @@ export const subscriptionSchema = z.object({
     each: z.coerce.number(),
     period: z.enum(subscriptionCyclePeriods),
   }),
+  tags: z.array(tagSchema),
 });
 export type SubscriptionModel = z.infer<typeof subscriptionSchema>;
 
-export const insertSubscriptionSchema = subscriptionSchema.omit({ id: true });
+export const insertSubscriptionSchema = subscriptionSchema.omit({
+  id: true,
+});
 export type InsertSubscriptionModel = z.infer<typeof insertSubscriptionSchema>;
 
-export const updateSubscriptionSchema = subscriptionSchema;
+export const updateSubscriptionSchema = subscriptionSchema.omit({});
 export type UpdateSubscriptionModel = z.infer<typeof updateSubscriptionSchema>;
 
 export type UpsertSubscriptionModel =
