@@ -1,4 +1,8 @@
 import { db } from '@/db/globals/db.ts';
+import {
+  formDateFormat,
+  type FormDateFormat,
+} from '@/form/types/form-date-format.ts';
 import type { RawFormValue } from '@/form/types/raw-form-value.ts';
 import { format } from 'date-fns';
 import {
@@ -55,11 +59,13 @@ export function mapSubscriptionToRawValue(
     id: `${subscription.id ?? ''}`,
     description: `${subscription.description ?? ''}`,
     price: `${subscription.price ?? ''}`,
-    startedAt: subscription.startedAt
-      ? format(subscription.startedAt, 'yyyy-MM-dd')
-      : '',
+    startedAt: format(subscription.startedAt, formDateFormat) as FormDateFormat,
     endedAt: subscription.endedAt
-      ? format(subscription.endedAt, 'yyyy-MM-dd')
+      ? format(subscription.endedAt, formDateFormat)
       : '',
+    cycle: {
+      each: `${subscription.cycle.each}`,
+      period: subscription.cycle.period,
+    },
   };
 }

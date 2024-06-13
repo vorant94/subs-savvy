@@ -10,6 +10,10 @@ test('should create subscription', async ({ page }) => {
     price: '10',
     startedAt: '2024-03-01',
     endedAt: '2024-08-01',
+    cycle: {
+      each: '1',
+      period: 'monthly',
+    },
   } as const satisfies RawFormValue<InsertSubscriptionModel>;
 
   await page.goto('/');
@@ -28,6 +32,8 @@ test('should create subscription', async ({ page }) => {
   await page.getByLabel('price').fill(formValue.price);
   await page.getByLabel('started at').fill(formValue.startedAt);
   await page.getByLabel('ended at').fill(formValue.endedAt);
+  await page.getByLabel('each').fill(formValue.cycle.each);
+  await page.getByLabel('period').selectOption(formValue.cycle.period);
 
   await page.getByRole('button', { name: 'insert' }).click();
 

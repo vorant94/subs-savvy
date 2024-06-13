@@ -2,7 +2,7 @@ import { cn } from '@/ui/utils/cn.ts';
 import { Avatar, Card, CardBody, Heading, Text } from '@chakra-ui/react';
 import { memo, useCallback, useContext } from 'react';
 import {
-  subscriptionIconToIconElement,
+  subscriptionIconToSvg,
   type SubscriptionModel,
 } from '../models/subscription.model.tsx';
 import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
@@ -26,7 +26,7 @@ export const SubscriptionListItem = memo(
           <Avatar
             bg="transparent"
             size="sm"
-            icon={subscriptionIconToIconElement[subscription.icon]}
+            icon={subscriptionIconToSvg[subscription.icon]}
           />
 
           <div className={cn('flex-1 overflow-hidden')}>

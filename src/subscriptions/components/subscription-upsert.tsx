@@ -24,6 +24,8 @@ import {
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { usePrevious } from 'react-use';
 import {
+  subscriptionCyclePeriodToLabel,
+  subscriptionCyclePeriods,
   subscriptionIconToLabel,
   subscriptionIcons,
   type InsertSubscriptionModel,
@@ -100,7 +102,7 @@ export const SubscriptionUpsert = memo(() => {
           <FormLabel>
             Name
             <Input
-              {...register('name')}
+              {...register('name', { required: true })}
               placeholder="Name"
               type="text"
               autoComplete="off"
@@ -123,7 +125,7 @@ export const SubscriptionUpsert = memo(() => {
           <FormLabel>
             Icon
             <Select
-              {...register('icon')}
+              {...register('icon', { required: true })}
               placeholder="Icon">
               {subscriptionIcons.map((icon) => (
                 <option
@@ -140,7 +142,7 @@ export const SubscriptionUpsert = memo(() => {
           <FormLabel>
             Price
             <Input
-              {...register('price')}
+              {...register('price', { required: true })}
               placeholder="Price"
               type="number"
               autoComplete="off"
@@ -152,7 +154,7 @@ export const SubscriptionUpsert = memo(() => {
           <FormLabel>
             Started At
             <Input
-              {...register('startedAt')}
+              {...register('startedAt', { required: true })}
               placeholder="Started At"
               type="date"
               autoComplete="off"
@@ -169,6 +171,35 @@ export const SubscriptionUpsert = memo(() => {
               type="date"
               autoComplete="off"
             />
+          </FormLabel>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>
+            Each
+            <Input
+              {...register('cycle.each', { required: true })}
+              placeholder="Each"
+              type="number"
+              autoComplete="off"
+            />
+          </FormLabel>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>
+            Period
+            <Select
+              {...register('cycle.period', { required: true })}
+              placeholder="Period">
+              {subscriptionCyclePeriods.map((period) => (
+                <option
+                  key={period}
+                  value={period}>
+                  {subscriptionCyclePeriodToLabel[period]}
+                </option>
+              ))}
+            </Select>
           </FormLabel>
         </FormControl>
 
@@ -207,6 +238,10 @@ const formDefaults = {
   price: '',
   startedAt: '',
   endedAt: '',
+  cycle: {
+    each: '',
+    period: '',
+  },
 } as const satisfies RawFormValue<SubscriptionModel>;
 
 export const SubscriptionUpsertStateContext = createContext<{
