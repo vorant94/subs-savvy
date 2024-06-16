@@ -1,6 +1,6 @@
 import { findTags } from '@/tags/models/tag.table.ts';
-import { DefaultLayoutContext } from '@/ui/layouts/default.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   Fieldset,
@@ -13,26 +13,21 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { memo, useCallback, useContext, useMemo } from 'react';
 import {
-  createContext,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  type Dispatch,
-  type PropsWithChildren,
-  type Reducer,
-} from 'react';
-import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
+  Controller,
+  useForm,
+  type DefaultValues,
+  type SubmitHandler,
+} from 'react-hook-form';
 import {
+  insertSubscriptionSchema,
   subscriptionCyclePeriodToLabel,
   subscriptionCyclePeriods,
   subscriptionIconToLabel,
   subscriptionIcons,
+  updateSubscriptionSchema,
   type InsertSubscriptionModel,
-  type SubscriptionModel,
   type UpdateSubscriptionModel,
   type UpsertSubscriptionModel,
 } from '../models/subscription.model.tsx';
@@ -41,22 +36,29 @@ import {
   insertSubscription,
   updateSubscription,
 } from '../models/subscription.table.ts';
+import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
 
 export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
-  const { register, handleSubmit, control, reset } =
-    useForm<UpsertSubscriptionModel>();
-  const tags = useLiveQuery(() => findTags());
 
-  const onSubmit: SubmitHandler<UpsertSubscriptionModel> = async (raw) => {
+  const { register, handleSubmit, control } = useForm<UpsertSubscriptionModel>({
+    resolver: zodResolver(
+      state.mode === 'update'
+        ? updateSubscriptionSchema
+        : insertSubscriptionSchema,
+    ),
+    defaultValues: state.mode === 'update' ? state.subscription : defaultValues,
+  });
+  const upsertSubscription: SubmitHandler<UpsertSubscriptionModel> = async (
+    raw,
+  ) => {
     state.mode === 'update'
       ? await updateSubscription(raw as UpdateSubscriptionModel)
       : await insertSubscription(raw as InsertSubscriptionModel);
 
     dispatch({ type: 'close' });
   };
-
-  const onDelete = useCallback(async () => {
+  const deleteSubscriptionCb = useCallback(async () => {
     if (state.mode !== 'update') {
       throw new Error(`Nothing to delete in insert mode!`);
     }
@@ -65,18 +67,11 @@ export const SubscriptionUpsert = memo(() => {
 
     dispatch({ type: 'close' });
   }, [dispatch, state]);
-
-  const onClose = useCallback(() => {
+  const closeUpsert = useCallback(() => {
     dispatch({ type: 'close' });
   }, [dispatch]);
 
-  // TODO fix form reset on add new after existing is open
-  useEffect(() => {
-    if (state.mode === 'update') {
-      reset(state.subscription);
-    }
-  }, [reset, state]);
-
+  const tags = useLiveQuery(() => findTags());
   const tagsData: ComboboxData = useMemo(() => {
     return (tags ?? []).map((tag) => ({
       label: tag.name,
@@ -86,7 +81,7 @@ export const SubscriptionUpsert = memo(() => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(upsertSubscription)}
       className={cn('flex flex-col gap-2 self-stretch')}>
       <Controller
         control={control}
@@ -102,7 +97,6 @@ export const SubscriptionUpsert = memo(() => {
       />
 
       <TextInput
-        defaultValue=""
         {...register('name')}
         label="Name"
         placeholder="Name"
@@ -110,7 +104,6 @@ export const SubscriptionUpsert = memo(() => {
       />
 
       <Textarea
-        defaultValue=""
         {...register('description')}
         label="Description"
         placeholder="Description"
@@ -149,7 +142,6 @@ export const SubscriptionUpsert = memo(() => {
         legend="Active Period"
         className={cn(`grid grid-cols-2 gap-2`)}>
         <Controller
-          defaultValue={new Date()}
           control={control}
           name="startedAt"
           render={({ field: { onChange, onBlur, value } }) => (
@@ -182,7 +174,6 @@ export const SubscriptionUpsert = memo(() => {
         legend="Billing Cycle"
         className={cn(`grid grid-cols-2 gap-2`)}>
         <Controller
-          defaultValue={1}
           control={control}
           name="cycle.each"
           render={({ field: { onChange, onBlur, value } }) => (
@@ -197,7 +188,6 @@ export const SubscriptionUpsert = memo(() => {
         />
 
         <Controller
-          defaultValue="monthly"
           control={control}
           name="cycle.period"
           render={({ field: { value, onChange, onBlur } }) => (
@@ -216,7 +206,6 @@ export const SubscriptionUpsert = memo(() => {
       <Controller
         control={control}
         name="tags"
-        defaultValue={[]}
         render={({ field: { value, onChange, onBlur } }) => (
           <MultiSelect
             aria-label="Tags"
@@ -243,7 +232,7 @@ export const SubscriptionUpsert = memo(() => {
         <Button
           type="button"
           variant="outline"
-          onClick={onClose}>
+          onClick={closeUpsert}>
           Close
         </Button>
         {state.mode === 'update' && (
@@ -251,7 +240,7 @@ export const SubscriptionUpsert = memo(() => {
             type="button"
             color="red"
             variant="outline"
-            onClick={onDelete}>
+            onClick={deleteSubscriptionCb}>
             Delete
           </Button>
         )}
@@ -272,85 +261,11 @@ const cyclePeriodsData: ComboboxData = subscriptionCyclePeriods.map(
   }),
 );
 
-export const SubscriptionUpsertStateContext = createContext<{
-  state: SubscriptionUpsertState;
-  dispatch: Dispatch<SubscriptionUpsertAction>;
-}>({
-  state: {
-    subscription: null,
-    mode: null,
+const defaultValues: DefaultValues<UpsertSubscriptionModel> = {
+  startedAt: new Date(),
+  tags: [],
+  cycle: {
+    each: 1,
+    period: 'monthly',
   },
-  dispatch: () => {},
-});
-
-const stateDefaults: SubscriptionUpsertState = {
-  mode: null,
-  subscription: null,
 };
-
-export const SubscriptionUpsertStateProvider = memo(
-  ({ children }: PropsWithChildren) => {
-    const layout = useContext(DefaultLayoutContext);
-    const [state, dispatch] = useReducer<
-      Reducer<SubscriptionUpsertState, SubscriptionUpsertAction>
-    >((_, action) => {
-      switch (action.type) {
-        case 'open': {
-          return action.subscription
-            ? {
-                subscription: action.subscription,
-                mode: 'update',
-              }
-            : {
-                mode: 'insert',
-              };
-        }
-        case 'close': {
-          return stateDefaults;
-        }
-      }
-    }, stateDefaults);
-
-    useEffect(() => {
-      state.mode ? layout.drawer.open() : layout.drawer.close();
-    }, [layout, state]);
-
-    useEffect(() => {
-      if (!layout.isDrawerOpened && !state.mode) {
-        dispatch({ type: 'close' });
-      }
-    }, [layout, dispatch, state]);
-
-    return (
-      <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
-        {children}
-      </SubscriptionUpsertStateContext.Provider>
-    );
-  },
-);
-
-export type SubscriptionUpsertState =
-  | {
-      subscription: SubscriptionModel;
-      mode: 'update';
-    }
-  | {
-      mode: 'insert';
-    }
-  | {
-      subscription: null;
-      mode: null;
-    };
-
-export interface SubscriptionUpsertOpenAction {
-  type: 'open';
-  subscription?: SubscriptionModel | null;
-}
-
-export interface SubscriptionUpsertCloseAction {
-  type: 'close';
-}
-
-export type SubscriptionUpsertAction =
-  | SubscriptionUpsertOpenAction
-  | SubscriptionUpsertCloseAction;

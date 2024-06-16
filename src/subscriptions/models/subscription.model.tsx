@@ -61,14 +61,12 @@ export const subscriptionCyclePeriodToLabel = {
 } as const satisfies Record<SubscriptionCyclePeriod, string>;
 
 export const subscriptionSchema = z.object({
-  // Coercion is needed because <input/> with type="number" still returns string as a value
   id: z.number(),
   name: z.string(),
   description: z.string().nullable().optional(),
   icon: z.enum(subscriptionIcons),
   price: z.number(),
   startedAt: z.date(),
-  // Preprocessing is needed because <input/> with type="date" returns empty string as a value and it is not a valid date
   endedAt: z.date().nullable().optional(),
   cycle: z.object({
     each: z.number(),

@@ -5,7 +5,7 @@ import {
   subscriptionIconToSvg,
   type SubscriptionModel,
 } from '../models/subscription.model.tsx';
-import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
+import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
 
 export const SubscriptionListItem = memo(
   ({ subscription }: SubscriptionListItemProps) => {

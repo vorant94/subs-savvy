@@ -12,7 +12,7 @@ import type { SubscriptionModel } from '../models/subscription.model.tsx';
 import { findSubscriptions } from '../models/subscription.table.ts';
 import { cyclePeriodToCalculateMonthlyPrice } from '../utils/cycle-period-to-calculate-monthly-price.ts';
 
-export const SubscriptionGraph = memo(() => {
+export const SubscriptionsByMonthChart = memo(() => {
   const subscriptions = useLiveQuery(() => findSubscriptions());
 
   const aggregatedSubscriptions = useMemo(
@@ -42,10 +42,7 @@ export const SubscriptionGraph = memo(() => {
   );
 });
 
-/**
- * @internal
- */
-export function aggregateSubscriptionsByMonth(
+function aggregateSubscriptionsByMonth(
   subscriptions: Array<SubscriptionModel>,
 ): Record<MonthName, number> {
   const totalPricePerMonth: Record<MonthName, number> = {

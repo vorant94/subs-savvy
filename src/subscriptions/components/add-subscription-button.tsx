@@ -1,14 +1,14 @@
 import { Button } from '@mantine/core';
 import { memo, useCallback, useContext } from 'react';
-import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
+import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
 
 export const AddSubscriptionButton = memo(() => {
   const upsert = useContext(SubscriptionUpsertStateContext);
 
-  const onClick = useCallback(
+  const openSubscriptionInsert = useCallback(
     () => upsert.dispatch({ type: 'open' }),
     [upsert],
   );
 
-  return <Button onClick={onClick}>add sub</Button>;
+  return <Button onClick={openSubscriptionInsert}>add sub</Button>;
 });

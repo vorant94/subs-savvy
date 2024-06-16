@@ -9,10 +9,10 @@ import type { TagModel } from '../models/tag.model.ts';
 import { findTags } from '../models/tag.table.ts';
 import { ManageTagsModal } from './manage-tags-modal.tsx';
 
-export const TagsSelect = memo(({ onChange }: TagsSelectProps) => {
+export const TagMultiselect = memo(({ onChange }: TagsSelectProps) => {
   const [selectedTags, setSelectedTags] = useState<Array<TagModel>>([]);
   const tags = useLiveQuery(() => findTags());
-  const [isModalOpen, modal] = useDisclosure(false);
+  const [isManageTagsOpen, manageTags] = useDisclosure(false);
 
   useEffect(() => {
     onChange(selectedTags);
@@ -49,7 +49,7 @@ export const TagsSelect = memo(({ onChange }: TagsSelectProps) => {
 
         <ActionIcon
           aria-label="Manage Tags"
-          onClick={modal.open}
+          onClick={manageTags.open}
           size="lg"
           variant="light">
           <FontAwesomeIcon
@@ -60,8 +60,8 @@ export const TagsSelect = memo(({ onChange }: TagsSelectProps) => {
       </div>
 
       <ManageTagsModal
-        isOpen={isModalOpen}
-        close={modal.close}
+        isOpen={isManageTagsOpen}
+        close={manageTags.close}
       />
     </>
   );

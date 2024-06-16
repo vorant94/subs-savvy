@@ -1,8 +1,8 @@
 import {
   NavLinksContextProvider,
   type NavLink,
-} from '@/router/components/nav-links.provider.tsx';
-import { SubscriptionUpsertStateProvider } from '@/subscriptions/components/subscription-upsert';
+} from '@/router/providers/nav-links.provider.tsx';
+import { SubscriptionUpsertStateProvider } from '@/subscriptions/providers/subscription-upsert-state.provider';
 import { DefaultLayoutContextProvider } from '@/ui/layouts/default.layout';
 import { faChartSimple, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

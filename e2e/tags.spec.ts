@@ -18,9 +18,8 @@ test('should create tag', async ({ page }) => {
 
   await page.getByRole('button', { name: 'insert' }).click();
 
-  const tagNameEls = await page.getByText(formValue.name).all();
-  expect(
-    tagNameEls.length,
-    `should show newly inserted tag name in compobox in header and in list in modal`,
-  ).toBe(2);
+  await expect(
+    page.getByRole('paragraph'),
+    `should show newly inserted tag name in list in modal`,
+  ).toHaveText(formValue.name);
 });

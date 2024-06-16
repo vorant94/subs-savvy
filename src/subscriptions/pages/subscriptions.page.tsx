@@ -1,7 +1,7 @@
 import {
-  TagsSelect,
+  TagMultiselect,
   type TagsSelectProps,
-} from '@/tags/components/tags-select.tsx';
+} from '@/tags/components/tag-multiselect.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
@@ -9,10 +9,8 @@ import {
 import { memo, useCallback, useContext } from 'react';
 import { AddSubscriptionButton } from '../components/add-subscription-button.tsx';
 import { SubscriptionList } from '../components/subscription-list.tsx';
-import {
-  SubscriptionUpsert,
-  SubscriptionUpsertStateContext,
-} from '../components/subscription-upsert.tsx';
+import { SubscriptionUpsert } from '../components/subscription-upsert.tsx';
+import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
 
 export const SubscriptionsPage = memo(() => {
   const upsert = useContext(SubscriptionUpsertStateContext);
@@ -28,7 +26,7 @@ export const SubscriptionsPage = memo(() => {
     <DefaultLayout
       header={
         <DefaultLayoutHeader actions={<AddSubscriptionButton />}>
-          <TagsSelect onChange={updateSelectedTags} />
+          <TagMultiselect onChange={updateSelectedTags} />
         </DefaultLayoutHeader>
       }
       drawerContent={<SubscriptionUpsert />}

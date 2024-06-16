@@ -1,19 +1,26 @@
 import { cn } from '@/ui/utils/cn.ts';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { NumberInput, TextInput } from '@mantine/core';
-import { forwardRef, memo, useEffect } from 'react';
-import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
-import { type TagModel, type UpsertTagModel } from '../models/tag.model.ts';
+import { forwardRef, memo } from 'react';
+import {
+  Controller,
+  useForm,
+  type DefaultValues,
+  type SubmitHandler,
+} from 'react-hook-form';
+import {
+  insertTagSchema,
+  updateTagSchema,
+  type TagModel,
+  type UpsertTagModel,
+} from '../models/tag.model.ts';
 
 export const TagForm = memo(
   forwardRef<HTMLFormElement, TagFormProps>(({ onSubmit, tag }, ref) => {
-    const { register, handleSubmit, control, reset } =
-      useForm<UpsertTagModel>();
-
-    useEffect(() => {
-      if (tag) {
-        reset(tag);
-      }
-    }, [reset, tag]);
+    const { register, handleSubmit, control } = useForm<UpsertTagModel>({
+      resolver: zodResolver(tag ? updateTagSchema : insertTagSchema),
+      defaultValues: tag ?? defaultValues,
+    });
 
     return (
       <form
@@ -57,3 +64,5 @@ export interface TagFormProps {
   onSubmit: SubmitHandler<UpsertTagModel>;
   tag?: TagModel | null;
 }
+
+const defaultValues: DefaultValues<UpsertTagModel> = {};

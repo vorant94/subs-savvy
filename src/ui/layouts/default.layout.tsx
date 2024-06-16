@@ -1,4 +1,4 @@
-import { NavLinksContext } from '@/router/components/nav-links.provider.tsx';
+import { NavLinksContext } from '@/router/providers/nav-links.provider.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { AppShell, Burger, Drawer, NavLink } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';

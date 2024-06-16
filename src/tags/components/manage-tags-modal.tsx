@@ -64,9 +64,9 @@ export const ManageTagsModal = memo(
           ? await updateTag(raw as UpdateTagModel)
           : await insertTag(raw as InsertTagModel);
 
-        dispatch({ type: 'view' });
+        switchToViewMode();
       },
-      [state],
+      [state, switchToViewMode],
     );
 
     const deleteTagCb: TagListProps['onDelete'] = useCallback(async (id) => {
