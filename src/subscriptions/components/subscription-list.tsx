@@ -1,20 +1,14 @@
-import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 import { findSubscriptions } from '../models/subscription.table.ts';
 import { SubscriptionListItem } from './subscription-list-item.tsx';
 
 export const SubscriptionList = memo(() => {
-  const layout = useContext(SplitLayoutContext);
   const subscriptions = useLiveQuery(() => findSubscriptions());
 
   return (
-    <div
-      className={cn(
-        `grid gap-4`,
-        layout.isSplit ? `grid-cols-2` : `grid-cols-4`,
-      )}>
+    <div className={cn(`grid grid-cols-4 gap-4`)}>
       {subscriptions && subscriptions.length > 0 ? (
         subscriptions.map((subscription) => (
           <SubscriptionListItem

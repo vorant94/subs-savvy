@@ -3,6 +3,8 @@ import {
   months,
   type MonthName,
 } from '@/date/types/month.ts';
+import { cn } from '@/ui/utils/cn.ts';
+import { Card } from '@mantine/core';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts';
@@ -19,17 +21,24 @@ export const SubscriptionGraph = memo(() => {
   );
 
   return (
-    <ResponsiveContainer
-      width="100%"
-      height="100%">
-      <BarChart data={aggregatedSubscriptions}>
-        <Bar
-          dataKey="1"
-          fill="#8884d8"
-        />
-        <XAxis dataKey="0" />
-      </BarChart>
-    </ResponsiveContainer>
+    <Card
+      className={cn(`h-full`)}
+      shadow="xs"
+      padding="xs"
+      radius="md"
+      withBorder>
+      <ResponsiveContainer
+        width="100%"
+        height="100%">
+        <BarChart data={aggregatedSubscriptions}>
+          <Bar
+            dataKey="1"
+            fill="#8884d8"
+          />
+          <XAxis dataKey="0" />
+        </BarChart>
+      </ResponsiveContainer>
+    </Card>
   );
 });
 

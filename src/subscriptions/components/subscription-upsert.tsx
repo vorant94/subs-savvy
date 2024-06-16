@@ -1,5 +1,5 @@
 import { findTags } from '@/tags/models/tag.table.ts';
-import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
+import { DefaultLayoutContext } from '@/ui/layouts/default.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import {
   Button,
@@ -26,7 +26,6 @@ import {
   type Reducer,
 } from 'react';
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
-import { usePrevious } from 'react-use';
 import {
   subscriptionCyclePeriodToLabel,
   subscriptionCyclePeriods,
@@ -50,16 +49,11 @@ export const SubscriptionUpsert = memo(() => {
   const tags = useLiveQuery(() => findTags());
 
   const onSubmit: SubmitHandler<UpsertSubscriptionModel> = async (raw) => {
-    const subscription =
-      state.mode === 'update'
-        ? await updateSubscription(raw as UpdateSubscriptionModel)
-        : await insertSubscription(raw as InsertSubscriptionModel);
+    state.mode === 'update'
+      ? await updateSubscription(raw as UpdateSubscriptionModel)
+      : await insertSubscription(raw as InsertSubscriptionModel);
 
-    if (state.mode === 'update') {
-      return;
-    }
-
-    dispatch({ type: 'open', subscription });
+    dispatch({ type: 'close' });
   };
 
   const onDelete = useCallback(async () => {
@@ -91,183 +85,178 @@ export const SubscriptionUpsert = memo(() => {
   }, [tags]);
 
   return (
-    <div className={cn(`flex flex-1 flex-col items-center`)}>
-      <h1>{`${state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}</h1>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={cn('flex flex-col gap-2 self-stretch')}>
+      <Controller
+        control={control}
+        name="id"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <NumberInput
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            className={cn('hidden')}
+          />
+        )}
+      />
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={cn('flex flex-col gap-2 self-stretch')}>
+      <TextInput
+        defaultValue=""
+        {...register('name')}
+        label="Name"
+        placeholder="Name"
+        autoComplete="off"
+      />
+
+      <Textarea
+        defaultValue=""
+        {...register('description')}
+        label="Description"
+        placeholder="Description"
+      />
+
+      <Controller
+        control={control}
+        name="icon"
+        render={({ field: { value, onChange, onBlur } }) => (
+          <Select
+            value={value}
+            onChange={(_, option) => onChange(option.value)}
+            onBlur={onBlur}
+            label="Icon"
+            placeholder="Icon"
+            data={iconsData}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="price"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <NumberInput
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            label="Price"
+            placeholder="Price"
+          />
+        )}
+      />
+
+      <Fieldset
+        legend="Active Period"
+        className={cn(`grid grid-cols-2 gap-2`)}>
+        <Controller
+          defaultValue={new Date()}
+          control={control}
+          name="startedAt"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <DatePickerInput
+              label="Started At"
+              placeholder="Started At"
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
+          )}
+        />
+
         <Controller
           control={control}
-          name="id"
+          name="endedAt"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <DatePickerInput
+              label="Ended At"
+              placeholder="Ended At"
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+            />
+          )}
+        />
+      </Fieldset>
+
+      <Fieldset
+        legend="Billing Cycle"
+        className={cn(`grid grid-cols-2 gap-2`)}>
+        <Controller
+          defaultValue={1}
+          control={control}
+          name="cycle.each"
           render={({ field: { onChange, onBlur, value } }) => (
             <NumberInput
               value={value}
               onBlur={onBlur}
               onChange={onChange}
-              className={cn('hidden')}
+              label="Each"
+              placeholder="Each"
             />
           )}
         />
 
-        <TextInput
-          defaultValue=""
-          {...register('name')}
-          label="Name"
-          placeholder="Name"
-          autoComplete="off"
-        />
-
-        <Textarea
-          defaultValue=""
-          {...register('description')}
-          label="Description"
-          placeholder="Description"
-        />
-
         <Controller
+          defaultValue="monthly"
           control={control}
-          name="icon"
+          name="cycle.period"
           render={({ field: { value, onChange, onBlur } }) => (
             <Select
               value={value}
               onChange={(_, option) => onChange(option.value)}
               onBlur={onBlur}
-              label="Icon"
-              placeholder="Icon"
-              data={iconsData}
+              label="Period"
+              placeholder="Period"
+              data={cyclePeriodsData}
             />
           )}
         />
+      </Fieldset>
 
-        <Controller
-          control={control}
-          name="price"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <NumberInput
-              value={value}
-              onBlur={onBlur}
-              onChange={onChange}
-              label="Price"
-              placeholder="Price"
-            />
-          )}
-        />
-
-        <Fieldset
-          legend="Active Period"
-          className={cn(`grid grid-cols-2 gap-2`)}>
-          <Controller
-            defaultValue={new Date()}
-            control={control}
-            name="startedAt"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <DatePickerInput
-                label="Started At"
-                placeholder="Started At"
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-              />
-            )}
+      <Controller
+        control={control}
+        name="tags"
+        defaultValue={[]}
+        render={({ field: { value, onChange, onBlur } }) => (
+          <MultiSelect
+            aria-label="Tags"
+            placeholder="Tags"
+            clearable
+            data={tagsData}
+            value={value.map((tag) => `${tag.id}`)}
+            onChange={(tagIds) =>
+              onChange(
+                tagIds.map(
+                  (tagId) => (tags ?? []).find((tag) => `${tag.id}` === tagId)!,
+                ),
+              )
+            }
+            onBlur={onBlur}
           />
+        )}
+      />
 
-          <Controller
-            control={control}
-            name="endedAt"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <DatePickerInput
-                label="Ended At"
-                placeholder="Ended At"
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-              />
-            )}
-          />
-        </Fieldset>
-
-        <Fieldset
-          legend="Billing Cycle"
-          className={cn(`grid grid-cols-2 gap-2`)}>
-          <Controller
-            defaultValue={1}
-            control={control}
-            name="cycle.each"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <NumberInput
-                value={value}
-                onBlur={onBlur}
-                onChange={onChange}
-                label="Each"
-                placeholder="Each"
-              />
-            )}
-          />
-
-          <Controller
-            defaultValue="monthly"
-            control={control}
-            name="cycle.period"
-            render={({ field: { value, onChange, onBlur } }) => (
-              <Select
-                value={value}
-                onChange={(_, option) => onChange(option.value)}
-                onBlur={onBlur}
-                label="Period"
-                placeholder="Period"
-                data={cyclePeriodsData}
-              />
-            )}
-          />
-        </Fieldset>
-
-        <Controller
-          control={control}
-          name="tags"
-          defaultValue={[]}
-          render={({ field: { value, onChange, onBlur } }) => (
-            <MultiSelect
-              aria-label="Tags"
-              placeholder="Tags"
-              clearable
-              data={tagsData}
-              value={value.map((tag) => `${tag.id}`)}
-              onChange={(tagIds) =>
-                onChange(
-                  tagIds.map(
-                    (tagId) =>
-                      (tags ?? []).find((tag) => `${tag.id}` === tagId)!,
-                  ),
-                )
-              }
-              onBlur={onBlur}
-            />
-          )}
-        />
-
-        <div className={cn('flex justify-end gap-2')}>
-          <Button type="submit">
-            {state.mode === 'update' ? 'Update' : 'Insert'}
-          </Button>
+      <div className={cn('flex justify-end gap-2')}>
+        <Button type="submit">
+          {state.mode === 'update' ? 'Update' : 'Insert'}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onClose}>
+          Close
+        </Button>
+        {state.mode === 'update' && (
           <Button
             type="button"
+            color="red"
             variant="outline"
-            onClick={onClose}>
-            Close
+            onClick={onDelete}>
+            Delete
           </Button>
-          {state.mode === 'update' && (
-            <Button
-              type="button"
-              color="red"
-              variant="outline"
-              onClick={onDelete}>
-              Delete
-            </Button>
-          )}
-        </div>
-      </form>
-    </div>
+        )}
+      </div>
+    </form>
   );
 });
 
@@ -301,7 +290,7 @@ const stateDefaults: SubscriptionUpsertState = {
 
 export const SubscriptionUpsertStateProvider = memo(
   ({ children }: PropsWithChildren) => {
-    const layout = useContext(SplitLayoutContext);
+    const layout = useContext(DefaultLayoutContext);
     const [state, dispatch] = useReducer<
       Reducer<SubscriptionUpsertState, SubscriptionUpsertAction>
     >((_, action) => {
@@ -321,19 +310,16 @@ export const SubscriptionUpsertStateProvider = memo(
         }
       }
     }, stateDefaults);
-    const prevState = usePrevious(state);
 
     useEffect(() => {
-      if (state.mode !== prevState?.mode) {
-        layout.setIsSplit(!!state.mode);
-      }
-    }, [layout, prevState, state]);
+      state.mode ? layout.drawer.open() : layout.drawer.close();
+    }, [layout, state]);
 
     useEffect(() => {
-      if (!layout.isSplit) {
+      if (!layout.isDrawerOpened && !state.mode) {
         dispatch({ type: 'close' });
       }
-    }, [layout, dispatch]);
+    }, [layout, dispatch, state]);
 
     return (
       <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
