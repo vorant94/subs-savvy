@@ -108,12 +108,14 @@ export const ManageTagsModal = memo(
             {state.mode === 'view' ? (
               <Button
                 type="button"
+                key="add-tag"
                 onClick={switchToInsertMode}>
                 add tag
               </Button>
             ) : (
               <Button
                 type="submit"
+                key="submit-tag-form"
                 form={formId}>
                 {state.mode === 'update' ? 'Update' : 'Insert'}
               </Button>
@@ -121,6 +123,7 @@ export const ManageTagsModal = memo(
             {state.mode !== 'view' ? (
               <Button
                 type="button"
+                key="cancel-tag-form"
                 variant="outline"
                 onClick={switchToViewMode}>
                 Cancel

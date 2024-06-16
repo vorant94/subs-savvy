@@ -16,6 +16,7 @@
     "test:watch": "vitest watch",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
+    "e2e:codegen": "playwright codegen",
     "e2e:setup": "playwright install --with-deps",
     "bundle:analyze": "vite-bundle-visualizer"
   },
@@ -37,7 +38,7 @@
     "react-hook-form": "^7.51.5",
     "react-router-dom": "^6.23.1",
     "react-use": "^17.5.0",
-    "recharts": "^2.12.7",
+    "recharts": "^2.10.3",
     "simple-icons": "^12.2.0",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.8"
