@@ -11,6 +11,7 @@ export const monthlySubscription = {
     each: 1,
     period: 'monthly',
   },
+  tags: [],
 } as const satisfies SubscriptionModel;
 
 export const yearlySubscription = {
@@ -23,4 +24,5 @@ export const yearlySubscription = {
     each: 1,
     period: 'yearly',
   },
+  tags: [],
 } as const satisfies SubscriptionModel;

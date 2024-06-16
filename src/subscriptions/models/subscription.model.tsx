@@ -1,4 +1,3 @@
-import { preprocessNullableValue } from '@/form/utils/preprocess-nullable-value.ts';
 import { tagSchema } from '@/tags/models/tag.model.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
@@ -63,19 +62,16 @@ export const subscriptionCyclePeriodToLabel = {
 
 export const subscriptionSchema = z.object({
   // Coercion is needed because <input/> with type="number" still returns string as a value
-  id: z.coerce.number(),
+  id: z.number(),
   name: z.string(),
   description: z.string().nullable().optional(),
   icon: z.enum(subscriptionIcons),
-  price: z.coerce.number(),
-  startedAt: z.coerce.date(),
+  price: z.number(),
+  startedAt: z.date(),
   // Preprocessing is needed because <input/> with type="date" returns empty string as a value and it is not a valid date
-  endedAt: z.preprocess(
-    preprocessNullableValue,
-    z.coerce.date().nullable().optional(),
-  ),
+  endedAt: z.date().nullable().optional(),
   cycle: z.object({
-    each: z.coerce.number(),
+    each: z.number(),
     period: z.enum(subscriptionCyclePeriods),
   }),
   tags: z.array(tagSchema),

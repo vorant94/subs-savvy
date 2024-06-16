@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button } from '@mantine/core';
 import { memo, useCallback, useContext } from 'react';
 import { SubscriptionUpsertStateContext } from './subscription-upsert.tsx';
 
@@ -10,11 +10,5 @@ export const AddSubscriptionButton = memo(() => {
     [upsert],
   );
 
-  return (
-    <Button
-      colorScheme="teal"
-      onClick={onClick}>
-      add sub
-    </Button>
-  );
+  return <Button onClick={onClick}>add sub</Button>;
 });

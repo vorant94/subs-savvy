@@ -5,3 +5,5 @@ export const subscriptionTagSchema = z.object({
   tagId: z.number(),
 });
 export type SubscriptionTagModel = z.infer<typeof subscriptionTagSchema>;
+
+export type UpsertSubscriptionTagModel = z.infer<typeof subscriptionTagSchema>;

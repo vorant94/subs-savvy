@@ -1,26 +1,31 @@
-import type { RawFormValue } from '@/form/types/raw-form-value.ts';
+import { findTags } from '@/tags/models/tag.table.ts';
 import { SplitLayoutContext } from '@/ui/layouts/split.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import {
   Button,
-  FormControl,
-  FormLabel,
-  Input,
+  Fieldset,
+  MultiSelect,
+  NumberInput,
   Select,
+  TextInput,
   Textarea,
-} from '@chakra-ui/react';
+  type ComboboxData,
+} from '@mantine/core';
+import { DatePickerInput } from '@mantine/dates';
+import { useLiveQuery } from 'dexie-react-hooks';
 import {
   createContext,
   memo,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   type Dispatch,
   type PropsWithChildren,
   type Reducer,
 } from 'react';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { usePrevious } from 'react-use';
 import {
   subscriptionCyclePeriodToLabel,
@@ -35,24 +40,20 @@ import {
 import {
   deleteSubscription,
   insertSubscription,
-  mapSubscriptionToRawValue,
   updateSubscription,
 } from '../models/subscription.table.ts';
 
 export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
-  const { register, handleSubmit, reset } =
-    useForm<RawFormValue<UpsertSubscriptionModel>>();
+  const { register, handleSubmit, control, reset } =
+    useForm<UpsertSubscriptionModel>();
+  const tags = useLiveQuery(() => findTags());
 
-  const onSubmit: SubmitHandler<RawFormValue<UpsertSubscriptionModel>> = async (
-    raw,
-  ) => {
+  const onSubmit: SubmitHandler<UpsertSubscriptionModel> = async (raw) => {
     const subscription =
       state.mode === 'update'
-        ? await updateSubscription(raw as RawFormValue<UpdateSubscriptionModel>)
-        : await insertSubscription(
-            raw as RawFormValue<InsertSubscriptionModel>,
-          );
+        ? await updateSubscription(raw as UpdateSubscriptionModel)
+        : await insertSubscription(raw as InsertSubscriptionModel);
 
     if (state.mode === 'update') {
       return;
@@ -75,13 +76,19 @@ export const SubscriptionUpsert = memo(() => {
     dispatch({ type: 'close' });
   }, [dispatch]);
 
+  // TODO fix form reset on add new after existing is open
   useEffect(() => {
-    reset(
-      state.mode === 'update'
-        ? mapSubscriptionToRawValue(state.subscription)
-        : formDefaults,
-    );
+    if (state.mode === 'update') {
+      reset(state.subscription);
+    }
   }, [reset, state]);
+
+  const tagsData: ComboboxData = useMemo(() => {
+    return (tags ?? []).map((tag) => ({
+      label: tag.name,
+      value: `${tag.id}`,
+    }));
+  }, [tags]);
 
   return (
     <div className={cn(`flex flex-1 flex-col items-center`)}>
@@ -90,136 +97,170 @@ export const SubscriptionUpsert = memo(() => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={cn('flex flex-col gap-2 self-stretch')}>
-        <input
-          {...register('id')}
-          id="id"
-          type="number"
-          className={cn('hidden')}
+        <Controller
+          control={control}
+          name="id"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <NumberInput
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
+              className={cn('hidden')}
+            />
+          )}
         />
 
-        <FormControl>
-          <FormLabel>
-            Name
-            <Input
-              {...register('name', { required: true })}
-              placeholder="Name"
-              type="text"
-              autoComplete="off"
-            />
-          </FormLabel>
-        </FormControl>
+        <TextInput
+          defaultValue=""
+          {...register('name')}
+          label="Name"
+          placeholder="Name"
+          autoComplete="off"
+        />
 
-        <FormControl>
-          <FormLabel>
-            Description
-            <Textarea
-              {...register('description')}
-              placeholder="Description"
-              autoComplete="off"
-            />
-          </FormLabel>
-        </FormControl>
+        <Textarea
+          defaultValue=""
+          {...register('description')}
+          label="Description"
+          placeholder="Description"
+        />
 
-        <FormControl>
-          <FormLabel>
-            Icon
+        <Controller
+          control={control}
+          name="icon"
+          render={({ field: { value, onChange, onBlur } }) => (
             <Select
-              {...register('icon', { required: true })}
-              placeholder="Icon">
-              {subscriptionIcons.map((icon) => (
-                <option
-                  key={icon}
-                  value={icon}>
-                  {subscriptionIconToLabel[icon]}
-                </option>
-              ))}
-            </Select>
-          </FormLabel>
-        </FormControl>
+              value={value}
+              onChange={(_, option) => onChange(option.value)}
+              onBlur={onBlur}
+              label="Icon"
+              placeholder="Icon"
+              data={iconsData}
+            />
+          )}
+        />
 
-        <FormControl>
-          <FormLabel>
-            Price
-            <Input
-              {...register('price', { required: true })}
+        <Controller
+          control={control}
+          name="price"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <NumberInput
+              value={value}
+              onBlur={onBlur}
+              onChange={onChange}
+              label="Price"
               placeholder="Price"
-              type="number"
-              step=".01"
-              autoComplete="off"
             />
-          </FormLabel>
-        </FormControl>
+          )}
+        />
 
-        <FormControl>
-          <FormLabel>
-            Started At
-            <Input
-              {...register('startedAt', { required: true })}
-              placeholder="Started At"
-              type="date"
-              autoComplete="off"
+        <Fieldset
+          legend="Active Period"
+          className={cn(`grid grid-cols-2 gap-2`)}>
+          <Controller
+            defaultValue={new Date()}
+            control={control}
+            name="startedAt"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <DatePickerInput
+                label="Started At"
+                placeholder="Started At"
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="endedAt"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <DatePickerInput
+                label="Ended At"
+                placeholder="Ended At"
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+            )}
+          />
+        </Fieldset>
+
+        <Fieldset
+          legend="Billing Cycle"
+          className={cn(`grid grid-cols-2 gap-2`)}>
+          <Controller
+            defaultValue={1}
+            control={control}
+            name="cycle.each"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <NumberInput
+                value={value}
+                onBlur={onBlur}
+                onChange={onChange}
+                label="Each"
+                placeholder="Each"
+              />
+            )}
+          />
+
+          <Controller
+            defaultValue="monthly"
+            control={control}
+            name="cycle.period"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <Select
+                value={value}
+                onChange={(_, option) => onChange(option.value)}
+                onBlur={onBlur}
+                label="Period"
+                placeholder="Period"
+                data={cyclePeriodsData}
+              />
+            )}
+          />
+        </Fieldset>
+
+        <Controller
+          control={control}
+          name="tags"
+          defaultValue={[]}
+          render={({ field: { value, onChange, onBlur } }) => (
+            <MultiSelect
+              aria-label="Tags"
+              placeholder="Tags"
+              clearable
+              data={tagsData}
+              value={value.map((tag) => `${tag.id}`)}
+              onChange={(tagIds) =>
+                onChange(
+                  tagIds.map(
+                    (tagId) =>
+                      (tags ?? []).find((tag) => `${tag.id}` === tagId)!,
+                  ),
+                )
+              }
+              onBlur={onBlur}
             />
-          </FormLabel>
-        </FormControl>
+          )}
+        />
 
-        <FormControl>
-          <FormLabel>
-            Ended At
-            <Input
-              {...register('endedAt')}
-              placeholder="Ended At"
-              type="date"
-              autoComplete="off"
-            />
-          </FormLabel>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel>
-            Each
-            <Input
-              {...register('cycle.each', { required: true })}
-              placeholder="Each"
-              type="number"
-              autoComplete="off"
-            />
-          </FormLabel>
-        </FormControl>
-
-        <FormControl>
-          <FormLabel>
-            Period
-            <Select
-              {...register('cycle.period', { required: true })}
-              placeholder="Period">
-              {subscriptionCyclePeriods.map((period) => (
-                <option
-                  key={period}
-                  value={period}>
-                  {subscriptionCyclePeriodToLabel[period]}
-                </option>
-              ))}
-            </Select>
-          </FormLabel>
-        </FormControl>
-
-        <div className={cn('flex gap-2')}>
-          <Button
-            type="submit"
-            colorScheme="teal">
+        <div className={cn('flex justify-end gap-2')}>
+          <Button type="submit">
             {state.mode === 'update' ? 'Update' : 'Insert'}
           </Button>
           <Button
-            variant="ghost"
             type="button"
+            variant="outline"
             onClick={onClose}>
             Close
           </Button>
           {state.mode === 'update' && (
             <Button
-              colorScheme="red"
-              variant="ghost"
               type="button"
+              color="red"
+              variant="outline"
               onClick={onDelete}>
               Delete
             </Button>
@@ -230,19 +271,17 @@ export const SubscriptionUpsert = memo(() => {
   );
 });
 
-const formDefaults = {
-  id: '',
-  name: '',
-  description: '',
-  icon: '',
-  price: '',
-  startedAt: '',
-  endedAt: '',
-  cycle: {
-    each: '',
-    period: '',
-  },
-} as const satisfies RawFormValue<SubscriptionModel>;
+const iconsData: ComboboxData = subscriptionIcons.map((icon) => ({
+  value: icon,
+  label: subscriptionIconToLabel[icon],
+}));
+
+const cyclePeriodsData: ComboboxData = subscriptionCyclePeriods.map(
+  (cyclePeriod) => ({
+    value: cyclePeriod,
+    label: subscriptionCyclePeriodToLabel[cyclePeriod],
+  }),
+);
 
 export const SubscriptionUpsertStateContext = createContext<{
   state: SubscriptionUpsertState;

@@ -20,8 +20,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           recharts: ['recharts'],
-          '@chakra-ui/react': ['@chakra-ui/react'],
-          'framer-motion': ['framer-motion'],
+          '@mantine/core': ['@mantine/core'],
+          '@mantine/dates': ['@mantine/dates'],
         },
       },
     },

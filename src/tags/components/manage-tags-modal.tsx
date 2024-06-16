@@ -1,23 +1,13 @@
-import type { RawFormValue } from '@/form/types/raw-form-value.ts';
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  type UseDisclosureReturn,
-} from '@chakra-ui/react';
+import { cn } from '@/ui/utils/cn.ts';
+import { Button, Modal } from '@mantine/core';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   memo,
   useCallback,
+  useEffect,
   useReducer,
   useState,
   type Reducer,
-  type RefCallback,
 } from 'react';
 import type {
   InsertTagModel,
@@ -34,8 +24,9 @@ import { TagForm, type TagFormProps } from './tag-form.tsx';
 import { TagList, type TagListProps } from './tag-list.tsx';
 
 export const ManageTagsModal = memo(
-  ({ isOpen, onClose }: ManageTagsModalProps) => {
+  ({ isOpen, close }: ManageTagsModalProps) => {
     const tags = useLiveQuery(() => findTags());
+    const [formId, setFormId] = useState('');
     const [state, dispatch] = useReducer<
       Reducer<ManageTagsModalState, ManageTagsModalAction>
     >((_, action) => {
@@ -50,11 +41,6 @@ export const ManageTagsModal = memo(
         }
       }
     }, stateDefaults);
-    const [formId, setFormId] = useState('');
-
-    const formRef: RefCallback<HTMLFormElement> = useCallback((ref) => {
-      setFormId(ref?.getAttribute('id') ?? '');
-    }, []);
 
     const switchToInsertMode = useCallback(() => {
       dispatch({ type: 'upsert' });
@@ -75,8 +61,8 @@ export const ManageTagsModal = memo(
         }
 
         state.mode === 'update'
-          ? await updateTag(raw as RawFormValue<UpdateTagModel>)
-          : await insertTag(raw as RawFormValue<InsertTagModel>);
+          ? await updateTag(raw as UpdateTagModel)
+          : await insertTag(raw as InsertTagModel);
 
         dispatch({ type: 'view' });
       },
@@ -87,43 +73,47 @@ export const ManageTagsModal = memo(
       await deleteTag(id);
     }, []);
 
+    useEffect(() => {
+      if (!isOpen && state.mode !== 'view') {
+        dispatch({ type: 'view' });
+      }
+    }, [isOpen, state]);
+
+    const updateFormId: (ref: HTMLFormElement | null) => void = useCallback(
+      (ref) => setFormId(ref?.getAttribute('id') ?? ''),
+      [],
+    );
+
     return (
       <Modal
-        isOpen={isOpen}
-        onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Manage Tags</ModalHeader>
-          <ModalCloseButton />
+        opened={isOpen}
+        onClose={close}
+        title="Manage Tags">
+        <div className={cn(`flex flex-col gap-4`)}>
+          {state.mode === 'view' ? (
+            <TagList
+              tags={tags ?? []}
+              onUpdate={switchToUpdateMode}
+              onDelete={deleteTagCb}
+            />
+          ) : (
+            <TagForm
+              ref={updateFormId}
+              onSubmit={upsertTag}
+              tag={state.mode === 'update' ? state.tag : null}
+            />
+          )}
 
-          <ModalBody>
-            {state.mode === 'view' ? (
-              <TagList
-                tags={tags ?? []}
-                onUpdate={switchToUpdateMode}
-                onDelete={deleteTagCb}
-              />
-            ) : (
-              <TagForm
-                onSubmit={upsertTag}
-                ref={formRef}
-                tag={state.mode === 'update' ? state.tag : null}
-              />
-            )}
-          </ModalBody>
-
-          <ModalFooter>
+          <div className={cn(`flex justify-end gap-2`)}>
             {state.mode === 'view' ? (
               <Button
                 type="button"
-                colorScheme="teal"
                 onClick={switchToInsertMode}>
                 add tag
               </Button>
             ) : (
               <Button
                 type="submit"
-                colorScheme="teal"
                 form={formId}>
                 {state.mode === 'update' ? 'Update' : 'Insert'}
               </Button>
@@ -131,19 +121,22 @@ export const ManageTagsModal = memo(
             {state.mode !== 'view' ? (
               <Button
                 type="button"
-                variant="ghost"
+                variant="outline"
                 onClick={switchToViewMode}>
                 Cancel
               </Button>
             ) : null}
-          </ModalFooter>
-        </ModalContent>
+          </div>
+        </div>
       </Modal>
     );
   },
 );
 
-export interface ManageTagsModalProps extends UseDisclosureReturn {}
+export interface ManageTagsModalProps {
+  isOpen: boolean;
+  close: () => void;
+}
 
 type ManageTagsModalState =
   | {

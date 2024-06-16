@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 export const tagSchema = z.object({
-  // Coercion is needed because <input/> with type="number" still returns string as a value
-  id: z.coerce.number(),
+  id: z.number(),
   name: z.string(),
   color: z.string(),
 });

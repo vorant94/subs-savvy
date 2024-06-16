@@ -1,7 +1,7 @@
 import { cn } from '@/ui/utils/cn.ts';
-import { IconButton, Text } from '@chakra-ui/react';
 import { faCircle, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ActionIcon, Text } from '@mantine/core';
 import { memo } from 'react';
 import type { TagModel } from '../models/tag.model.ts';
 
@@ -21,23 +21,20 @@ export const TagList = memo(({ tags, onUpdate, onDelete }: TagListProps) => {
 
           <div className={cn(`flex-1`)} />
 
-          <IconButton
-            colorScheme="teal"
+          <ActionIcon
             aria-label="Update"
-            variant="ghost"
-            size="sm"
-            icon={<FontAwesomeIcon icon={faPen} />}
-            onClick={() => onUpdate(tag)}
-          />
+            variant="subtle"
+            onClick={() => onUpdate(tag)}>
+            <FontAwesomeIcon icon={faPen} />
+          </ActionIcon>
 
-          <IconButton
-            colorScheme="red"
+          <ActionIcon
             aria-label="Delete"
-            variant="ghost"
-            size="sm"
-            icon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={() => onDelete(tag.id)}
-          />
+            variant="subtle"
+            color="red"
+            onClick={() => onDelete(tag.id)}>
+            <FontAwesomeIcon icon={faTrash} />
+          </ActionIcon>
         </div>
       ))}
     </div>

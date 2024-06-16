@@ -1,5 +1,5 @@
 import { cn } from '@/ui/utils/cn.ts';
-import { Avatar, Card, CardBody, Heading, Text } from '@chakra-ui/react';
+import { Avatar, Card, Text, Title } from '@mantine/core';
 import { memo, useCallback, useContext } from 'react';
 import {
   subscriptionIconToSvg,
@@ -18,36 +18,43 @@ export const SubscriptionListItem = memo(
 
     return (
       <Card
-        as="button"
-        textAlign="start"
-        alignItems="initial"
+        shadow="xs"
+        padding="xs"
+        radius="md"
+        withBorder
+        aria-label={subscription.name}
+        component="button"
+        className={cn(`block text-left`)}
         onClick={openSubscriptionUpdate}>
-        <CardBody className={cn(`flex items-center gap-2`)}>
+        <div className={cn(`flex items-center gap-2`)}>
           <Avatar
-            bg="transparent"
-            size="sm"
-            icon={subscriptionIconToSvg[subscription.icon]}
-          />
+            radius={0}
+            variant="transparent">
+            {subscriptionIconToSvg[subscription.icon]}
+          </Avatar>
 
           <div className={cn('flex-1 overflow-hidden')}>
-            <Heading
-              size="xs"
-              className={cn(`truncate`)}
-              textTransform="uppercase">
+            <Title
+              order={5}
+              className={cn(`!mb-0 truncate uppercase`)}>
               {subscription.name}
-            </Heading>
+            </Title>
 
             {subscription.description ? (
               <Text
-                className={cn(`truncate`)}
-                fontSize="sm">
+                size="sm"
+                className={cn(`block truncate`)}>
                 {subscription.description}
               </Text>
             ) : null}
           </div>
 
-          <Heading size="md">{subscription.price}</Heading>
-        </CardBody>
+          <Title
+            order={4}
+            className={cn(`!mb-0`)}>
+            {subscription.price}
+          </Title>
+        </div>
       </Card>
     );
   },

@@ -1,6 +1,5 @@
-import { App } from '@/App.tsx';
 import { route } from '@/router/types/route.ts';
-import { ChakraProvider } from '@chakra-ui/react';
+import { MantineProvider } from '@mantine/core';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -8,6 +7,7 @@ import {
   Navigate,
   RouterProvider,
 } from 'react-router-dom';
+import { App } from './App.tsx';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -44,8 +44,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ChakraProvider>
+    <MantineProvider>
       <RouterProvider router={router} />
-    </ChakraProvider>
+    </MantineProvider>
   </StrictMode>,
 );
