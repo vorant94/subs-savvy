@@ -19,13 +19,11 @@ export interface NavLinksContextProviderProps {
   navLinks: Array<NavLink>;
 }
 
-export const NavLinksContext = createContext<NavLinksContextModel>({
+export const NavLinksContext = createContext<{
+  navLinks: Array<NavLink>;
+}>({
   navLinks: [],
 });
-
-export interface NavLinksContextModel {
-  navLinks: Array<NavLink>;
-}
 
 export interface NavLink {
   label: string;

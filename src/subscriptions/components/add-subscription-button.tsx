@@ -16,7 +16,7 @@ export const AddSubscriptionButton = memo(() => {
 
   return isMd ? (
     <Button onClick={openSubscriptionInsert}>add sub</Button>
-  ) : typeof isMd !== 'undefined' ? (
+  ) : (
     <ActionIcon
       onClick={openSubscriptionInsert}
       size="xl"
@@ -24,5 +24,5 @@ export const AddSubscriptionButton = memo(() => {
       aria-label="add sub">
       <FontAwesomeIcon icon={faPlus} />
     </ActionIcon>
-  ) : null;
+  );
 });
