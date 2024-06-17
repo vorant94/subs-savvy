@@ -3,6 +3,7 @@ import { cn } from '@/ui/utils/cn.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
+  Divider,
   Fieldset,
   MultiSelect,
   NumberInput,
@@ -83,6 +84,8 @@ export const SubscriptionUpsert = memo(() => {
     <form
       onSubmit={handleSubmit(upsertSubscription)}
       className={cn('flex flex-col gap-2 self-stretch')}>
+      <Divider />
+
       <Controller
         control={control}
         name="id"
@@ -208,7 +211,7 @@ export const SubscriptionUpsert = memo(() => {
         name="tags"
         render={({ field: { value, onChange, onBlur } }) => (
           <MultiSelect
-            aria-label="Tags"
+            label="Tags"
             placeholder="Tags"
             clearable
             data={tagsData}
@@ -224,6 +227,8 @@ export const SubscriptionUpsert = memo(() => {
           />
         )}
       />
+
+      <Divider />
 
       <div className={cn('flex justify-end gap-2')}>
         <Button type="submit">

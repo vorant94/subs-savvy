@@ -8,7 +8,7 @@ export const SubscriptionList = memo(() => {
   const subscriptions = useLiveQuery(() => findSubscriptions());
 
   return (
-    <div className={cn(`grid grid-cols-4 gap-4`)}>
+    <div className={cn(`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4`)}>
       {subscriptions && subscriptions.length > 0 ? (
         subscriptions.map((subscription) => (
           <SubscriptionListItem

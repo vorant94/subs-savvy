@@ -1,7 +1,7 @@
 import {
-  TagMultiselect,
+  TagSelect,
   type TagsSelectProps,
-} from '@/tags/components/tag-multiselect.tsx';
+} from '@/tags/components/tag-select.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
@@ -26,7 +26,7 @@ export const SubscriptionsPage = memo(() => {
     <DefaultLayout
       header={
         <DefaultLayoutHeader actions={<AddSubscriptionButton />}>
-          <TagMultiselect onChange={updateSelectedTags} />
+          <TagSelect onChange={updateSelectedTags} />
         </DefaultLayoutHeader>
       }
       drawerContent={<SubscriptionUpsert />}

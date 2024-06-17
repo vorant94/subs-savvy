@@ -1,6 +1,6 @@
 import { cn } from '@/ui/utils/cn.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { NumberInput, TextInput } from '@mantine/core';
+import { ColorInput, NumberInput, TextInput } from '@mantine/core';
 import { forwardRef, memo } from 'react';
 import {
   Controller,
@@ -49,11 +49,18 @@ export const TagForm = memo(
           autoComplete="off"
         />
 
-        <TextInput
-          {...register('color')}
-          label="Color"
-          placeholder="Color"
-          type="color"
+        <Controller
+          control={control}
+          name="color"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <ColorInput
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              label="Color"
+              placeholder="Color"
+            />
+          )}
         />
       </form>
     );

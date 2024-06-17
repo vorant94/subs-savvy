@@ -36,7 +36,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.5",
     "react-router-dom": "^6.23.1",
-    "react-use": "^17.5.0",
     "recharts": "^2.10.3",
     "simple-icons": "^12.2.0",
     "tailwind-merge": "^2.3.0",

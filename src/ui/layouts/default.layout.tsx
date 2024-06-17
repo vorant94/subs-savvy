@@ -1,6 +1,14 @@
 import { NavLinksContext } from '@/router/providers/nav-links.provider.tsx';
+import { useBreakpoint } from '@/ui/hooks/use-breakpoint.ts';
 import { cn } from '@/ui/utils/cn.ts';
-import { AppShell, Burger, Drawer, NavLink } from '@mantine/core';
+import {
+  Affix,
+  AppShell,
+  Burger,
+  Drawer,
+  NavLink,
+  Transition,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
   createContext,
@@ -22,6 +30,7 @@ export const DefaultLayout = memo(
     const { isDrawerOpened, drawer } = useContext(DefaultLayoutContext);
     const [isNavOpened, nav] = useDisclosure();
     const { pathname } = useLocation();
+    const isMd = useBreakpoint('md');
 
     return (
       <>
@@ -33,7 +42,7 @@ export const DefaultLayout = memo(
             collapsed: { mobile: !isNavOpened },
           }}
           padding="md">
-          <AppShell.Header>
+          <AppShell.Header className={cn(`flex items-center gap-2 px-4`)}>
             <Burger
               opened={isNavOpened}
               onClick={nav.toggle}
@@ -65,7 +74,9 @@ export const DefaultLayout = memo(
         </AppShell>
 
         <Drawer
-          position="right"
+          offset={8}
+          radius="md"
+          position={isMd ? 'right' : 'bottom'}
           onClose={drawer.close}
           opened={isDrawerOpened}
           title={drawerTitle}>
@@ -84,13 +95,29 @@ export interface DefaultLayoutProps {
 
 export const DefaultLayoutHeader = memo(
   ({ actions, children }: PropsWithChildren<DefaultLayoutHeaderProps>) => {
+    const isMd = useBreakpoint('md');
+
     return (
-      <div className={cn(`flex h-16 flex-row items-center gap-4`)}>
-        <h1 className={cn(`min-w-[200px] pl-8`)}>Subs Savvy</h1>
+      <>
+        <h1 className={cn(`w-[192px]`)}>Subs Savvy</h1>
         {children ? <div>{children}</div> : null}
         <div className={cn(`flex-1`)} />
-        {actions ? <div className={cn('pr-8')}>{actions}</div> : null}
-      </div>
+        {actions ? (
+          isMd ? (
+            <div>{actions}</div>
+          ) : (
+            <Affix position={{ bottom: 20, right: 20 }}>
+              <Transition
+                transition="slide-up"
+                mounted={true}>
+                {(transitionStyles) => (
+                  <div style={transitionStyles}>{actions}</div>
+                )}
+              </Transition>
+            </Affix>
+          )
+        ) : null}
+      </>
     );
   },
 );

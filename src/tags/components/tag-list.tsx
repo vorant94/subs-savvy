@@ -10,7 +10,7 @@ export const TagList = memo(({ tags, onUpdate, onDelete }: TagListProps) => {
     <div className={cn(`flex flex-col divide-y divide-dashed`)}>
       {tags.map((tag) => (
         <div
-          className={cn(`flex items-center gap-2`)}
+          className={cn(`flex items-center gap-2 py-1`)}
           key={tag.id}>
           <FontAwesomeIcon
             icon={faCircle}

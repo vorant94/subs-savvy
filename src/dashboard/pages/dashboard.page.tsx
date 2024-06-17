@@ -17,7 +17,10 @@ export const DashboardPage = memo(() => {
       header={<DefaultLayoutHeader actions={<AddSubscriptionButton />} />}
       drawerContent={<SubscriptionUpsert />}
       drawerTitle={`${upsert.state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}>
-      <div className={cn(`grid flex-1 grid-rows-2 gap-4`)}>
+      <div
+        className={cn(
+          `grid flex-1 grid-cols-1 grid-rows-2 gap-4 lg:grid-cols-2`,
+        )}>
         <SubscriptionsByMonthChart />
       </div>
     </DefaultLayout>
