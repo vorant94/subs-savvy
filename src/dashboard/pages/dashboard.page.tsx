@@ -2,6 +2,7 @@ import { AddSubscriptionButton } from '@/subscriptions/components/add-subscripti
 import { SubscriptionUpsert } from '@/subscriptions/components/subscription-upsert.tsx';
 import { SubscriptionsByMonthChart } from '@/subscriptions/components/subscriptions-by-month-chart.tsx';
 import { SubscriptionUpsertStateContext } from '@/subscriptions/providers/subscription-upsert-state.provider.tsx';
+import { TagSelect } from '@/tags/components/tag-select.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
@@ -14,7 +15,11 @@ export const DashboardPage = memo(() => {
 
   return (
     <DefaultLayout
-      header={<DefaultLayoutHeader actions={<AddSubscriptionButton />} />}
+      header={
+        <DefaultLayoutHeader actions={<AddSubscriptionButton />}>
+          <TagSelect />
+        </DefaultLayoutHeader>
+      }
       drawerContent={<SubscriptionUpsert />}
       drawerTitle={`${upsert.state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}>
       <div

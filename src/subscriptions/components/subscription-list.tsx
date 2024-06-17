@@ -1,11 +1,10 @@
 import { cn } from '@/ui/utils/cn.ts';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { memo } from 'react';
-import { findSubscriptions } from '../models/subscription.table.ts';
+import { memo, useContext } from 'react';
+import { SubscriptionsContext } from '../providers/subscriptions.provider.tsx';
 import { SubscriptionListItem } from './subscription-list-item.tsx';
 
 export const SubscriptionList = memo(() => {
-  const subscriptions = useLiveQuery(() => findSubscriptions());
+  const { subscriptions } = useContext(SubscriptionsContext);
 
   return (
     <div className={cn(`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4`)}>

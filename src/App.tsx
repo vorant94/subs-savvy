@@ -3,6 +3,7 @@ import {
   type NavLink,
 } from '@/router/providers/nav-links.provider.tsx';
 import { SubscriptionUpsertStateProvider } from '@/subscriptions/providers/subscription-upsert-state.provider';
+import { SubscriptionsProvider } from '@/subscriptions/providers/subscriptions.provider.tsx';
 import { DefaultLayoutContextProvider } from '@/ui/layouts/default.layout';
 import { faChartSimple, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,7 +15,9 @@ export const App = memo(() => {
     <NavLinksContextProvider navLinks={navLinks}>
       <DefaultLayoutContextProvider>
         <SubscriptionUpsertStateProvider>
-          <Outlet />
+          <SubscriptionsProvider>
+            <Outlet />
+          </SubscriptionsProvider>
         </SubscriptionUpsertStateProvider>
       </DefaultLayoutContextProvider>
     </NavLinksContextProvider>

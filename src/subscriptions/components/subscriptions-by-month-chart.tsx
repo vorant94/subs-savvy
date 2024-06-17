@@ -5,15 +5,14 @@ import {
 } from '@/date/types/month.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { Card } from '@mantine/core';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { memo, useMemo } from 'react';
+import { memo, useContext, useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts';
 import type { SubscriptionModel } from '../models/subscription.model.tsx';
-import { findSubscriptions } from '../models/subscription.table.ts';
+import { SubscriptionsContext } from '../providers/subscriptions.provider.tsx';
 import { cyclePeriodToCalculateMonthlyPrice } from '../utils/cycle-period-to-calculate-monthly-price.ts';
 
 export const SubscriptionsByMonthChart = memo(() => {
-  const subscriptions = useLiveQuery(() => findSubscriptions());
+  const { subscriptions } = useContext(SubscriptionsContext);
 
   const aggregatedSubscriptions = useMemo(
     () => Object.entries(aggregateSubscriptionsByMonth(subscriptions ?? [])),
