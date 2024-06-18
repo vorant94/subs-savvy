@@ -10,6 +10,18 @@ import {
 import { App } from './App.tsx';
 import './index.css';
 
+window.addEventListener('unhandledrejection', function ({ reason }) {
+  if (import.meta.env.DEV && reason instanceof Error) {
+    console.error(reason.message);
+  }
+});
+
+window.addEventListener('error', function ({ error }) {
+  if (import.meta.env.DEV && error instanceof Error) {
+    console.error(error.message);
+  }
+});
+
 const router = createBrowserRouter([
   {
     path: '/',
