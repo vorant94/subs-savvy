@@ -43,6 +43,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.44.1",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/node": "^20.14.2",
     "@types/react": "^18.2.66",

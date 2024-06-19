@@ -8,7 +8,7 @@ import {
 import type { Route } from '../types/route.ts';
 
 export function useNavLinks(): UseNavLinks {
-  return useContext(NavLinksContext);
+  return useContext(navLinksContext);
 }
 
 export interface UseNavLinks {
@@ -24,9 +24,9 @@ export interface NavLink {
 export const NavLinksProvider = memo(
   ({ children, navLinks }: PropsWithChildren<NavLinksProviderProps>) => {
     return (
-      <NavLinksContext.Provider value={{ navLinks }}>
+      <navLinksContext.Provider value={{ navLinks }}>
         {children}
-      </NavLinksContext.Provider>
+      </navLinksContext.Provider>
     );
   },
 );
@@ -35,6 +35,6 @@ export interface NavLinksProviderProps {
   navLinks: Array<NavLink>;
 }
 
-const NavLinksContext = createContext<UseNavLinks>({
+const navLinksContext = createContext<UseNavLinks>({
   navLinks: [],
 });

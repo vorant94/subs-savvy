@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import type { Disclosure } from '../types/disclosure.ts';
 
 export function useDefaultLayout(): UseDefaultLayout {
-  return useContext(DefaultLayoutContext);
+  return useContext(defaultLayoutContext);
 }
 
 export interface UseDefaultLayout {
@@ -33,14 +33,14 @@ export const DefaultLayoutProvider = memo(({ children }: PropsWithChildren) => {
   }, [nav, pathname, prevPathname]);
 
   return (
-    <DefaultLayoutContext.Provider
+    <defaultLayoutContext.Provider
       value={{ isDrawerOpened, drawer, isNavOpened, nav }}>
       {children}
-    </DefaultLayoutContext.Provider>
+    </defaultLayoutContext.Provider>
   );
 });
 
-const DefaultLayoutContext = createContext<UseDefaultLayout>({
+const defaultLayoutContext = createContext<UseDefaultLayout>({
   isDrawerOpened: false,
   drawer: {
     open: () => {},

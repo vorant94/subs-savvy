@@ -13,7 +13,7 @@ import {
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 
 export function useSubscriptionUpsert() {
-  return useContext(SubscriptionUpsertContext);
+  return useContext(subscriptionUpsertContext);
 }
 
 export interface UseSubscriptionUpsert {
@@ -91,14 +91,14 @@ export const SubscriptionUpsertProvider = memo(
     }, [layout, prevLayout, prevState, state]);
 
     return (
-      <SubscriptionUpsertContext.Provider value={{ state, dispatch }}>
+      <subscriptionUpsertContext.Provider value={{ state, dispatch }}>
         {children}
-      </SubscriptionUpsertContext.Provider>
+      </subscriptionUpsertContext.Provider>
     );
   },
 );
 
-const SubscriptionUpsertContext = createContext<UseSubscriptionUpsert>({
+const subscriptionUpsertContext = createContext<UseSubscriptionUpsert>({
   state: {
     subscription: null,
     mode: null,

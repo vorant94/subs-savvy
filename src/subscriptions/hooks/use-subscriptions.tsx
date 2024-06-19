@@ -14,7 +14,7 @@ import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 
 export function useSubscriptions(): UseSubscriptions {
-  return useContext(SubscriptionsContext);
+  return useContext(subscriptionsContext);
 }
 
 export interface UseSubscriptions {
@@ -53,7 +53,7 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
   );
 
   return (
-    <SubscriptionsContext.Provider
+    <subscriptionsContext.Provider
       value={{
         subscriptions,
         tags: tags ?? [],
@@ -61,11 +61,11 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
         selectTag,
       }}>
       {children}
-    </SubscriptionsContext.Provider>
+    </subscriptionsContext.Provider>
   );
 });
 
-const SubscriptionsContext = createContext<UseSubscriptions>({
+const subscriptionsContext = createContext<UseSubscriptions>({
   subscriptions: [],
   tags: [],
   selectedTag: null,

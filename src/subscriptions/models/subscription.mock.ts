@@ -1,3 +1,4 @@
+import { findSubscriptions } from '@/subscriptions/models/subscription.table.ts';
 import dayjs from 'dayjs';
 import type { SubscriptionModel } from './subscription.model.ts';
 
@@ -26,3 +27,9 @@ export const yearlySubscription = {
   },
   tags: [],
 } as const satisfies SubscriptionModel;
+
+export async function findSubscriptionsMock(): ReturnType<
+  typeof findSubscriptions
+> {
+  return [monthlySubscription, yearlySubscription];
+}

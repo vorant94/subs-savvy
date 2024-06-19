@@ -14,6 +14,8 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     root: './src',
+    setupFiles: ['./test-setup.ts'],
+    mockReset: true,
   },
   build: {
     rollupOptions: {
