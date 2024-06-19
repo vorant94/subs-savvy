@@ -1,18 +1,15 @@
-import {
-  monthToMonthName,
-  months,
-  type MonthName,
-} from '@/date/types/month.ts';
+import type { MonthName } from '@/date/types/month-name.ts';
+import { monthToMonthName, months } from '@/date/types/month.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { Card } from '@mantine/core';
-import { memo, useContext, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis } from 'recharts';
-import type { SubscriptionModel } from '../models/subscription.model.tsx';
-import { SubscriptionsContext } from '../providers/subscriptions.provider.tsx';
+import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
+import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { cyclePeriodToCalculateMonthlyPrice } from '../utils/cycle-period-to-calculate-monthly-price.ts';
 
 export const SubscriptionsByMonthChart = memo(() => {
-  const { subscriptions } = useContext(SubscriptionsContext);
+  const { subscriptions } = useSubscriptions();
 
   const aggregatedSubscriptions = useMemo(
     () => Object.entries(aggregateSubscriptionsByMonth(subscriptions ?? [])),

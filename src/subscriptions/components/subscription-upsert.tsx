@@ -14,33 +14,37 @@ import {
 } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { memo, useCallback, useContext, useMemo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import {
   Controller,
   useForm,
   type DefaultValues,
   type SubmitHandler,
 } from 'react-hook-form';
+import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 import {
   insertSubscriptionSchema,
-  subscriptionCyclePeriodToLabel,
-  subscriptionCyclePeriods,
-  subscriptionIconToLabel,
-  subscriptionIcons,
   updateSubscriptionSchema,
   type InsertSubscriptionModel,
   type UpdateSubscriptionModel,
   type UpsertSubscriptionModel,
-} from '../models/subscription.model.tsx';
+} from '../models/subscription.model.ts';
 import {
   deleteSubscription,
   insertSubscription,
   updateSubscription,
 } from '../models/subscription.table.ts';
-import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
+import {
+  subscriptionCyclePeriodToLabel,
+  subscriptionCyclePeriods,
+} from '../types/subscription-cycle-period.ts';
+import {
+  subscriptionIconToLabel,
+  subscriptionIcons,
+} from '../types/subscription-icon.tsx';
 
 export const SubscriptionUpsert = memo(() => {
-  const { state, dispatch } = useContext(SubscriptionUpsertStateContext);
+  const { state, dispatch } = useSubscriptionUpsert();
 
   const { register, handleSubmit, control } = useForm<UpsertSubscriptionModel>({
     resolver: zodResolver(

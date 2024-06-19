@@ -7,7 +7,7 @@ import {
   type InsertSubscriptionModel,
   type SubscriptionModel,
   type UpdateSubscriptionModel,
-} from './subscription.model.tsx';
+} from './subscription.model.ts';
 
 export function findSubscriptions(): Promise<Array<SubscriptionModel>> {
   return db.transaction(

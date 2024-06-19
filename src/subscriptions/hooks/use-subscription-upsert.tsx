@@ -1,4 +1,4 @@
-import { DefaultLayoutContext } from '@/ui/layouts/default.layout.tsx';
+import { useDefaultLayout } from '@/ui/hooks/use-default-layout.tsx';
 import { usePrevious } from '@mantine/hooks';
 import {
   createContext,
@@ -10,11 +10,46 @@ import {
   type PropsWithChildren,
   type Reducer,
 } from 'react';
-import type { SubscriptionModel } from '../models/subscription.model.tsx';
+import type { SubscriptionModel } from '../models/subscription.model.ts';
 
-export const SubscriptionUpsertStateProvider = memo(
+export function useSubscriptionUpsert() {
+  return useContext(SubscriptionUpsertContext);
+}
+
+export interface UseSubscriptionUpsert {
+  state: SubscriptionUpsertState;
+  dispatch: Dispatch<SubscriptionUpsertAction>;
+}
+
+export type SubscriptionUpsertState =
+  | {
+      subscription: SubscriptionModel;
+      mode: 'update';
+    }
+  | {
+      mode: 'insert';
+    }
+  | {
+      subscription: null;
+      mode: null;
+    };
+
+export interface SubscriptionUpsertOpenAction {
+  type: 'open';
+  subscription?: SubscriptionModel | null;
+}
+
+export interface SubscriptionUpsertCloseAction {
+  type: 'close';
+}
+
+export type SubscriptionUpsertAction =
+  | SubscriptionUpsertOpenAction
+  | SubscriptionUpsertCloseAction;
+
+export const SubscriptionUpsertProvider = memo(
   ({ children }: PropsWithChildren) => {
-    const layout = useContext(DefaultLayoutContext);
+    const layout = useDefaultLayout();
     const prevLayout = usePrevious(layout);
 
     const [state, dispatch] = useReducer<
@@ -56,49 +91,20 @@ export const SubscriptionUpsertStateProvider = memo(
     }, [layout, prevLayout, prevState, state]);
 
     return (
-      <SubscriptionUpsertStateContext.Provider value={{ state, dispatch }}>
+      <SubscriptionUpsertContext.Provider value={{ state, dispatch }}>
         {children}
-      </SubscriptionUpsertStateContext.Provider>
+      </SubscriptionUpsertContext.Provider>
     );
   },
 );
 
-export const SubscriptionUpsertStateContext = createContext<{
-  state: SubscriptionUpsertState;
-  dispatch: Dispatch<SubscriptionUpsertAction>;
-}>({
+const SubscriptionUpsertContext = createContext<UseSubscriptionUpsert>({
   state: {
     subscription: null,
     mode: null,
   },
   dispatch: () => {},
 });
-
-export type SubscriptionUpsertState =
-  | {
-      subscription: SubscriptionModel;
-      mode: 'update';
-    }
-  | {
-      mode: 'insert';
-    }
-  | {
-      subscription: null;
-      mode: null;
-    };
-
-export interface SubscriptionUpsertOpenAction {
-  type: 'open';
-  subscription?: SubscriptionModel | null;
-}
-
-export interface SubscriptionUpsertCloseAction {
-  type: 'close';
-}
-
-export type SubscriptionUpsertAction =
-  | SubscriptionUpsertOpenAction
-  | SubscriptionUpsertCloseAction;
 
 const stateDefaults: SubscriptionUpsertState = {
   mode: null,

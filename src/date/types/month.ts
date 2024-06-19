@@ -1,23 +1,8 @@
+import type { MonthName } from './month-name.ts';
+
 export const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 
 export type Month = (typeof months)[number];
-
-export const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-] as const;
-
-export type MonthName = (typeof monthNames)[number];
 
 export const monthToMonthName = {
   0: 'January',

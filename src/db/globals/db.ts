@@ -1,5 +1,5 @@
 import type { SubscriptionTagModel } from '@/subscriptions/models/subscription-tag.model.ts';
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.tsx';
+import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
 import type { TagModel } from '@/tags/models/tag.model.ts';
 import Dexie, { type EntityTable, type Table } from 'dexie';
 

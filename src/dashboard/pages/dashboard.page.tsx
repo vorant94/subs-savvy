@@ -1,17 +1,17 @@
 import { AddSubscriptionButton } from '@/subscriptions/components/add-subscription-button.tsx';
 import { SubscriptionUpsert } from '@/subscriptions/components/subscription-upsert.tsx';
 import { SubscriptionsByMonthChart } from '@/subscriptions/components/subscriptions-by-month-chart.tsx';
-import { SubscriptionUpsertStateContext } from '@/subscriptions/providers/subscription-upsert-state.provider.tsx';
+import { useSubscriptionUpsert } from '@/subscriptions/hooks/use-subscription-upsert';
 import { TagSelect } from '@/tags/components/tag-select.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
 } from '@/ui/layouts/default.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
-import { memo, useContext } from 'react';
+import { memo } from 'react';
 
 export const DashboardPage = memo(() => {
-  const upsert = useContext(SubscriptionUpsertStateContext);
+  const upsert = useSubscriptionUpsert();
 
   return (
     <DefaultLayout

@@ -2,11 +2,11 @@ import { useBreakpoint } from '@/ui/hooks/use-breakpoint.ts';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ActionIcon, Button } from '@mantine/core';
-import { memo, useCallback, useContext } from 'react';
-import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
+import { memo, useCallback } from 'react';
+import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 
 export const AddSubscriptionButton = memo(() => {
-  const upsert = useContext(SubscriptionUpsertStateContext);
+  const upsert = useSubscriptionUpsert();
   const isMd = useBreakpoint('md');
 
   const openSubscriptionInsert = useCallback(

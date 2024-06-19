@@ -5,12 +5,24 @@ import {
   createContext,
   memo,
   useCallback,
+  useContext,
   useMemo,
   useState,
   type PropsWithChildren,
 } from 'react';
-import type { SubscriptionModel } from '../models/subscription.model.tsx';
+import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
+
+export function useSubscriptions(): UseSubscriptions {
+  return useContext(SubscriptionsContext);
+}
+
+export interface UseSubscriptions {
+  subscriptions: Array<SubscriptionModel>;
+  tags: Array<TagModel>;
+  selectedTag: TagModel | null;
+  selectTag(tagId: string | null): void;
+}
 
 export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
   const unfilteredSubscriptions = useLiveQuery(() => findSubscriptions());
@@ -53,12 +65,7 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
   );
 });
 
-export const SubscriptionsContext = createContext<{
-  subscriptions: Array<SubscriptionModel>;
-  tags: Array<TagModel>;
-  selectedTag: TagModel | null;
-  selectTag(tagId: string | null): void;
-}>({
+const SubscriptionsContext = createContext<UseSubscriptions>({
   subscriptions: [],
   tags: [],
   selectedTag: null,

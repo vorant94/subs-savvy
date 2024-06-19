@@ -1,8 +1,6 @@
 import type { Month } from '@/date/types/month.ts';
-import type {
-  SubscriptionCyclePeriod,
-  SubscriptionModel,
-} from '../models/subscription.model.tsx';
+import type { SubscriptionModel } from '../models/subscription.model.ts';
+import type { SubscriptionCyclePeriod } from '../types/subscription-cycle-period.ts';
 
 export interface CalculateSubscriptionMonthlyPrice {
   (subscription: SubscriptionModel, month: Month, year?: number): number;

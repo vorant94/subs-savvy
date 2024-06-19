@@ -4,7 +4,7 @@ import {
   monthlySubscription,
   yearlySubscription,
 } from '../models/subscription.mock.ts';
-import type { SubscriptionModel } from '../models/subscription.model.tsx';
+import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { cyclePeriodToCalculateMonthlyPrice } from './cycle-period-to-calculate-monthly-price.ts';
 
 describe('cyclePeriodToCalculateMonthlyPrice', () => {

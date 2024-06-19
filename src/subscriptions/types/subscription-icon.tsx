@@ -1,4 +1,3 @@
-import { tagSchema } from '@/tags/models/tag.model.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +9,6 @@ import JetBrains from 'simple-icons/icons/jetbrains.svg?react';
 import Netflix from 'simple-icons/icons/netflix.svg?react';
 import Telegram from 'simple-icons/icons/telegram.svg?react';
 import YouTube from 'simple-icons/icons/youtube.svg?react';
-import { z } from 'zod';
 
 export const subscriptionIcons = [
   'telegram',
@@ -51,39 +49,3 @@ export const subscriptionIconToLabel = {
   headspace: 'HeadSpace',
   godaddy: 'GoDaddy',
 } as const satisfies Record<SubscriptionIcon, string>;
-
-export const subscriptionCyclePeriods = ['monthly', 'yearly'] as const;
-export type SubscriptionCyclePeriod = (typeof subscriptionCyclePeriods)[number];
-
-export const subscriptionCyclePeriodToLabel = {
-  monthly: 'Month',
-  yearly: 'Year',
-} as const satisfies Record<SubscriptionCyclePeriod, string>;
-
-export const subscriptionSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  description: z.string().nullable().optional(),
-  icon: z.enum(subscriptionIcons),
-  price: z.number(),
-  startedAt: z.date(),
-  endedAt: z.date().nullable().optional(),
-  cycle: z.object({
-    each: z.number(),
-    period: z.enum(subscriptionCyclePeriods),
-  }),
-  tags: z.array(tagSchema),
-});
-export type SubscriptionModel = z.infer<typeof subscriptionSchema>;
-
-export const insertSubscriptionSchema = subscriptionSchema.omit({
-  id: true,
-});
-export type InsertSubscriptionModel = z.infer<typeof insertSubscriptionSchema>;
-
-export const updateSubscriptionSchema = subscriptionSchema.omit({});
-export type UpdateSubscriptionModel = z.infer<typeof updateSubscriptionSchema>;
-
-export type UpsertSubscriptionModel =
-  | InsertSubscriptionModel
-  | UpdateSubscriptionModel;

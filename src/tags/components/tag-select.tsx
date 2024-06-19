@@ -1,4 +1,4 @@
-import { SubscriptionsContext } from '@/subscriptions/providers/subscriptions.provider.tsx';
+import { useSubscriptions } from '@/subscriptions/hooks/use-subscriptions.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { faCircle, faSliders } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,11 +11,11 @@ import {
   useCombobox,
 } from '@mantine/core';
 import { useDisclosure, usePrevious } from '@mantine/hooks';
-import { memo, useContext, useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { ManageTagsModal } from './manage-tags-modal.tsx';
 
 export const TagSelect = memo(() => {
-  const { tags, selectTag, selectedTag } = useContext(SubscriptionsContext);
+  const { tags, selectTag, selectedTag } = useSubscriptions();
   const prevSelectedTag = usePrevious(selectedTag);
 
   const combobox = useCombobox({

@@ -6,4 +6,7 @@ export const subscriptionTagSchema = z.object({
 });
 export type SubscriptionTagModel = z.infer<typeof subscriptionTagSchema>;
 
-export type UpsertSubscriptionTagModel = z.infer<typeof subscriptionTagSchema>;
+export const upsertSubscriptionTagSchema = subscriptionTagSchema.omit({});
+export type UpsertSubscriptionTagModel = z.infer<
+  typeof upsertSubscriptionTagSchema
+>;

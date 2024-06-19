@@ -1,10 +1,10 @@
 import {
-  NavLinksContextProvider,
+  NavLinksProvider,
   type NavLink,
-} from '@/router/providers/nav-links.provider.tsx';
-import { SubscriptionUpsertStateProvider } from '@/subscriptions/providers/subscription-upsert-state.provider';
-import { SubscriptionsProvider } from '@/subscriptions/providers/subscriptions.provider.tsx';
-import { DefaultLayoutContextProvider } from '@/ui/layouts/default.layout';
+} from '@/router/hooks/use-nav-links.tsx';
+import { SubscriptionUpsertProvider } from '@/subscriptions/hooks/use-subscription-upsert.tsx';
+import { SubscriptionsProvider } from '@/subscriptions/hooks/use-subscriptions.tsx';
+import { DefaultLayoutProvider } from '@/ui/hooks/use-default-layout.tsx';
 import { faChartSimple, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { memo } from 'react';
@@ -12,15 +12,15 @@ import { Outlet } from 'react-router-dom';
 
 export const App = memo(() => {
   return (
-    <NavLinksContextProvider navLinks={navLinks}>
-      <DefaultLayoutContextProvider>
-        <SubscriptionUpsertStateProvider>
+    <NavLinksProvider navLinks={navLinks}>
+      <DefaultLayoutProvider>
+        <SubscriptionUpsertProvider>
           <SubscriptionsProvider>
             <Outlet />
           </SubscriptionsProvider>
-        </SubscriptionUpsertStateProvider>
-      </DefaultLayoutContextProvider>
-    </NavLinksContextProvider>
+        </SubscriptionUpsertProvider>
+      </DefaultLayoutProvider>
+    </NavLinksProvider>
   );
 });
 

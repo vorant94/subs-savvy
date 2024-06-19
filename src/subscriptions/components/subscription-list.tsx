@@ -1,10 +1,10 @@
 import { cn } from '@/ui/utils/cn.ts';
-import { memo, useContext } from 'react';
-import { SubscriptionsContext } from '../providers/subscriptions.provider.tsx';
+import { memo } from 'react';
+import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
 import { SubscriptionListItem } from './subscription-list-item.tsx';
 
 export const SubscriptionList = memo(() => {
-  const { subscriptions } = useContext(SubscriptionsContext);
+  const { subscriptions } = useSubscriptions();
 
   return (
     <div className={cn(`grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4`)}>

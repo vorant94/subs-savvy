@@ -1,18 +1,10 @@
-import { NavLinksContext } from '@/router/providers/nav-links.provider.tsx';
-import { useBreakpoint } from '@/ui/hooks/use-breakpoint.ts';
-import type { Disclosure } from '@/ui/types/disclosure.ts';
+import { useNavLinks } from '@/router/hooks/use-nav-links.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { Affix, AppShell, Burger, Drawer, NavLink } from '@mantine/core';
-import { useDisclosure, usePrevious } from '@mantine/hooks';
-import {
-  createContext,
-  memo,
-  useContext,
-  useEffect,
-  type PropsWithChildren,
-  type ReactElement,
-} from 'react';
+import { memo, type PropsWithChildren, type ReactElement } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useBreakpoint } from '../hooks/use-breakpoint.ts';
+import { useDefaultLayout } from '../hooks/use-default-layout.tsx';
 
 export const DefaultLayout = memo(
   ({
@@ -21,9 +13,8 @@ export const DefaultLayout = memo(
     drawerContent,
     drawerTitle,
   }: PropsWithChildren<DefaultLayoutProps>) => {
-    const { navLinks } = useContext(NavLinksContext);
-    const { isDrawerOpened, isNavOpened, drawer, nav } =
-      useContext(DefaultLayoutContext);
+    const { navLinks } = useNavLinks();
+    const { isDrawerOpened, isNavOpened, drawer, nav } = useDefaultLayout();
     const { pathname } = useLocation();
     const isMd = useBreakpoint('md');
 
@@ -91,7 +82,7 @@ export interface DefaultLayoutProps {
 export const DefaultLayoutHeader = memo(
   ({ actions, children }: PropsWithChildren<DefaultLayoutHeaderProps>) => {
     const isMd = useBreakpoint('md');
-    const { isDrawerOpened, isNavOpened } = useContext(DefaultLayoutContext);
+    const { isDrawerOpened, isNavOpened } = useDefaultLayout();
 
     return (
       <>
@@ -115,45 +106,3 @@ export const DefaultLayoutHeader = memo(
 export interface DefaultLayoutHeaderProps {
   actions?: ReactElement;
 }
-
-export const DefaultLayoutContext = createContext<{
-  isDrawerOpened: boolean;
-  drawer: Disclosure;
-  isNavOpened: boolean;
-  nav: Disclosure;
-}>({
-  isDrawerOpened: false,
-  drawer: {
-    open: () => {},
-    close: () => {},
-    toggle: () => {},
-  },
-  isNavOpened: false,
-  nav: {
-    open: () => {},
-    close: () => {},
-    toggle: () => {},
-  },
-});
-
-export const DefaultLayoutContextProvider = memo(
-  ({ children }: PropsWithChildren) => {
-    const [isDrawerOpened, drawer] = useDisclosure(false);
-    const [isNavOpened, nav] = useDisclosure(false);
-    const { pathname } = useLocation();
-    const prevPathname = usePrevious(pathname);
-
-    useEffect(() => {
-      if (pathname !== prevPathname) {
-        nav.close();
-      }
-    }, [nav, pathname, prevPathname]);
-
-    return (
-      <DefaultLayoutContext.Provider
-        value={{ isDrawerOpened, drawer, isNavOpened, nav }}>
-        {children}
-      </DefaultLayoutContext.Provider>
-    );
-  },
-);

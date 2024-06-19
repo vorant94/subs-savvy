@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import type { SubscriptionModel } from './subscription.model.tsx';
+import type { SubscriptionModel } from './subscription.model.ts';
 
 export const monthlySubscription = {
   id: 1,

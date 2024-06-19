@@ -1,15 +1,13 @@
 import { cn } from '@/ui/utils/cn.ts';
 import { Avatar, Card, Text, Title } from '@mantine/core';
-import { memo, useCallback, useContext } from 'react';
-import {
-  subscriptionIconToSvg,
-  type SubscriptionModel,
-} from '../models/subscription.model.tsx';
-import { SubscriptionUpsertStateContext } from '../providers/subscription-upsert-state.provider.tsx';
+import { memo, useCallback } from 'react';
+import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
+import { type SubscriptionModel } from '../models/subscription.model.ts';
+import { subscriptionIconToSvg } from '../types/subscription-icon.tsx';
 
 export const SubscriptionListItem = memo(
   ({ subscription }: SubscriptionListItemProps) => {
-    const upsert = useContext(SubscriptionUpsertStateContext);
+    const upsert = useSubscriptionUpsert();
 
     const openSubscriptionUpdate = useCallback(
       () => upsert.dispatch({ type: 'open', subscription }),
