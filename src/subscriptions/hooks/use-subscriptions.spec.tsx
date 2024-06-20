@@ -38,6 +38,12 @@ describe('useSubscriptions', () => {
     await Promise.all([
       waitFor(() =>
         expect(
+          hook.current.selectedTag,
+          'have initially no selected tag',
+        ).toBeFalsy(),
+      ),
+      waitFor(() =>
+        expect(
           hook.current.tags.length,
           'have initially one populated tag',
         ).toEqual(1),
@@ -53,6 +59,12 @@ describe('useSubscriptions', () => {
 
   it('should filter out subscriptions based on selected tag', async () => {
     await Promise.all([
+      waitFor(() =>
+        expect(
+          hook.current.selectedTag,
+          'have initially no selected tag',
+        ).toBeFalsy(),
+      ),
       waitFor(() =>
         expect(
           hook.current.tags.length,
@@ -92,6 +104,23 @@ describe('useSubscriptions', () => {
         'all left subscriptions should have selected tag in it',
       ).toBeTruthy();
     }
+
+    act(() => hook.current.selectTag(null));
+
+    await Promise.all([
+      waitFor(() =>
+        expect(
+          hook.current.selectedTag,
+          'selected tag to not be there',
+        ).toBeFalsy(),
+      ),
+      waitFor(() =>
+        expect(
+          hook.current.subscriptions.length,
+          'restore amount of filtered subscriptions',
+        ).toEqual(2),
+      ),
+    ]);
   });
 });
 
