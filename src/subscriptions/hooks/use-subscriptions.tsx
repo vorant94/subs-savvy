@@ -25,16 +25,18 @@ export interface UseSubscriptions {
 }
 
 export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
-  const unfilteredSubscriptions = useLiveQuery(() => findSubscriptions());
-  const tags = useLiveQuery(() => findTags());
+  const unfilteredSubscriptions = useLiveQuery(
+    () => findSubscriptions(),
+    [],
+    [],
+  );
+  const tags = useLiveQuery(() => findTags(), [], []);
   const [selectedTag, setSelectedTag] = useState<TagModel | null>(null);
 
   const selectTag: (tagId: string | null) => void = useCallback(
     (tagId) => {
       if (tagId) {
-        setSelectedTag(
-          (tags ?? []).find((tag) => `${tag.id}` === tagId) ?? null,
-        );
+        setSelectedTag(tags.find((tag) => `${tag.id}` === tagId) ?? null);
       } else {
         setSelectedTag(null);
       }
@@ -44,7 +46,7 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
 
   const subscriptions = useMemo(
     () =>
-      (unfilteredSubscriptions ?? []).filter(
+      unfilteredSubscriptions.filter(
         (subscription) =>
           !selectedTag ||
           subscription.tags.find((subTag) => subTag.id === selectedTag.id),

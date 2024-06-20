@@ -1,4 +1,4 @@
-import { findSubscriptions } from '@/subscriptions/models/subscription.table.ts';
+import { tag } from '@/tags/models/tag.mock.ts';
 import dayjs from 'dayjs';
 import type { SubscriptionModel } from './subscription.model.ts';
 
@@ -12,11 +12,11 @@ export const monthlySubscription = {
     each: 1,
     period: 'monthly',
   },
-  tags: [],
+  tags: [tag],
 } as const satisfies SubscriptionModel;
 
 export const yearlySubscription = {
-  id: 1,
+  id: 2,
   name: 'Netflix',
   price: 13.33,
   startedAt: dayjs(new Date()).set('month', 2).toDate(),
@@ -28,8 +28,4 @@ export const yearlySubscription = {
   tags: [],
 } as const satisfies SubscriptionModel;
 
-export async function findSubscriptionsMock(): ReturnType<
-  typeof findSubscriptions
-> {
-  return [monthlySubscription, yearlySubscription];
-}
+export const subscriptions = [monthlySubscription, yearlySubscription] as const;

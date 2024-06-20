@@ -14,10 +14,11 @@ import {
 } from './use-subscription-upsert.tsx';
 
 describe('useSubscriptionUpsert', () => {
+  let renderResult: RenderHookResult<HooksCombined, void>;
   let hooks: RenderHookResult<HooksCombined, void>['result'];
 
   beforeEach(() => {
-    const renderResult = renderHook<HooksCombined, void>(
+    renderResult = renderHook<HooksCombined, void>(
       () => ({
         upsert: useSubscriptionUpsert(),
         defaultLayout: useDefaultLayout(),
@@ -32,33 +33,31 @@ describe('useSubscriptionUpsert', () => {
 
   it('should open/close drawer on upsert open/close', () => {
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
+    expect(hooks.current.upsert.state.mode).toBeFalsy();
 
-    act(() => {
-      hooks.current.upsert.dispatch({ type: 'open' });
-    });
-
+    act(() => hooks.current.upsert.dispatch({ type: 'open' }));
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeTruthy();
 
-    act(() => {
-      hooks.current.upsert.dispatch({ type: 'close' });
-    });
-
+    act(() => hooks.current.upsert.dispatch({ type: 'close' }));
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
   });
 
   it('should close upsert on drawer close', () => {
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
+    expect(hooks.current.upsert.state.mode).toBeFalsy();
 
-    act(() => {
-      hooks.current.upsert.dispatch({ type: 'open' });
-    });
-
+    act(() => hooks.current.upsert.dispatch({ type: 'open' }));
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeTruthy();
 
-    act(() => {
-      hooks.current.defaultLayout.drawer.close();
-    });
+    act(() => hooks.current.defaultLayout.drawer.close());
+    expect(hooks.current.upsert.state.mode).toBeFalsy();
+  });
 
+  it(`shouldn't open upsert on drawer open`, () => {
+    expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
+    expect(hooks.current.upsert.state.mode).toBeFalsy();
+
+    act(() => hooks.current.defaultLayout.drawer.open());
     expect(hooks.current.upsert.state.mode).toBeFalsy();
   });
 });

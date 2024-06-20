@@ -35,6 +35,7 @@ export function findSubscriptions(): Promise<Array<SubscriptionModel>> {
   );
 }
 
+// TODO optionally allow to accept transaction
 export function getSubscription(id: number): Promise<SubscriptionModel> {
   return db.transaction(
     'r',
