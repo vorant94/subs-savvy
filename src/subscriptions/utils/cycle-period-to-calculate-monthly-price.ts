@@ -1,4 +1,5 @@
 import type { Month } from '@/date/types/month.ts';
+import dayjs from 'dayjs';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import type { SubscriptionCyclePeriod } from '../types/subscription-cycle-period.ts';
 
@@ -8,7 +9,7 @@ export interface CalculateSubscriptionMonthlyPrice {
 
 export const cyclePeriodToCalculateMonthlyPrice = {
   monthly(
-    { startedAt, endedAt, price },
+    { startedAt, endedAt, price, cycle },
     month,
     year = new Date().getFullYear(),
   ) {
@@ -20,6 +21,14 @@ export const cyclePeriodToCalculateMonthlyPrice = {
     }
 
     if (endedAt && year > endedAt.getFullYear()) {
+      return 0;
+    }
+
+    const differenceInMonths = dayjs(startedAt)
+      .set('year', year)
+      .set('month', month)
+      .diff(startedAt, 'month');
+    if (differenceInMonths % cycle.each !== 0) {
       return 0;
     }
 
@@ -45,7 +54,7 @@ export const cyclePeriodToCalculateMonthlyPrice = {
     }
   },
   yearly(
-    { startedAt, endedAt, price },
+    { startedAt, endedAt, price, cycle },
     month,
     year = new Date().getFullYear(),
   ) {
@@ -57,6 +66,13 @@ export const cyclePeriodToCalculateMonthlyPrice = {
     }
 
     if (endedAt && year >= endedAt.getFullYear()) {
+      return 0;
+    }
+
+    const differenceInYears = dayjs(startedAt)
+      .set('year', year)
+      .diff(startedAt, 'year');
+    if (differenceInYears % cycle.each !== 0) {
       return 0;
     }
 

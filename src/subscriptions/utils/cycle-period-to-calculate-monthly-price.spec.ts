@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 import { describe, expect, it } from 'vitest';
 import {
   monthlySubscription,
+  twoMonthlySubscription,
+  twoYearlySubscription,
   yearlySubscription,
 } from '../models/subscription.mock.ts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
@@ -137,6 +139,30 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
       };
 
       expect(calculateMonthlyPrice(subscription, 6)).toEqual(13.33);
+    });
+
+    it('each = 2 && startedAtMonth % month = 0 && startedAtYear < year', () => {
+      const subscription: SubscriptionModel = {
+        ...twoMonthlySubscription,
+        startedAt: dayjs(twoMonthlySubscription.startedAt)
+          .subtract(1, 'year')
+          .set('month', 2)
+          .toDate(),
+      };
+
+      expect(calculateMonthlyPrice(subscription, 4)).toEqual(826);
+    });
+
+    it('each = 2 && startedAtMonth % month = 1 && startedAtYear < year', () => {
+      const subscription: SubscriptionModel = {
+        ...twoMonthlySubscription,
+        startedAt: dayjs(twoMonthlySubscription.startedAt)
+          .subtract(1, 'year')
+          .set('month', 2)
+          .toDate(),
+      };
+
+      expect(calculateMonthlyPrice(subscription, 3)).toEqual(0);
     });
   });
 
@@ -307,6 +333,30 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
       };
 
       expect(calculateMonthlyPrice(subscription, 1)).toEqual(0);
+    });
+
+    it('each = 2 && startedAtMonth = month && startedAtYear % year = 1', () => {
+      const subscription: SubscriptionModel = {
+        ...twoYearlySubscription,
+        startedAt: dayjs(twoYearlySubscription.startedAt)
+          .subtract(1, 'year')
+          .set('month', 2)
+          .toDate(),
+      };
+
+      expect(calculateMonthlyPrice(subscription, 2)).toEqual(0);
+    });
+
+    it('each = 2 && startedAtMonth = month && startedAtYear % year = 0', () => {
+      const subscription: SubscriptionModel = {
+        ...twoYearlySubscription,
+        startedAt: dayjs(twoYearlySubscription.startedAt)
+          .subtract(2, 'year')
+          .set('month', 2)
+          .toDate(),
+      };
+
+      expect(calculateMonthlyPrice(subscription, 2)).toEqual(300);
     });
   });
 });
