@@ -13,7 +13,7 @@ export const DefaultLayout = memo(
     drawerContent,
     drawerTitle,
   }: PropsWithChildren<DefaultLayoutProps>) => {
-    const { navLinks } = useNavLinks();
+    const { topNavLinks, bottomNavLinks } = useNavLinks();
     const { isDrawerOpened, isNavOpened, drawer, nav } = useDefaultLayout();
     const { pathname } = useLocation();
     const isMd = useBreakpoint('md');
@@ -39,15 +39,29 @@ export const DefaultLayout = memo(
           </AppShell.Header>
 
           <AppShell.Navbar p="md">
-            <ol>
-              {navLinks.map((navLink) => (
+            <ol className={cn(`flex flex-1 flex-col`)}>
+              {topNavLinks.map((navLink) => (
                 <li key={navLink.path}>
                   <NavLink
                     component={Link}
                     to={navLink.path}
                     label={navLink.label}
                     leftSection={navLink.icon}
-                    active={pathname.startsWith(navLink.path)}
+                    active={pathname === navLink.path}
+                  />
+                </li>
+              ))}
+
+              <div className="flex-1" />
+
+              {bottomNavLinks.map((navLink) => (
+                <li key={navLink.path}>
+                  <NavLink
+                    component={Link}
+                    to={navLink.path}
+                    label={navLink.label}
+                    leftSection={navLink.icon}
+                    active={pathname === navLink.path}
                   />
                 </li>
               ))}

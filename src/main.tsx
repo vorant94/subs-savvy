@@ -50,6 +50,15 @@ const router = createBrowserRouter([
             Component: m.SubscriptionsPage,
           })),
       },
+      {
+        path: route.subscriptionsBulk,
+        lazy: () =>
+          import(`@/subscriptions/pages/subscriptions-bulk.page.tsx`).then(
+            (m) => ({
+              Component: m.SubscriptionsBulkPage,
+            }),
+          ),
+      },
     ],
   },
 ]);

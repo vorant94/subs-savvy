@@ -12,7 +12,8 @@ export function useNavLinks(): UseNavLinks {
 }
 
 export interface UseNavLinks {
-  navLinks: Array<NavLink>;
+  topNavLinks: Array<NavLink>;
+  bottomNavLinks: Array<NavLink>;
 }
 
 export interface NavLink {
@@ -22,9 +23,13 @@ export interface NavLink {
 }
 
 export const NavLinksProvider = memo(
-  ({ children, navLinks }: PropsWithChildren<NavLinksProviderProps>) => {
+  ({
+    children,
+    topNavLinks,
+    bottomNavLinks,
+  }: PropsWithChildren<NavLinksProviderProps>) => {
     return (
-      <navLinksContext.Provider value={{ navLinks }}>
+      <navLinksContext.Provider value={{ topNavLinks, bottomNavLinks }}>
         {children}
       </navLinksContext.Provider>
     );
@@ -32,9 +37,11 @@ export const NavLinksProvider = memo(
 );
 
 export interface NavLinksProviderProps {
-  navLinks: Array<NavLink>;
+  topNavLinks: Array<NavLink>;
+  bottomNavLinks: Array<NavLink>;
 }
 
 const navLinksContext = createContext<UseNavLinks>({
-  navLinks: [],
+  topNavLinks: [],
+  bottomNavLinks: [],
 });
