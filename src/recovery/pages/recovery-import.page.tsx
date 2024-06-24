@@ -1,13 +1,22 @@
+import { SubscriptionsUpsertTable } from '@/subscriptions/components/subscriptions-upsert-table.tsx';
+import {
+  insertSubscriptionSchema,
+  type UpsertSubscriptionModel,
+} from '@/subscriptions/models/subscription.model.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { faFileCode } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Group, Text } from '@mantine/core';
+import { Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import type { FileWithPath } from 'react-dropzone-esm';
 import { recoverySchema } from '../models/recovery.model.ts';
 
 export const RecoveryImportPage = memo(() => {
+  const [subscriptions, setSubscriptions] = useState<
+    Array<UpsertSubscriptionModel>
+  >([]);
+
   const processExportFile = ({ currentTarget }: ProgressEvent<FileReader>) => {
     if (!currentTarget) {
       throw new Error(`currentTarget is missing`);
@@ -19,10 +28,13 @@ export const RecoveryImportPage = memo(() => {
     }
 
     // TODO validate dbVersion
-    const { dbVersion, subscriptions } = recoverySchema.parse(
-      JSON.parse(result),
+    const { subscriptions } = recoverySchema.parse(JSON.parse(result));
+
+    setSubscriptions(
+      subscriptions.map((subscription) =>
+        insertSubscriptionSchema.parse({ ...subscription, tags: [] }),
+      ),
     );
-    console.log(dbVersion, subscriptions);
   };
 
   useEffect(() => {
@@ -44,11 +56,10 @@ export const RecoveryImportPage = memo(() => {
         onDrop={readExportFile}
         multiple={false}
         accept={['application/json']}>
-        <Group
-          justify="center"
-          gap="xl"
-          mih={220}
-          style={{ pointerEvents: 'none' }}>
+        <div
+          className={cn(
+            `pointer-events-none flex min-h-40 items-center justify-center gap-4`,
+          )}>
           <Dropzone.Idle>
             <FontAwesomeIcon
               style={{
@@ -59,22 +70,20 @@ export const RecoveryImportPage = memo(() => {
             />
           </Dropzone.Idle>
 
-          <div>
-            <Text
-              size="xl"
-              inline>
-              Drag file here or click to select it
-            </Text>
+          <div className={cn(`flex flex-col gap-1`)}>
+            <Text size="xl">Drag file here or click to select it</Text>
             <Text
               size="sm"
-              c="dimmed"
-              inline
-              mt={7}>
+              c="dimmed">
               Attach one file of JSON format
             </Text>
           </div>
-        </Group>
+        </div>
       </Dropzone>
+
+      {subscriptions.length ? (
+        <SubscriptionsUpsertTable subscriptions={subscriptions} />
+      ) : null}
     </div>
   );
 });

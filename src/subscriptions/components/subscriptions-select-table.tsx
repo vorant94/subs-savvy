@@ -73,7 +73,9 @@ export const SubscriptionsSelectTable = memo(
                   {dayjs(subscription.startedAt).format('MMMM D, YYYY')}
                 </Table.Td>
                 <Table.Td>
-                  {dayjs(subscription.endedAt).format('MMMM D, YYYY')}
+                  {subscription.endedAt
+                    ? dayjs(subscription.endedAt).format('MMMM D, YYYY')
+                    : null}
                 </Table.Td>
                 <Table.Td>{subscription.cycle.each}</Table.Td>
                 <Table.Td>
