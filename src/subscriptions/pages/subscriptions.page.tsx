@@ -9,6 +9,7 @@ import { SubscriptionList } from '../components/subscription-list.tsx';
 import { SubscriptionUpsert } from '../components/subscription-upsert.tsx';
 import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 
+// TODO partition subscriptions by whether it is expired or not
 export const SubscriptionsPage = memo(() => {
   const upsert = useSubscriptionUpsert();
 

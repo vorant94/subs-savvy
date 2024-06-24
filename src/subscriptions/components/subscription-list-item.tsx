@@ -5,6 +5,7 @@ import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 import { type SubscriptionModel } from '../models/subscription.model.ts';
 import { subscriptionIconToSvg } from '../types/subscription-icon.tsx';
 
+// TODO gray out expired subscription
 export const SubscriptionListItem = memo(
   ({ subscription }: SubscriptionListItemProps) => {
     const upsert = useSubscriptionUpsert();

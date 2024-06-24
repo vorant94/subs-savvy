@@ -8,6 +8,7 @@ export const subscriptionSchema = z.object({
   name: z.string(),
   description: z.string().nullable().optional(),
   icon: z.enum(subscriptionIcons),
+  // TODO add different currency support
   price: z.number(),
   startedAt: z.date(),
   endedAt: z.date().nullable().optional(),
@@ -30,3 +31,12 @@ export type UpdateSubscriptionModel = z.infer<typeof updateSubscriptionSchema>;
 export type UpsertSubscriptionModel =
   | InsertSubscriptionModel
   | UpdateSubscriptionModel;
+
+// TODO add support for exporting with tags as well
+export const exportedSubscriptionSchema = subscriptionSchema.omit({
+  id: true,
+  tags: true,
+});
+export type ExportedSubscriptionModel = z.infer<
+  typeof exportedSubscriptionSchema
+>;
