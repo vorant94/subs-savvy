@@ -17,15 +17,4 @@ export default defineConfig({
     setupFiles: ['./test-setup.ts'],
     mockReset: true,
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          recharts: ['recharts'],
-          '@mantine/core': ['@mantine/core'],
-          '@mantine/dates': ['@mantine/dates'],
-        },
-      },
-    },
-  },
 });

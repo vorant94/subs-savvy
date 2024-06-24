@@ -10,8 +10,9 @@ export const subscriptionSchema = z.object({
   icon: z.enum(subscriptionIcons),
   // TODO add different currency support
   price: z.number(),
-  startedAt: z.date(),
-  endedAt: z.date().nullable().optional(),
+  // despite dexie support for dates without coercion it is still needed because of recovery via JSON
+  startedAt: z.coerce.date(),
+  endedAt: z.coerce.date().nullable().optional(),
   cycle: z.object({
     each: z.number(),
     period: z.enum(subscriptionCyclePeriods),

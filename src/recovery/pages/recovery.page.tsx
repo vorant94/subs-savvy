@@ -3,6 +3,7 @@ import {
   DefaultLayout,
   DefaultLayoutHeader,
 } from '@/ui/layouts/default.layout.tsx';
+import { cn } from '@/ui/utils/cn.ts';
 import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tabs } from '@mantine/core';
@@ -29,24 +30,26 @@ export const RecoveryPage = memo(() => {
         padding="xs"
         radius="md"
         withBorder>
-        <Tabs
-          value={activeTab}
-          onChange={navigateToTab}>
-          <Tabs.List>
-            <Tabs.Tab
-              value={recoveryRoute.import}
-              leftSection={<FontAwesomeIcon icon={faUpload} />}>
-              Import
-            </Tabs.Tab>
-            <Tabs.Tab
-              value={recoveryRoute.export}
-              leftSection={<FontAwesomeIcon icon={faDownload} />}>
-              Export
-            </Tabs.Tab>
-          </Tabs.List>
-        </Tabs>
+        <div className={cn(`flex flex-col gap-2`)}>
+          <Tabs
+            value={activeTab}
+            onChange={navigateToTab}>
+            <Tabs.List>
+              <Tabs.Tab
+                value={recoveryRoute.import}
+                leftSection={<FontAwesomeIcon icon={faUpload} />}>
+                Import
+              </Tabs.Tab>
+              <Tabs.Tab
+                value={recoveryRoute.export}
+                leftSection={<FontAwesomeIcon icon={faDownload} />}>
+                Export
+              </Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
 
-        <Outlet />
+          <Outlet />
+        </div>
       </Card>
     </DefaultLayout>
   );
