@@ -8,6 +8,11 @@ import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { cyclePeriodToCalculateMonthlyPrice } from '../utils/cycle-period-to-calculate-monthly-price.ts';
 
+// TODO color bars based on subscription tag color
+//  if sub has one tag - take it's color
+//  if sub has no tags - use "default"
+//  if sub has multiple - use "rainbow"
+//  if sub has two tags and one of them is selected - use color of the second one
 export const SubscriptionsByMonthChart = memo(() => {
   const { subscriptions } = useSubscriptions();
 
