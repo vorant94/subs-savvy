@@ -5,7 +5,6 @@ import {
   type PropsWithChildren,
   type ReactNode,
 } from 'react';
-import type { Route } from '../types/route.ts';
 
 export function useNavLinks(): UseNavLinks {
   return useContext(navLinksContext);
@@ -18,7 +17,7 @@ export interface UseNavLinks {
 
 export interface NavLink {
   label: string;
-  path: Route | string;
+  path: string;
   icon: ReactNode;
 }
 

@@ -3,13 +3,15 @@ import type { SubscriptionModel } from '@/subscriptions/models/subscription.mode
 import type { TagModel } from '@/tags/models/tag.model.ts';
 import Dexie, { type EntityTable, type Table } from 'dexie';
 
+export const dbVersion = 3;
+
 export const db = new Dexie('subs-savvy') as Dexie & {
   subscriptions: EntityTable<Omit<SubscriptionModel, 'tags'>, 'id'>;
   tags: EntityTable<TagModel, 'id'>;
   subscriptionsTags: Table<SubscriptionTagModel, [number, number]>;
 };
 
-db.version(3).stores({
+db.version(dbVersion).stores({
   subscriptions: '++id',
   tags: '++id',
   subscriptionsTags: '[subscriptionId+tagId],subscriptionId,tagId',

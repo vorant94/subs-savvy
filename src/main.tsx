@@ -1,3 +1,4 @@
+import { recoveryRoute } from '@/recovery/types/recovery-route.ts';
 import { route } from '@/router/types/route.ts';
 import { MantineProvider } from '@mantine/core';
 import { StrictMode } from 'react';
@@ -28,36 +29,56 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       {
-        path: route.root,
+        path: '/',
         element: (
           <Navigate
-            to="/dashboard"
+            to={`/${route.dashboard}`}
             replace
           />
         ),
       },
       {
-        path: route.dashboard,
+        path: `/${route.dashboard}`,
         lazy: () =>
           import(`@/dashboard/pages/dashboard.page.tsx`).then((m) => ({
             Component: m.DashboardPage,
           })),
       },
       {
-        path: route.subscriptions,
+        path: `/${route.subscriptions}`,
         lazy: () =>
           import(`@/subscriptions/pages/subscriptions.page.tsx`).then((m) => ({
             Component: m.SubscriptionsPage,
           })),
       },
       {
-        path: route.subscriptionsBulk,
+        path: `/${route.recovery}`,
         lazy: () =>
-          import(`@/subscriptions/pages/subscriptions-bulk.page.tsx`).then(
-            (m) => ({
-              Component: m.SubscriptionsBulkPage,
-            }),
-          ),
+          import(`@/recovery/pages/recovery.page.tsx`).then((m) => ({
+            Component: m.RecoveryPage,
+          })),
+        children: [
+          {
+            path: `/${route.recovery}`,
+            element: (
+              <Navigate to={`/${route.recovery}/${recoveryRoute.import}`} />
+            ),
+          },
+          {
+            path: `/${route.recovery}/${recoveryRoute.import}`,
+            lazy: () =>
+              import(`@/recovery/pages/recovery-import.page.tsx`).then((m) => ({
+                Component: m.RecoveryImportPage,
+              })),
+          },
+          {
+            path: `/${route.recovery}/${recoveryRoute.export}`,
+            lazy: () =>
+              import(`@/recovery/pages/recovery-export.page.tsx`).then((m) => ({
+                Component: m.RecoveryExportPage,
+              })),
+          },
+        ],
       },
     ],
   },

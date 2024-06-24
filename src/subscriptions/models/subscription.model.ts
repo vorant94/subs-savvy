@@ -31,12 +31,3 @@ export type UpdateSubscriptionModel = z.infer<typeof updateSubscriptionSchema>;
 export type UpsertSubscriptionModel =
   | InsertSubscriptionModel
   | UpdateSubscriptionModel;
-
-// TODO add support for exporting with tags as well
-export const exportedSubscriptionSchema = subscriptionSchema.omit({
-  id: true,
-  tags: true,
-});
-export type ExportedSubscriptionModel = z.infer<
-  typeof exportedSubscriptionSchema
->;

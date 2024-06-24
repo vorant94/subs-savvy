@@ -1,6 +1,12 @@
-import { useNavLinks } from '@/router/hooks/use-nav-links.tsx';
+import { useNavLinks, type NavLink } from '@/router/hooks/use-nav-links.tsx';
 import { cn } from '@/ui/utils/cn.ts';
-import { Affix, AppShell, Burger, Drawer, NavLink } from '@mantine/core';
+import {
+  Affix,
+  AppShell,
+  Burger,
+  Drawer,
+  NavLink as MantineNavLink,
+} from '@mantine/core';
 import { memo, type PropsWithChildren, type ReactElement } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useBreakpoint } from '../hooks/use-breakpoint.ts';
@@ -15,7 +21,6 @@ export const DefaultLayout = memo(
   }: PropsWithChildren<DefaultLayoutProps>) => {
     const { topNavLinks, bottomNavLinks } = useNavLinks();
     const { isDrawerOpened, isNavOpened, drawer, nav } = useDefaultLayout();
-    const { pathname } = useLocation();
     const isMd = useBreakpoint('md');
 
     return (
@@ -41,29 +46,19 @@ export const DefaultLayout = memo(
           <AppShell.Navbar p="md">
             <ol className={cn(`flex flex-1 flex-col`)}>
               {topNavLinks.map((navLink) => (
-                <li key={navLink.path}>
-                  <NavLink
-                    component={Link}
-                    to={navLink.path}
-                    label={navLink.label}
-                    leftSection={navLink.icon}
-                    active={pathname === navLink.path}
-                  />
-                </li>
+                <DefaultLayoutNavLink
+                  key={navLink.path}
+                  {...navLink}
+                />
               ))}
 
               <div className="flex-1" />
 
               {bottomNavLinks.map((navLink) => (
-                <li key={navLink.path}>
-                  <NavLink
-                    component={Link}
-                    to={navLink.path}
-                    label={navLink.label}
-                    leftSection={navLink.icon}
-                    active={pathname === navLink.path}
-                  />
-                </li>
+                <DefaultLayoutNavLink
+                  key={navLink.path}
+                  {...navLink}
+                />
               ))}
             </ol>
           </AppShell.Navbar>
@@ -120,3 +115,23 @@ export const DefaultLayoutHeader = memo(
 export interface DefaultLayoutHeaderProps {
   actions?: ReactElement;
 }
+
+const DefaultLayoutNavLink = memo(
+  ({ path, label, icon }: DefaultLayoutNavLinkProps) => {
+    const { pathname } = useLocation();
+
+    return (
+      <li>
+        <MantineNavLink
+          component={Link}
+          to={path}
+          label={label}
+          leftSection={icon}
+          active={pathname.startsWith(path)}
+        />
+      </li>
+    );
+  },
+);
+
+interface DefaultLayoutNavLinkProps extends NavLink {}

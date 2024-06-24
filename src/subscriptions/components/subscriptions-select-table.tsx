@@ -1,54 +1,30 @@
-import { cn } from '@/ui/utils/cn.ts';
-import { Button, Checkbox, Switch, Table } from '@mantine/core';
+import { Checkbox, Table } from '@mantine/core';
 import dayjs from 'dayjs';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { memo, useCallback, useState } from 'react';
-import { exportedSubscriptionSchema } from '../models/subscription.model.ts';
-import { findSubscriptions } from '../models/subscription.table.ts';
+import { memo, type Dispatch, type SetStateAction } from 'react';
+import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { subscriptionCyclePeriodToLabel } from '../types/subscription-cycle-period.ts';
 import { subscriptionIconToLabel } from '../types/subscription-icon.tsx';
 
-export const ExportSubscriptions = memo(() => {
-  const subscriptions = useLiveQuery(() => findSubscriptions(), [], []);
+export const SubscriptionsSelectTable = memo(
+  ({
+    subscriptions,
+    selectedIds,
+    setSelectedIds,
+  }: SubscriptionsSelectTableProps) => {
+    const toggleAll = () => {
+      selectedIds.length === subscriptions.length
+        ? setSelectedIds([])
+        : setSelectedIds(subscriptions.map((subscription) => subscription.id));
+    };
+    const toggleSelectedId = (id: number): void => {
+      setSelectedIds(
+        !selectedIds.includes(id)
+          ? [...selectedIds, id]
+          : selectedIds.filter((selectedId) => selectedId !== id),
+      );
+    };
 
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const toggleAll = () => {
-    selectedIds.length === subscriptions.length
-      ? setSelectedIds([])
-      : setSelectedIds(subscriptions.map((subscription) => subscription.id));
-  };
-  const toggleSelectedId = (id: number): void => {
-    setSelectedIds(
-      !selectedIds.includes(id)
-        ? [...selectedIds, id]
-        : selectedIds.filter((selectedId) => selectedId !== id),
-    );
-  };
-
-  const [isPrettify, setIsPrettify] = useState(true);
-  const toggleIsPrettify = useCallback(() => {
-    setIsPrettify(!isPrettify);
-  }, [isPrettify]);
-
-  const exportSubscriptions = () => {
-    const subscriptionsToExport = subscriptions
-      .filter((subscription) => selectedIds.includes(subscription.id))
-      .map((subscription) => exportedSubscriptionSchema.parse(subscription));
-    const jsonToExport = isPrettify
-      ? JSON.stringify(subscriptionsToExport, null, 2)
-      : JSON.stringify(subscriptionsToExport);
-    const blobToExport = new Blob([jsonToExport], { type: 'application/json' });
-
-    const exportLink = document.createElement('a');
-    exportLink.href = URL.createObjectURL(blobToExport);
-    exportLink.download = 'subscriptions.json';
-    document.body.appendChild(exportLink);
-    exportLink.click();
-    document.body.removeChild(exportLink);
-  };
-
-  return (
-    <div className={cn(`flex flex-col gap-4`)}>
+    return (
       <Table.ScrollContainer minWidth="100%">
         <Table>
           <Table.Thead>
@@ -108,22 +84,12 @@ export const ExportSubscriptions = memo(() => {
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
+    );
+  },
+);
 
-      <div className={cn(`flex items-center`)}>
-        <Switch
-          checked={isPrettify}
-          onChange={toggleIsPrettify}
-          label="Prettify"
-        />
-
-        <div className={cn('flex-1')} />
-
-        <Button
-          disabled={selectedIds.length === 0}
-          onClick={exportSubscriptions}>
-          export
-        </Button>
-      </div>
-    </div>
-  );
-});
+export interface SubscriptionsSelectTableProps {
+  subscriptions: Array<SubscriptionModel>;
+  selectedIds: Array<number>;
+  setSelectedIds: Dispatch<SetStateAction<Array<number>>>;
+}
