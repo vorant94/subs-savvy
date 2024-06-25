@@ -1,21 +1,27 @@
 import { cn } from '@/ui/utils/cn.ts';
-import { Avatar, Card, Text, Title } from '@mantine/core';
-import { memo, useCallback } from 'react';
+import { Avatar, Card, Indicator, Text, Title } from '@mantine/core';
+import { memo, useCallback, useMemo } from 'react';
 import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 import { type SubscriptionModel } from '../models/subscription.model.ts';
 import { subscriptionIconToSvg } from '../types/subscription-icon.tsx';
+import { isSubscriptionExpired } from '../utils/is-subscription-expired.ts';
 
 // TODO gray out expired subscription
 export const SubscriptionListItem = memo(
   ({ subscription }: SubscriptionListItemProps) => {
-    const upsert = useSubscriptionUpsert();
+    const { dispatch: upsertDispatch } = useSubscriptionUpsert();
 
     const openSubscriptionUpdate = useCallback(
-      () => upsert.dispatch({ type: 'open', subscription }),
-      [subscription, upsert],
+      () => upsertDispatch({ type: 'open', subscription }),
+      [subscription, upsertDispatch],
     );
 
-    return (
+    const isExpired = useMemo(
+      () => isSubscriptionExpired(subscription),
+      [subscription],
+    );
+
+    const Component = (
       <Card
         shadow="xs"
         padding="xs"
@@ -55,6 +61,19 @@ export const SubscriptionListItem = memo(
           </Title>
         </div>
       </Card>
+    );
+
+    return isExpired ? (
+      <Indicator
+        className={cn('flex flex-col opacity-60')}
+        color="gray"
+        size="xs"
+        position="bottom-center"
+        label="Expired">
+        {Component}
+      </Indicator>
+    ) : (
+      Component
     );
   },
 );

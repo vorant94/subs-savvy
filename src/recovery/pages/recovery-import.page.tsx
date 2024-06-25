@@ -1,7 +1,7 @@
 import { SubscriptionsInsertTable } from '@/subscriptions/components/subscriptions-insert-table.tsx';
 import {
   insertSubscriptionSchema,
-  type UpsertSubscriptionModel,
+  type InsertSubscriptionModel,
 } from '@/subscriptions/models/subscription.model.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { faFileCode } from '@fortawesome/free-regular-svg-icons';
@@ -14,7 +14,7 @@ import { recoverySchema } from '../models/recovery.model.ts';
 
 export const RecoveryImportPage = memo(() => {
   const [subscriptions, setSubscriptions] = useState<
-    Array<UpsertSubscriptionModel>
+    Array<InsertSubscriptionModel>
   >([]);
 
   const readExportFile = useCallback(

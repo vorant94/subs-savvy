@@ -33,7 +33,7 @@ export const subscriptionIconToSvg = {
     <FontAwesomeIcon
       size="2xl"
       icon={faHouse}
-      color="#000000"
+      className={cn(`text-slate-800`)}
     />
   ),
   headspace: <HeadSpace className={cn(`fill-[#F47D31]`)} />,
