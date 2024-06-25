@@ -19,6 +19,7 @@ import {
   type SubmitHandler,
 } from 'react-hook-form';
 import type { InsertSubscriptionModel } from '../models/subscription.model.ts';
+import { insertSubscriptions } from '../models/subscription.table.ts';
 import { subscriptionCyclePeriodsComboboxData } from '../types/subscription-cycle-period.ts';
 import { subscriptionIconsComboboxData } from '../types/subscription-icon.tsx';
 
@@ -48,18 +49,17 @@ export const SubscriptionsInsertTable = memo(
         }));
       }, [tags]);
 
-      const insertSubscriptions: SubmitHandler<
+      const insertSubscriptionsCb: SubmitHandler<
         SubscriptionsInsertTableFormValue
       > = async ({ subscriptions }) => {
-        // TODO bulk insert subscriptions here
-        console.log(subscriptions);
+        await insertSubscriptions(subscriptions);
         onInsert?.();
       };
 
       return (
         <form
           id="subscriptionsUpsertTableForm"
-          onSubmit={handleSubmit(insertSubscriptions)}
+          onSubmit={handleSubmit(insertSubscriptionsCb)}
           ref={ref}>
           <Table.ScrollContainer minWidth="100%">
             <Table>

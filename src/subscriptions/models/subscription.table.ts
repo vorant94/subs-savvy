@@ -35,72 +35,41 @@ export function findSubscriptions(): Promise<Array<SubscriptionModel>> {
   );
 }
 
-// TODO optionally allow to accept transaction
-export function getSubscription(id: number): Promise<SubscriptionModel> {
+export function insertSubscription(
+  raw: InsertSubscriptionModel,
+): Promise<SubscriptionModel> {
   return db.transaction(
-    'r',
+    'rw',
+    db.subscriptions,
+    db.subscriptionsTags,
+    db.tags,
+    () => insertSubscription(raw),
+  );
+}
+
+export function insertSubscriptions(
+  raw: Array<InsertSubscriptionModel>,
+): Promise<Array<SubscriptionModel>> {
+  return db.transaction(
+    `rw`,
+    db.subscriptions,
+    db.subscriptionsTags,
+    db.tags,
+    () => Promise.all(raw.map((raw) => _insertSubscription(raw))),
+  );
+}
+
+export function updateSubscription(
+  raw: UpdateSubscriptionModel,
+): Promise<SubscriptionModel> {
+  return db.transaction(
+    'rw',
     db.subscriptions,
     db.subscriptionsTags,
     db.tags,
     async () => {
-      const raw = await db.subscriptions.get(id);
-      if (!raw) {
-        throw new Error(`Subscription not found!`);
-      }
+      const { id, tags, ...rest } = updateSubscriptionSchema.parse(raw);
 
-      const tagsLinks = await db.subscriptionsTags
-        .where({ subscriptionId: raw.id })
-        .toArray();
-
-      const tags = await Promise.all(
-        tagsLinks.map(async (link) => db.tags.get(link.tagId)),
-      );
-
-      return subscriptionSchema.parse({ ...raw, tags });
-    },
-  );
-}
-
-export async function insertSubscription(
-  raw: InsertSubscriptionModel,
-): Promise<SubscriptionModel> {
-  const { tags, ...rest } = insertSubscriptionSchema.parse(raw);
-
-  const id = await db.transaction(
-    'rw',
-    db.subscriptions,
-    db.subscriptionsTags,
-    async () => {
-      const id = await db.subscriptions.add(rest);
-
-      await Promise.all(
-        tags.map(async (tag) => {
-          const link: UpsertSubscriptionTagModel = {
-            tagId: tag.id,
-            subscriptionId: id,
-          };
-
-          await db.subscriptionsTags.add(link);
-        }),
-      );
-
-      return id;
-    },
-  );
-
-  return await getSubscription(id);
-}
-
-export async function updateSubscription(
-  raw: UpdateSubscriptionModel,
-): Promise<SubscriptionModel> {
-  const { id, tags, ...rest } = updateSubscriptionSchema.parse(raw);
-
-  await db.transaction(
-    'rw',
-    db.subscriptions,
-    db.subscriptionsTags,
-    async () => {
       await db.subscriptionsTags.where({ subscriptionId: id }).delete();
 
       await Promise.all(
@@ -115,10 +84,10 @@ export async function updateSubscription(
       );
 
       await db.subscriptions.update(id, rest);
+
+      return _getSubscription(id);
     },
   );
-
-  return await getSubscription(id);
 }
 
 export function deleteSubscription(id: number): Promise<void> {
@@ -133,4 +102,42 @@ export function deleteSubscription(id: number): Promise<void> {
       ]);
     },
   );
+}
+
+async function _getSubscription(id: number): Promise<SubscriptionModel> {
+  const raw = await db.subscriptions.get(id);
+  if (!raw) {
+    throw new Error(`Subscription not found!`);
+  }
+
+  const tagsLinks = await db.subscriptionsTags
+    .where({ subscriptionId: raw.id })
+    .toArray();
+
+  const tags = await Promise.all(
+    tagsLinks.map(async (link) => db.tags.get(link.tagId)),
+  );
+
+  return subscriptionSchema.parse({ ...raw, tags });
+}
+
+async function _insertSubscription(
+  raw: InsertSubscriptionModel,
+): Promise<SubscriptionModel> {
+  const { tags, ...rest } = insertSubscriptionSchema.parse(raw);
+
+  const id = await db.subscriptions.add(rest);
+
+  await Promise.all(
+    tags.map(async (tag) => {
+      const link: UpsertSubscriptionTagModel = {
+        tagId: tag.id,
+        subscriptionId: id,
+      };
+
+      await db.subscriptionsTags.add(link);
+    }),
+  );
+
+  return _getSubscription(id);
 }
