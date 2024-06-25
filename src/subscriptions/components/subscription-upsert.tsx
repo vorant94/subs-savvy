@@ -34,14 +34,8 @@ import {
   insertSubscription,
   updateSubscription,
 } from '../models/subscription.table.ts';
-import {
-  subscriptionCyclePeriodToLabel,
-  subscriptionCyclePeriods,
-} from '../types/subscription-cycle-period.ts';
-import {
-  subscriptionIconToLabel,
-  subscriptionIcons,
-} from '../types/subscription-icon.tsx';
+import { subscriptionCyclePeriodsComboboxData } from '../types/subscription-cycle-period.ts';
+import { subscriptionIconsComboboxData } from '../types/subscription-icon.tsx';
 
 export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useSubscriptionUpsert();
@@ -76,9 +70,9 @@ export const SubscriptionUpsert = memo(() => {
     dispatch({ type: 'close' });
   }, [dispatch]);
 
-  const tags = useLiveQuery(() => findTags());
+  const tags = useLiveQuery(() => findTags(), [], []);
   const tagsData: ComboboxData = useMemo(() => {
-    return (tags ?? []).map((tag) => ({
+    return tags.map((tag) => ({
       label: tag.name,
       value: `${tag.id}`,
     }));
@@ -126,7 +120,7 @@ export const SubscriptionUpsert = memo(() => {
             onBlur={onBlur}
             label="Icon"
             placeholder="Icon"
-            data={iconsData}
+            data={subscriptionIconsComboboxData}
           />
         )}
       />
@@ -204,7 +198,7 @@ export const SubscriptionUpsert = memo(() => {
               onBlur={onBlur}
               label="Period"
               placeholder="Period"
-              data={cyclePeriodsData}
+              data={subscriptionCyclePeriodsComboboxData}
             />
           )}
         />
@@ -223,7 +217,7 @@ export const SubscriptionUpsert = memo(() => {
             onChange={(tagIds) =>
               onChange(
                 tagIds.map(
-                  (tagId) => (tags ?? []).find((tag) => `${tag.id}` === tagId)!,
+                  (tagId) => tags.find((tag) => `${tag.id}` === tagId)!,
                 ),
               )
             }
@@ -257,18 +251,6 @@ export const SubscriptionUpsert = memo(() => {
     </form>
   );
 });
-
-const iconsData: ComboboxData = subscriptionIcons.map((icon) => ({
-  value: icon,
-  label: subscriptionIconToLabel[icon],
-}));
-
-const cyclePeriodsData: ComboboxData = subscriptionCyclePeriods.map(
-  (cyclePeriod) => ({
-    value: cyclePeriod,
-    label: subscriptionCyclePeriodToLabel[cyclePeriod],
-  }),
-);
 
 const defaultValues: DefaultValues<UpsertSubscriptionModel> = {
   startedAt: new Date(),

@@ -26,7 +26,6 @@ import { TagList, type TagListProps } from './tag-list.tsx';
 export const ManageTagsModal = memo(
   ({ isOpen, close }: ManageTagsModalProps) => {
     const tags = useLiveQuery(() => findTags());
-    const [formId, setFormId] = useState('');
     const [state, dispatch] = useReducer<
       Reducer<ManageTagsModalState, ManageTagsModalAction>
     >((_, action) => {
@@ -79,6 +78,7 @@ export const ManageTagsModal = memo(
       }
     }, [isOpen, state]);
 
+    const [formId, setFormId] = useState('');
     const updateFormId: (ref: HTMLFormElement | null) => void = useCallback(
       (ref) => setFormId(ref?.getAttribute('id') ?? ''),
       [],

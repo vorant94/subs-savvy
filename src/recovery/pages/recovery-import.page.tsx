@@ -1,4 +1,4 @@
-import { SubscriptionsUpsertTable } from '@/subscriptions/components/subscriptions-upsert-table.tsx';
+import { SubscriptionsInsertTable } from '@/subscriptions/components/subscriptions-insert-table.tsx';
 import {
   insertSubscriptionSchema,
   type UpsertSubscriptionModel,
@@ -6,7 +6,7 @@ import {
 import { cn } from '@/ui/utils/cn.ts';
 import { faFileCode } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Text } from '@mantine/core';
+import { Button, Text } from '@mantine/core';
 import { Dropzone } from '@mantine/dropzone';
 import { memo, useCallback, useEffect, useState } from 'react';
 import type { FileWithPath } from 'react-dropzone-esm';
@@ -17,6 +17,17 @@ export const RecoveryImportPage = memo(() => {
     Array<UpsertSubscriptionModel>
   >([]);
 
+  const readExportFile = useCallback(
+    ([file]: Array<FileWithPath>) => file && reader.readAsText(file),
+    [],
+  );
+  useEffect(() => {
+    reader.addEventListener('load', processExportFile);
+
+    return () => {
+      reader.removeEventListener('load', processExportFile);
+    };
+  });
   const processExportFile = ({ currentTarget }: ProgressEvent<FileReader>) => {
     if (!currentTarget) {
       throw new Error(`currentTarget is missing`);
@@ -37,18 +48,15 @@ export const RecoveryImportPage = memo(() => {
     );
   };
 
-  useEffect(() => {
-    reader.addEventListener('load', processExportFile);
-
-    return () => {
-      reader.removeEventListener('load', processExportFile);
-    };
-  });
-
-  const readExportFile = useCallback(
-    ([file]: Array<FileWithPath>) => file && reader.readAsText(file),
+  const [formId, setFormId] = useState('');
+  const updateFormId: (ref: HTMLFormElement | null) => void = useCallback(
+    (ref) => setFormId(ref?.getAttribute('id') ?? ''),
     [],
   );
+
+  const clearSubscriptions = useCallback(() => {
+    setSubscriptions([]);
+  }, []);
 
   return (
     <div className={cn(`flex flex-col gap-4`)}>
@@ -82,7 +90,23 @@ export const RecoveryImportPage = memo(() => {
       </Dropzone>
 
       {subscriptions.length ? (
-        <SubscriptionsUpsertTable subscriptions={subscriptions} />
+        <>
+          <SubscriptionsInsertTable
+            subscriptions={subscriptions}
+            ref={updateFormId}
+            onInsert={clearSubscriptions}
+          />
+
+          <div className={cn(`flex items-center`)}>
+            <div className={cn('flex-1')} />
+
+            <Button
+              form={formId}
+              type="submit">
+              import
+            </Button>
+          </div>
+        </>
       ) : null}
     </div>
   );

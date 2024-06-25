@@ -1,6 +1,7 @@
 import { cn } from '@/ui/utils/cn.ts';
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { ComboboxData } from '@mantine/core';
 import type { ReactElement } from 'react';
 import GitHub from 'simple-icons/icons/github.svg?react';
 import GoDaddy from 'simple-icons/icons/godaddy.svg?react';
@@ -49,3 +50,9 @@ export const subscriptionIconToLabel = {
   headspace: 'HeadSpace',
   godaddy: 'GoDaddy',
 } as const satisfies Record<SubscriptionIcon, string>;
+
+export const subscriptionIconsComboboxData: ComboboxData =
+  subscriptionIcons.map((icon) => ({
+    value: icon,
+    label: subscriptionIconToLabel[icon],
+  }));
