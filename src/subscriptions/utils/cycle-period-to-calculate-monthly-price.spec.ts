@@ -141,6 +141,22 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
       expect(calculateMonthlyPrice(subscription, 6)).toEqual(13.33);
     });
 
+    it('startedAtMonth < endedAtMonth < month && startedAtYear < year < endedAtYear', () => {
+      const subscription: SubscriptionModel = {
+        ...monthlySubscription,
+        startedAt: dayjs(monthlySubscription.startedAt)
+          .subtract(1, 'year')
+          .set('month', 2)
+          .toDate(),
+        endedAt: dayjs(monthlySubscription.startedAt)
+          .add(1, 'year')
+          .set('month', 6)
+          .toDate(),
+      };
+
+      expect(calculateMonthlyPrice(subscription, 9)).toEqual(13.33);
+    });
+
     it('each = 2 && startedAtMonth % month = 0 && startedAtYear < year', () => {
       const subscription: SubscriptionModel = {
         ...twoMonthlySubscription,

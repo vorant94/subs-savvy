@@ -37,7 +37,10 @@ export const cyclePeriodToCalculateMonthlyPrice = {
       const endedAtYear = endedAt.getFullYear();
 
       if (year > startedAtYear) {
-        return month < endedAtMonth ? price : 0;
+        return (month < endedAtMonth && year === endedAtYear) ||
+          year < endedAtYear
+          ? price
+          : 0;
       }
 
       if (year < endedAtYear) {

@@ -1,5 +1,6 @@
 import type { MonthName } from '@/date/types/month-name.ts';
 import { monthToMonthName, months } from '@/date/types/month.ts';
+import { roundToDecimal } from '@/math/utils/round-to-decimal.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { Card, Divider, Text, Title } from '@mantine/core';
 import { Fragment, memo, useMemo } from 'react';
@@ -93,6 +94,7 @@ function aggregateSubscriptionsByMonth(
 
   for (const subsByMonth of subscriptionsByMonth) {
     subsByMonth.subscriptions.sort(compareSubscriptionsDesc);
+    subsByMonth.totalExpenses = roundToDecimal(subsByMonth.totalExpenses);
   }
 
   return subscriptionsByMonth;
