@@ -32,7 +32,7 @@
     "noEmit": true,
 
     /* Runtime/Framework */
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
     "allowImportingTsExtensions": true,
 

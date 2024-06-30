@@ -33,7 +33,7 @@ export const twoMonthlySubscription = {
   name: 'Arnona',
   price: 826,
   startedAt: dayjs(new Date()).set('month', 2).toDate(),
-  icon: 'home',
+  icon: 'house',
   cycle: {
     each: 2,
     period: 'monthly',
@@ -46,7 +46,7 @@ export const twoYearlySubscription = {
   name: 'Non-Arnona',
   price: 300,
   startedAt: dayjs(new Date()).set('month', 2).toDate(),
-  icon: 'home',
+  icon: 'house',
   cycle: {
     each: 2,
     period: 'yearly',

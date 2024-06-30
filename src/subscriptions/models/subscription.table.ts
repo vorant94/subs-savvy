@@ -43,7 +43,7 @@ export function insertSubscription(
     db.subscriptions,
     db.subscriptionsTags,
     db.tags,
-    () => insertSubscription(raw),
+    () => _insertSubscription(raw),
   );
 }
 
