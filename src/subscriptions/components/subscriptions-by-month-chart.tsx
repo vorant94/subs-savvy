@@ -3,10 +3,18 @@ import { monthToMonthName, months } from '@/date/types/month.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { Card, Divider, Text, Title } from '@mantine/core';
 import { Fragment, memo, useMemo } from 'react';
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+} from 'recharts';
 import type { TooltipProps } from 'recharts/types/component/Tooltip';
 import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
+import { compareSubscriptionsDesc } from '../utils/compare-subscriptions.ts';
 import { cyclePeriodToCalculateMonthlyPrice } from '../utils/cycle-period-to-calculate-monthly-price.ts';
 
 // TODO color bars based on subscription tag color
@@ -38,6 +46,7 @@ export const SubscriptionsByMonthChart = memo(() => {
         width="100%"
         height="100%">
         <BarChart data={aggregatedSubscriptions}>
+          <CartesianGrid strokeDasharray="3 3" />
           <Bar
             name="Expences per Month"
             dataKey="totalExpenses"
@@ -80,6 +89,10 @@ function aggregateSubscriptionsByMonth(
       subscriptionsByMonth[month]!.totalExpenses += priceThisMonth;
       subscriptionsByMonth[month]!.subscriptions.push(subscription);
     }
+  }
+
+  for (const subsByMonth of subscriptionsByMonth) {
+    subsByMonth.subscriptions.sort(compareSubscriptionsDesc);
   }
 
   return subscriptionsByMonth;
