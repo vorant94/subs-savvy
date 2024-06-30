@@ -3,6 +3,7 @@ import {
   faBolt,
   faCar,
   faCarBurst,
+  faCat,
   faCity,
   faDumbbell,
   faEye,
@@ -11,7 +12,9 @@ import {
   faPeopleGroup,
   faPlaneArrival,
   faPlaneDeparture,
+  faSackDollar,
   faTooth,
+  faYinYang,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ComboboxData } from '@mantine/core';
@@ -46,6 +49,9 @@ export const subscriptionIcons = [
   'dumbbell',
   'bolt',
   'people-group',
+  'sack-dollar',
+  'yin-yang',
+  'cat',
 ] as const;
 export type SubscriptionIcon = (typeof subscriptionIcons)[number];
 
@@ -142,6 +148,27 @@ export const subscriptionIconToSvg = {
       className={cn(`text-slate-800`)}
     />
   ),
+  'sack-dollar': (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faSackDollar}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  'yin-yang': (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faYinYang}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  cat: (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faCat}
+      className={cn(`text-slate-800`)}
+    />
+  ),
 } as const satisfies Record<SubscriptionIcon, ReactElement>;
 
 export const subscriptionIconToLabel = {
@@ -165,6 +192,9 @@ export const subscriptionIconToLabel = {
   dumbbell: 'Dumbbell',
   bolt: 'Bolt',
   'people-group': 'People Group',
+  'sack-dollar': 'Sack Dollar',
+  'yin-yang': 'Yin Yang',
+  cat: 'Cat',
 } as const satisfies Record<SubscriptionIcon, string>;
 
 export const subscriptionIconsComboboxData: ComboboxData = subscriptionIcons
