@@ -67,15 +67,17 @@ interface SubscriptionsAggregatedByMonth {
   subscriptions: Array<SubscriptionModel>;
 }
 
+const subscriptionsByMonthInitial: Array<SubscriptionsAggregatedByMonth> =
+  months.map((month) => ({
+    totalExpenses: 0,
+    month: monthToMonthName[month],
+    subscriptions: [],
+  }));
+
 function aggregateSubscriptionsByMonth(
   subscriptions: Array<SubscriptionModel>,
 ): Array<SubscriptionsAggregatedByMonth> {
-  const subscriptionsByMonth: Array<SubscriptionsAggregatedByMonth> =
-    months.map((month) => ({
-      totalExpenses: 0,
-      month: monthToMonthName[month],
-      subscriptions: [],
-    }));
+  const subscriptionsByMonth = structuredClone(subscriptionsByMonthInitial);
 
   for (const subscription of subscriptions) {
     for (const month of months) {

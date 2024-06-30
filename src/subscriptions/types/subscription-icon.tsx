@@ -7,8 +7,12 @@ import {
   faCity,
   faDumbbell,
   faEye,
+  faFaucetDrip,
+  faFireFlameSimple,
   faHeart,
   faHouse,
+  faKitMedical,
+  faLandmark,
   faPeopleGroup,
   faPlaneArrival,
   faPlaneDeparture,
@@ -21,9 +25,12 @@ import type { ComboboxData } from '@mantine/core';
 import type { ReactElement } from 'react';
 import GitHub from 'simple-icons/icons/github.svg?react';
 import GoDaddy from 'simple-icons/icons/godaddy.svg?react';
+import Google from 'simple-icons/icons/google.svg?react';
 import HeadSpace from 'simple-icons/icons/headspace.svg?react';
 import JetBrains from 'simple-icons/icons/jetbrains.svg?react';
 import Netflix from 'simple-icons/icons/netflix.svg?react';
+import ProtonMail from 'simple-icons/icons/protonmail.svg?react';
+import Spotify from 'simple-icons/icons/spotify.svg?react';
 import Telegram from 'simple-icons/icons/telegram.svg?react';
 import YouTube from 'simple-icons/icons/youtube.svg?react';
 import Moovit from '../assets/moovit.svg?react';
@@ -52,6 +59,13 @@ export const subscriptionIcons = [
   'sack-dollar',
   'yin-yang',
   'cat',
+  'kit-medical',
+  'proton-mail',
+  'google',
+  'spotify',
+  'landmark',
+  'faucet-drip',
+  'fire-flame-simple',
 ] as const;
 export type SubscriptionIcon = (typeof subscriptionIcons)[number];
 
@@ -169,6 +183,37 @@ export const subscriptionIconToSvg = {
       className={cn(`text-slate-800`)}
     />
   ),
+  'kit-medical': (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faKitMedical}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  'proton-mail': <ProtonMail className={cn(`fill-[#6D4AFF]`)} />,
+  google: <Google className={cn(`fill-[#4285F4]`)} />,
+  spotify: <Spotify className={cn(`fill-[#1DB954]`)} />,
+  landmark: (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faLandmark}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  'faucet-drip': (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faFaucetDrip}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  'fire-flame-simple': (
+    <FontAwesomeIcon
+      size="2xl"
+      icon={faFireFlameSimple}
+      className={cn(`text-slate-800`)}
+    />
+  ),
 } as const satisfies Record<SubscriptionIcon, ReactElement>;
 
 export const subscriptionIconToLabel = {
@@ -195,6 +240,13 @@ export const subscriptionIconToLabel = {
   'sack-dollar': 'Sack Dollar',
   'yin-yang': 'Yin Yang',
   cat: 'Cat',
+  'kit-medical': 'Kit Medical',
+  'proton-mail': 'Proton Mail',
+  google: 'Google',
+  spotify: 'Spotify',
+  landmark: 'Landmark',
+  'faucet-drip': 'Faucet Drip',
+  'fire-flame-simple': 'Fire Flame Simple',
 } as const satisfies Record<SubscriptionIcon, string>;
 
 export const subscriptionIconsComboboxData: ComboboxData = subscriptionIcons
