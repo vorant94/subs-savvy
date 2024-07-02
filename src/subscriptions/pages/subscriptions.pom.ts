@@ -1,7 +1,5 @@
-import { ButtonCom } from '@/ui/components/button.com.ts';
 import { DatePickerInputCom } from '@/ui/components/date-picker-input.com.ts';
 import { InputCom } from '@/ui/components/input.com.ts';
-import { NavLinkCom } from '@/ui/components/nav-link.com.ts';
 import { SelectCom } from '@/ui/components/select.com.ts';
 import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-input-aria-labels.ts';
 import type { Locator, Page } from '@playwright/test';
@@ -15,9 +13,9 @@ import {
 } from '../types/subscription-icon.ts';
 
 export class SubscriptionsPom {
-  addSubscriptionButton: ButtonCom;
-  insertSubscriptionButton: ButtonCom;
-  updateSubscriptionButton: ButtonCom;
+  addSubscriptionButton: Locator;
+  insertSubscriptionButton: Locator;
+  updateSubscriptionButton: Locator;
   noSubscriptionsPlaceholder: Locator;
 
   nameInput: InputCom;
@@ -29,18 +27,18 @@ export class SubscriptionsPom {
   eachInput: InputCom;
   periodSelect: SelectCom<SubscriptionCyclePeriod>;
 
-  private subscriptionsNavLink: NavLinkCom;
+  private subscriptionsNavLink: Locator;
 
   constructor(private readonly page: Page) {
-    this.addSubscriptionButton = new ButtonCom(
-      this.page.getByRole('button', { name: 'add sub' }),
-    );
-    this.insertSubscriptionButton = new ButtonCom(
-      this.page.getByRole('button', { name: 'insert' }),
-    );
-    this.updateSubscriptionButton = new ButtonCom(
-      this.page.getByRole('button', { name: 'update' }),
-    );
+    this.addSubscriptionButton = this.page.getByRole('button', {
+      name: 'add sub',
+    });
+    this.insertSubscriptionButton = this.page.getByRole('button', {
+      name: 'insert',
+    });
+    this.updateSubscriptionButton = this.page.getByRole('button', {
+      name: 'update',
+    });
     this.noSubscriptionsPlaceholder = this.page.getByText('No Subscriptions');
 
     this.nameInput = new InputCom(this.page.getByLabel('name'));
@@ -74,9 +72,9 @@ export class SubscriptionsPom {
       subscriptionCyclePeriodToLabel,
     );
 
-    this.subscriptionsNavLink = new NavLinkCom(
-      this.page.getByRole('link', { name: 'subscriptions' }),
-    );
+    this.subscriptionsNavLink = this.page.getByRole('link', {
+      name: 'subscriptions',
+    });
   }
 
   async goto() {

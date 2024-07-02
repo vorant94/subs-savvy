@@ -5,7 +5,7 @@ import type { InsertSubscriptionModel } from '../src/subscriptions/models/subscr
 import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
 
 test('should create subscription', async ({ page }) => {
-  const subscriptionsPage = new SubscriptionsPom(page);
+  const pom = new SubscriptionsPom(page);
 
   const subscription = {
     ...monthlySubscription,
@@ -14,29 +14,29 @@ test('should create subscription', async ({ page }) => {
     tags: [],
   } as const satisfies InsertSubscriptionModel;
 
-  await subscriptionsPage.goto();
+  await pom.goto();
 
   await expect(
-    subscriptionsPage.noSubscriptionsPlaceholder,
+    pom.noSubscriptionsPlaceholder,
     `should show no subscriptions placeholder initially`,
   ).toBeVisible();
 
-  await subscriptionsPage.addSubscriptionButton.click();
+  await pom.addSubscriptionButton.click();
 
-  await subscriptionsPage.nameInput.fill(subscription.name);
-  await subscriptionsPage.descriptionTextarea.fill(subscription.description);
-  await subscriptionsPage.iconSelect.fill(subscription.icon);
-  await subscriptionsPage.priceInput.fill(subscription.price);
-  await subscriptionsPage.startedAtDatePickerInput.fill(subscription.startedAt);
-  await subscriptionsPage.endedAtDatePickerInput.fill(subscription.endedAt);
-  await subscriptionsPage.eachInput.fill(subscription.cycle.each);
-  await subscriptionsPage.periodSelect.fill(subscription.cycle.period);
+  await pom.nameInput.fill(subscription.name);
+  await pom.descriptionTextarea.fill(subscription.description);
+  await pom.iconSelect.fill(subscription.icon);
+  await pom.priceInput.fill(subscription.price);
+  await pom.startedAtDatePickerInput.fill(subscription.startedAt);
+  await pom.endedAtDatePickerInput.fill(subscription.endedAt);
+  await pom.eachInput.fill(subscription.cycle.each);
+  await pom.periodSelect.fill(subscription.cycle.period);
   // TODO: add filling tag here
 
-  await subscriptionsPage.insertSubscriptionButton.click();
+  await pom.insertSubscriptionButton.click();
 
   await expect(
-    subscriptionsPage.noSubscriptionsPlaceholder,
+    pom.noSubscriptionsPlaceholder,
     `should hide no subscriptions placeholder`,
   ).not.toBeVisible();
 });
