@@ -1,8 +1,11 @@
 import { expect, test } from '@playwright/test';
 import dayjs from 'dayjs';
 import type { InsertSubscriptionModel } from '../src/subscriptions/models/subscription.model';
+import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
 
 test.skip('should create subscription', async ({ page }) => {
+  const subscriptionsPage = new SubscriptionsPom(page);
+
   const formValue = {
     name: 'Webstorm',
     description: 'JavaScript/TypeScript IDE',
@@ -17,27 +20,28 @@ test.skip('should create subscription', async ({ page }) => {
     tags: [],
   } as const satisfies InsertSubscriptionModel;
 
-  await page.goto('/');
-  await page.getByRole('link', { name: 'subscriptions' }).click();
+  await subscriptionsPage.goto();
 
   await expect(
     page.getByText('No Subscriptions'),
     `should show no subscriptions placeholder initially`,
   ).toBeVisible();
 
-  await page.getByRole('button', { name: 'add sub' }).click();
+  await subscriptionsPage.addSubscriptionButton.click();
 
-  await page.getByLabel('name').fill(formValue.name);
-  await page.getByLabel('description').fill(formValue.description);
+  await subscriptionsPage.nameInput.fill(formValue.name);
+  await subscriptionsPage.descriptionTextarea.fill(formValue.description);
+  await subscriptionsPage.iconSelect.fill(formValue.icon);
+  await subscriptionsPage.priceInput.fill(formValue.price);
+  await subscriptionsPage.startedAtDatePickerInput.fill(formValue.startedAt);
+  await subscriptionsPage.endedAtDatePickerInput.fill(formValue.endedAt);
+  await subscriptionsPage.eachInput.fill(formValue.cycle.each);
+  await subscriptionsPage.periodSelect.fill(formValue.cycle.period);
 
-  await page.getByLabel('icon').nth(0).click();
-  await page
-    .getByLabel('icon')
-    .nth(1)
-    .getByRole('option', { name: formValue.icon })
-    .click();
+  await subscriptionsPage.insertSubscriptionButton.click();
 
-  await page.getByLabel('price').fill(`${formValue.price}`);
-
-  // TODO continue after mantine datepicker accessibility is resolved
+  await expect(
+    page.getByText('No Subscriptions'),
+    `should hide no subscriptions placeholder`,
+  ).not.toBeVisible();
 });

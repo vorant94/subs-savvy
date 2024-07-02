@@ -1,5 +1,6 @@
 import { findTags } from '@/tags/models/tag.table.ts';
 import { cn } from '@/ui/utils/cn.ts';
+import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-input-aria-labels.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -148,6 +149,8 @@ export const SubscriptionUpsert = memo(() => {
           render={({ field: { onChange, onBlur, value } }) => (
             <DatePickerInput
               label="Started At"
+              aria-label="Started At"
+              ariaLabels={createDatePickerInputAriaLabels('started at')}
               placeholder="Started At"
               value={value}
               onChange={onChange}
@@ -162,6 +165,8 @@ export const SubscriptionUpsert = memo(() => {
           render={({ field: { onChange, onBlur, value } }) => (
             <DatePickerInput
               label="Ended At"
+              aria-label="Ended At"
+              ariaLabels={createDatePickerInputAriaLabels('ended at')}
               placeholder="Ended At"
               value={value}
               onChange={onChange}
