@@ -40,7 +40,7 @@
     "react-hook-form": "^7.51.5",
     "react-router-dom": "^6.23.1",
     "recharts": "^2.10.3",
-    "simple-icons": "^12.2.0",
+    "simple-icons": "^13.0.0",
     "tailwind-merge": "^2.3.0",
     "zod": "^3.23.8"
   },
@@ -72,7 +72,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.3.0",
     "prettier-plugin-css-order": "^2.1.2",
-    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-organize-imports": "^4.0.0",
     "prettier-plugin-tailwindcss": "^0.6.1",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.2.2",
