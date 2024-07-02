@@ -4,7 +4,7 @@ import { InputCom } from '@/ui/components/input.com.ts';
 import { NavLinkCom } from '@/ui/components/nav-link.com.ts';
 import { SelectCom } from '@/ui/components/select.com.ts';
 import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-input-aria-labels.ts';
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import {
   subscriptionCyclePeriodToLabel,
   type SubscriptionCyclePeriod,
@@ -12,12 +12,13 @@ import {
 import {
   subscriptionIconToLabel,
   type SubscriptionIcon,
-} from '../types/subscription-icon.tsx';
+} from '../types/subscription-icon.ts';
 
 export class SubscriptionsPom {
   addSubscriptionButton: ButtonCom;
   insertSubscriptionButton: ButtonCom;
   updateSubscriptionButton: ButtonCom;
+  noSubscriptionsPlaceholder: Locator;
 
   nameInput: InputCom;
   descriptionTextarea: InputCom;
@@ -40,6 +41,7 @@ export class SubscriptionsPom {
     this.updateSubscriptionButton = new ButtonCom(
       this.page.getByRole('button', { name: 'update' }),
     );
+    this.noSubscriptionsPlaceholder = this.page.getByText('No Subscriptions');
 
     this.nameInput = new InputCom(this.page.getByLabel('name'));
     this.descriptionTextarea = new InputCom(

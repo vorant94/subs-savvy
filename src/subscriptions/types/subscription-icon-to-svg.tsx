@@ -21,7 +21,6 @@ import {
   faYinYang,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ComboboxData } from '@mantine/core';
 import type { ReactElement } from 'react';
 import GitHub from 'simple-icons/icons/github.svg?react';
 import GoDaddy from 'simple-icons/icons/godaddy.svg?react';
@@ -34,41 +33,9 @@ import Spotify from 'simple-icons/icons/spotify.svg?react';
 import Telegram from 'simple-icons/icons/telegram.svg?react';
 import YouTube from 'simple-icons/icons/youtube.svg?react';
 import Moovit from '../assets/moovit.svg?react';
+import type { SubscriptionIcon } from './subscription-icon.ts';
 
-export const subscriptionIcons = [
-  'telegram',
-  'netflix',
-  'jetbrains',
-  'github',
-  'youtube',
-  'house',
-  'headspace',
-  'godaddy',
-  'moovit',
-  'tooth',
-  'car',
-  'eye',
-  'heart',
-  'city',
-  'plane-departure',
-  'plane-arrival',
-  'car-burst',
-  'dumbbell',
-  'bolt',
-  'people-group',
-  'sack-dollar',
-  'yin-yang',
-  'cat',
-  'kit-medical',
-  'proton-mail',
-  'google',
-  'spotify',
-  'landmark',
-  'faucet-drip',
-  'fire-flame-simple',
-] as const;
-export type SubscriptionIcon = (typeof subscriptionIcons)[number];
-
+// must be in a separate file so the subscription-icon can be simple .ts file hence can be used in playwright
 export const subscriptionIconToSvg = {
   telegram: <Telegram className={cn(`fill-[#26A5E4]`)} />,
   netflix: <Netflix className={cn(`fill-[#E50914]`)} />,
@@ -215,43 +182,3 @@ export const subscriptionIconToSvg = {
     />
   ),
 } as const satisfies Record<SubscriptionIcon, ReactElement>;
-
-export const subscriptionIconToLabel = {
-  telegram: 'Telegram',
-  netflix: 'Netflix',
-  jetbrains: 'JetBrains',
-  github: 'GitHub',
-  youtube: 'YouTube',
-  house: 'House',
-  headspace: 'HeadSpace',
-  godaddy: 'GoDaddy',
-  moovit: 'Moovit',
-  tooth: 'Tooth',
-  car: 'Car',
-  eye: 'Eye',
-  heart: 'Heart',
-  city: 'City',
-  'plane-departure': 'Plane Departure',
-  'plane-arrival': 'Plane Arrival',
-  'car-burst': 'Car Burst',
-  dumbbell: 'Dumbbell',
-  bolt: 'Bolt',
-  'people-group': 'People Group',
-  'sack-dollar': 'Sack Dollar',
-  'yin-yang': 'Yin Yang',
-  cat: 'Cat',
-  'kit-medical': 'Kit Medical',
-  'proton-mail': 'Proton Mail',
-  google: 'Google',
-  spotify: 'Spotify',
-  landmark: 'Landmark',
-  'faucet-drip': 'Faucet Drip',
-  'fire-flame-simple': 'Fire Flame Simple',
-} as const satisfies Record<SubscriptionIcon, string>;
-
-export const subscriptionIconsComboboxData: ComboboxData = subscriptionIcons
-  .map((icon) => ({
-    value: icon,
-    label: subscriptionIconToLabel[icon],
-  }))
-  .toSorted((a, b) => a.label.localeCompare(b.label));

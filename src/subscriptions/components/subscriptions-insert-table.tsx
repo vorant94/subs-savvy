@@ -21,7 +21,7 @@ import {
 import type { InsertSubscriptionModel } from '../models/subscription.model.ts';
 import { insertSubscriptions } from '../models/subscription.table.ts';
 import { subscriptionCyclePeriodsComboboxData } from '../types/subscription-cycle-period.ts';
-import { subscriptionIconsComboboxData } from '../types/subscription-icon.tsx';
+import { subscriptionIconsComboboxData } from '../types/subscription-icon.ts';
 
 export const SubscriptionsInsertTable = memo(
   forwardRef<HTMLFormElement, SubscriptionsInsertTableProps>(

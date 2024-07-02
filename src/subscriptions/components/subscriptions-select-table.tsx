@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { memo, type Dispatch, type SetStateAction } from 'react';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { subscriptionCyclePeriodToLabel } from '../types/subscription-cycle-period.ts';
-import { subscriptionIconToLabel } from '../types/subscription-icon.tsx';
+import { subscriptionIconToLabel } from '../types/subscription-icon.ts';
 
 export const SubscriptionsSelectTable = memo(
   ({

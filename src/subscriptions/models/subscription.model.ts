@@ -1,7 +1,7 @@
 import { tagSchema } from '@/tags/models/tag.model.ts';
 import { z } from 'zod';
 import { subscriptionCyclePeriods } from '../types/subscription-cycle-period.ts';
-import { subscriptionIcons } from '../types/subscription-icon.tsx';
+import { subscriptionIcons } from '../types/subscription-icon.ts';
 
 export const subscriptionSchema = z.object({
   id: z.number(),

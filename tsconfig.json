@@ -47,5 +47,11 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.pom.ts",
+    "src/**/*.com.ts"
+  ]
 }

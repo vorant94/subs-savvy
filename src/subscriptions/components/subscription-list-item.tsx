@@ -3,7 +3,7 @@ import { Avatar, Card, Indicator, Text, Title } from '@mantine/core';
 import { memo, useCallback, useMemo } from 'react';
 import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 import { type SubscriptionModel } from '../models/subscription.model.ts';
-import { subscriptionIconToSvg } from '../types/subscription-icon.tsx';
+import { subscriptionIconToSvg } from '../types/subscription-icon-to-svg.tsx';
 import { isSubscriptionExpired } from '../utils/is-subscription-expired.ts';
 
 // TODO gray out expired subscription

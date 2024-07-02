@@ -36,7 +36,7 @@ import {
   updateSubscription,
 } from '../models/subscription.table.ts';
 import { subscriptionCyclePeriodsComboboxData } from '../types/subscription-cycle-period.ts';
-import { subscriptionIconsComboboxData } from '../types/subscription-icon.tsx';
+import { subscriptionIconsComboboxData } from '../types/subscription-icon.ts';
 
 export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useSubscriptionUpsert();
@@ -117,7 +117,7 @@ export const SubscriptionUpsert = memo(() => {
         render={({ field: { value, onChange, onBlur } }) => (
           <Select
             value={value}
-            onChange={(_, option) => onChange(option.value)}
+            onChange={(_, option) => option && onChange(option.value)}
             onBlur={onBlur}
             label="Icon"
             placeholder="Icon"
@@ -199,7 +199,7 @@ export const SubscriptionUpsert = memo(() => {
           render={({ field: { value, onChange, onBlur } }) => (
             <Select
               value={value}
-              onChange={(_, option) => onChange(option.value)}
+              onChange={(_, option) => option && onChange(option.value)}
               onBlur={onBlur}
               label="Period"
               placeholder="Period"
