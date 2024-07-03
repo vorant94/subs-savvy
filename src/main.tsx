@@ -1,3 +1,4 @@
+import { db } from '@/db/globals/db.ts';
 import { recoveryRoute } from '@/recovery/types/recovery-route.ts';
 import { route } from '@/router/types/route.ts';
 import { MantineProvider } from '@mantine/core';
@@ -22,6 +23,9 @@ window.addEventListener('error', function ({ error }) {
     console.error(error.message);
   }
 });
+
+// setting it to the window so db is easily accessible to populate it with data during e2e tests
+window.Dexie = db;
 
 const router = createBrowserRouter([
   {

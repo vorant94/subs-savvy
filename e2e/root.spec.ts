@@ -1,0 +1,26 @@
+import { expect, test } from '@playwright/test';
+import type { db } from '../src/db/globals/db';
+import { route } from '../src/router/types/route';
+
+test.describe('root', () => {
+  test('should redirect from root url to dashboard', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page).toHaveURL(`/${route.dashboard}`);
+  });
+
+  test('should have Dexie be defined on window', async ({ page }) => {
+    await page.goto('/');
+
+    const isDexie = await page.evaluate(() => !!window.Dexie);
+
+    expect(isDexie).toBeTruthy();
+  });
+});
+
+// TODO find a place to define global types for test files
+declare global {
+  interface Window {
+    Dexie: typeof db;
+  }
+}

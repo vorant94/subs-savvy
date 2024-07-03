@@ -1,6 +1,11 @@
 import { TagFormCom } from '@/tags/components/tag-form.com';
+import type { UpsertTagModel } from '@/tags/models/tag.model';
 import type { Locator, Page } from '@playwright/test';
 import { SubscriptionUpsertCom } from '../components/subscription-upsert.com';
+import type {
+  SubscriptionModel,
+  UpsertSubscriptionModel,
+} from '../models/subscription.model';
 
 export class SubscriptionsPom {
   addSubscriptionButton: Locator;
@@ -15,7 +20,7 @@ export class SubscriptionsPom {
 
   tagForm: TagFormCom;
 
-  private subscriptionsNavLink: Locator;
+  subscriptionsNavLink: Locator;
 
   constructor(private readonly page: Page) {
     this.addSubscriptionButton = this.page.getByRole('button', {
@@ -44,5 +49,39 @@ export class SubscriptionsPom {
   async goto() {
     await this.page.goto('/');
     await this.subscriptionsNavLink.click();
+  }
+
+  async fillSubscriptionUpsert(
+    subscription: UpsertSubscriptionModel,
+  ): Promise<void> {
+    await this.subscriptionUpsert.nameControl.fill(subscription.name);
+
+    if (subscription.description) {
+      await this.subscriptionUpsert.descriptionControl.fill(
+        subscription.description,
+      );
+    }
+
+    await this.subscriptionUpsert.iconControl.fill(subscription.icon);
+    await this.subscriptionUpsert.priceControl.fill(subscription.price);
+    await this.subscriptionUpsert.startedAtControl.fill(subscription.startedAt);
+
+    if (subscription.endedAt) {
+      await this.subscriptionUpsert.endedAtControl.fill(subscription.endedAt);
+    }
+
+    await this.subscriptionUpsert.eachControl.fill(subscription.cycle.each);
+    await this.subscriptionUpsert.periodControl.fill(subscription.cycle.period);
+
+    // TODO: add filling tag multiselect here
+  }
+
+  async fillTagForm(tag: UpsertTagModel): Promise<void> {
+    await this.tagForm.nameControl.fill(tag.name);
+    await this.tagForm.colorControl.fill(tag.color);
+  }
+
+  subscriptionListItem({ name }: SubscriptionModel): Locator {
+    return this.page.getByLabel(name);
   }
 }

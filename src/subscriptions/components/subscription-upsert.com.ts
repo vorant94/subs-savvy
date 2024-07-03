@@ -15,6 +15,7 @@ import {
 export class SubscriptionUpsertCom {
   insertButton: Locator;
   updateButton: Locator;
+  deleteButton: Locator;
 
   nameControl: InputCom;
   descriptionControl: InputCom;
@@ -31,6 +32,9 @@ export class SubscriptionUpsertCom {
     });
     this.updateButton = this.page.getByRole('button', {
       name: 'update',
+    });
+    this.deleteButton = this.page.getByRole('button', {
+      name: 'delete',
     });
 
     this.nameControl = new InputCom(this.page.getByLabel('name'));
