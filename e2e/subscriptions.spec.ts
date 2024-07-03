@@ -1,20 +1,48 @@
 import { expect, type Page, test } from '@playwright/test';
 import dayjs from 'dayjs';
 import type { db } from '../src/db/globals/db';
-import { monthlySubscription } from '../src/subscriptions/models/subscription.mock';
+import {
+  monthlySubscription,
+  subscriptions as subscriptionsMock,
+} from '../src/subscriptions/models/subscription.mock';
 import type {
   InsertSubscriptionModel,
   SubscriptionModel,
+  UpdateSubscriptionModel,
 } from '../src/subscriptions/models/subscription.model';
 import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
 import { tag as tagMock } from '../src/tags/models/tag.mock';
 import type { InsertTagModel } from '../src/tags/models/tag.model';
 
 test.describe('subscriptions', () => {
-  test('should create subscription', async ({ page }) => {
+  test('should show no subscriptions placeholder if there are no subscriptions', async ({
+    page,
+  }) => {
     const pom = new SubscriptionsPom(page);
 
-    const subscription = {
+    await pom.goto();
+
+    await expect(pom.noSubscriptionsPlaceholder).toBeVisible();
+  });
+
+  test('should show subscriptions list items instead of placeholder if there are subscriptions', async ({
+    page,
+  }) => {
+    const pom = new SubscriptionsPom(page);
+    const subscriptions = [...subscriptionsMock];
+
+    await pom.goto();
+    await populateDb(page, subscriptions);
+
+    await expect(pom.noSubscriptionsPlaceholder).not.toBeVisible();
+    for (const subscription of subscriptions) {
+      await expect(pom.subscriptionListItem(subscription)).toBeVisible();
+    }
+  });
+
+  test('should create subscription', async ({ page }) => {
+    const pom = new SubscriptionsPom(page);
+    const subscriptionToCreate = {
       ...monthlySubscription,
       description: 'Basic Plan',
       endedAt: dayjs(monthlySubscription.startedAt).add(1, 'year').toDate(),
@@ -23,50 +51,55 @@ test.describe('subscriptions', () => {
 
     await pom.goto();
 
-    await expect(
-      pom.noSubscriptionsPlaceholder,
-      `should show no subscriptions placeholder initially`,
-    ).toBeVisible();
-
     await pom.addSubscriptionButton.click();
-
-    await pom.fillSubscriptionUpsert(subscription);
-
+    await pom.fillSubscriptionUpsert(subscriptionToCreate);
     await pom.subscriptionUpsert.insertButton.click();
 
-    await expect(
-      pom.noSubscriptionsPlaceholder,
-      `should hide no subscriptions placeholder`,
-    ).not.toBeVisible();
+    await expect(pom.subscriptionListItem(subscriptionToCreate)).toBeVisible();
+  });
 
-    // TODO: add check for subscription card is shown
+  test('should update subscription', async ({ page }) => {
+    const pom = new SubscriptionsPom(page);
+    const subscriptionToUpdate = {
+      ...monthlySubscription,
+    } as const satisfies SubscriptionModel;
+    const updatedSubscription = {
+      ...monthlySubscription,
+      name: 'YouTube',
+    } as const satisfies UpdateSubscriptionModel;
+
+    await pom.goto();
+    await populateDb(page, [subscriptionToUpdate]);
+
+    await pom.subscriptionListItem(subscriptionToUpdate).click();
+    await pom.fillSubscriptionUpsert(updatedSubscription);
+    await pom.subscriptionUpsert.updateButton.click();
+
+    await expect(
+      pom.subscriptionListItem(subscriptionToUpdate),
+    ).not.toBeVisible();
+    await expect(pom.subscriptionListItem(updatedSubscription)).toBeVisible();
   });
 
   test('should delete subscription', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
+    const subscriptionToDelete = {
+      ...monthlySubscription,
+    } as const satisfies SubscriptionModel;
 
     await pom.goto();
+    await populateDb(page, [subscriptionToDelete]);
 
-    await populateDb(page, [monthlySubscription]);
-
-    await expect(
-      pom.noSubscriptionsPlaceholder,
-      `should hide no subscriptions placeholder after db was populated`,
-    ).not.toBeVisible();
-
-    await pom.subscriptionListItem(monthlySubscription).click();
-
+    await pom.subscriptionListItem(subscriptionToDelete).click();
     await pom.subscriptionUpsert.deleteButton.click();
 
     await expect(
-      pom.noSubscriptionsPlaceholder,
-      `should show no subscriptions placeholder after subscription was deleted`,
-    ).toBeVisible();
+      pom.subscriptionListItem(subscriptionToDelete),
+    ).not.toBeVisible();
   });
 
   test('should create tag', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
-
     const tag = {
       ...tagMock,
     } as const satisfies InsertTagModel;
@@ -75,9 +108,7 @@ test.describe('subscriptions', () => {
 
     await pom.manageTagsButton.click();
     await pom.addTagButton.click();
-
     await pom.fillTagForm(tag);
-
     await pom.insertTagButton.click();
 
     // TODO: move it to SubscriptionsPom

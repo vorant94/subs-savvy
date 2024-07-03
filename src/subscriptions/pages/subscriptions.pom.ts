@@ -81,7 +81,9 @@ export class SubscriptionsPom {
     await this.tagForm.colorControl.fill(tag.color);
   }
 
-  subscriptionListItem({ name }: SubscriptionModel): Locator {
+  subscriptionListItem({
+    name,
+  }: SubscriptionModel | UpsertSubscriptionModel): Locator {
     return this.page.getByLabel(name);
   }
 }
