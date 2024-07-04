@@ -1,16 +1,15 @@
-import { expect, type Page, test } from '@playwright/test';
-import dayjs from 'dayjs';
-import type { db } from '../src/db/globals/db';
 import {
   monthlySubscription,
   subscriptions as subscriptionsMock,
-} from '../src/subscriptions/models/subscription.mock';
+} from '@/subscriptions/models/subscription.mock';
 import type {
   InsertSubscriptionModel,
   SubscriptionModel,
   UpdateSubscriptionModel,
-} from '../src/subscriptions/models/subscription.model';
-import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
+} from '@/subscriptions/models/subscription.model.ts';
+import { SubscriptionsPom } from '@/subscriptions/pages/subscriptions.pom.ts';
+import { expect, test, type Page } from '@playwright/test';
+import dayjs from 'dayjs';
 
 test.describe('subscriptions', () => {
   test('should find subscriptions', async ({ page }) => {
@@ -113,11 +112,4 @@ async function populateDb(
       },
     );
   }, subscriptions);
-}
-
-// TODO find a place to define global types for test files
-declare global {
-  interface Window {
-    Dexie: typeof db;
-  }
 }

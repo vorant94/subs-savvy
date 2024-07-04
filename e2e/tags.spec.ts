@@ -1,8 +1,7 @@
-import { expect, type Page, test } from '@playwright/test';
-import type { db } from '../src/db/globals/db';
-import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
-import { tag } from '../src/tags/models/tag.mock';
-import type { InsertTagModel, TagModel } from '../src/tags/models/tag.model';
+import { SubscriptionsPom } from '@/subscriptions/pages/subscriptions.pom.ts';
+import { tag } from '@/tags/models/tag.mock.ts';
+import type { InsertTagModel, TagModel } from '@/tags/models/tag.model.ts';
+import { expect, test, type Page } from '@playwright/test';
 
 test.describe('tags', () => {
   test('should find tags', async ({ page }) => {
@@ -79,11 +78,4 @@ async function populateDb(page: Page, tags: Array<TagModel>): Promise<void> {
       await Promise.all(tags.map((tag) => window.Dexie.tags.put(tag)));
     });
   }, tags);
-}
-
-// TODO find a place to define global types for test files
-declare global {
-  interface Window {
-    Dexie: typeof db;
-  }
 }

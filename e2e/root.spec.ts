@@ -1,6 +1,5 @@
+import { rootRoute } from '@/ui/types/root-route.ts';
 import { expect, test } from '@playwright/test';
-import type { db } from '../src/db/globals/db';
-import { rootRoute } from '../src/ui/types/root-route';
 
 test.describe('root', () => {
   test('should redirect from root url to dashboard', async ({ page }) => {
@@ -17,10 +16,3 @@ test.describe('root', () => {
     expect(isDexie).toBeTruthy();
   });
 });
-
-// TODO find a place to define global types for test files
-declare global {
-  interface Window {
-    Dexie: typeof db;
-  }
-}

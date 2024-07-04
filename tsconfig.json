@@ -47,5 +47,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "./test-setup.ts"]
+  "include": ["src", "e2e", "./test-setup.ts"]
 }
