@@ -1,4 +1,5 @@
-import { db } from '@/db/globals/db.ts';
+import { cleanUpDb } from '@/db/utils/clean-up-db.ts';
+import { populateDb } from '@/db/utils/populate-db.ts';
 import { MantineProvider } from '@mantine/core';
 import { render, type RenderResult, waitFor } from '@testing-library/react';
 import type { FC, PropsWithChildren } from 'react';
@@ -23,7 +24,7 @@ describe('SubscriptionList', () => {
   });
 
   describe('with subscriptions', () => {
-    beforeEach(async () => await populateDb());
+    beforeEach(async () => await populateDb(subscriptions));
 
     afterEach(async () => await cleanUpDb());
 
@@ -42,43 +43,3 @@ const wrapper: FC<PropsWithChildren> = ({ children }) => {
     </MantineProvider>
   );
 };
-
-async function populateDb(): Promise<void> {
-  await db.transaction(
-    `rw`,
-    db.subscriptionsTags,
-    db.subscriptions,
-    db.tags,
-    async () => {
-      for (const { tags, ...subscription } of subscriptions) {
-        const tagPuts = tags.map((tag) => db.tags.put(tag));
-        const tagLinkPuts = tags.map((tag) =>
-          db.subscriptionsTags.put({
-            tagId: tag.id,
-            subscriptionId: subscription.id,
-          }),
-        );
-
-        await Promise.all([
-          ...tagPuts,
-          db.subscriptions.put(subscription),
-          ...tagLinkPuts,
-        ]);
-      }
-    },
-  );
-}
-
-async function cleanUpDb(): Promise<void> {
-  await db.transaction(
-    'rw',
-    db.subscriptionsTags,
-    db.subscriptions,
-    db.tags,
-    async () => {
-      await db.subscriptionsTags.clear();
-      await db.subscriptions.clear();
-      await db.tags.clear();
-    },
-  );
-}

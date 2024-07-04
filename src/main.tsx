@@ -1,6 +1,6 @@
 import { db } from '@/db/globals/db.ts';
 import { recoveryRoute } from '@/recovery/types/recovery-route.ts';
-import { route } from '@/router/types/route.ts';
+import { rootRoute } from '@/ui/types/root-route.ts';
 import { MantineProvider } from '@mantine/core';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -36,47 +36,47 @@ const router = createBrowserRouter([
         path: '/',
         element: (
           <Navigate
-            to={`/${route.dashboard}`}
+            to={`/${rootRoute.dashboard}`}
             replace
           />
         ),
       },
       {
-        path: `/${route.dashboard}`,
+        path: `/${rootRoute.dashboard}`,
         lazy: () =>
           import(`@/dashboard/pages/dashboard.page.tsx`).then((m) => ({
             Component: m.DashboardPage,
           })),
       },
       {
-        path: `/${route.subscriptions}`,
+        path: `/${rootRoute.subscriptions}`,
         lazy: () =>
           import(`@/subscriptions/pages/subscriptions.page.tsx`).then((m) => ({
             Component: m.SubscriptionsPage,
           })),
       },
       {
-        path: `/${route.recovery}`,
+        path: `/${rootRoute.recovery}`,
         lazy: () =>
           import(`@/recovery/pages/recovery.page.tsx`).then((m) => ({
             Component: m.RecoveryPage,
           })),
         children: [
           {
-            path: `/${route.recovery}`,
+            path: `/${rootRoute.recovery}`,
             element: (
-              <Navigate to={`/${route.recovery}/${recoveryRoute.import}`} />
+              <Navigate to={`/${rootRoute.recovery}/${recoveryRoute.import}`} />
             ),
           },
           {
-            path: `/${route.recovery}/${recoveryRoute.import}`,
+            path: `/${rootRoute.recovery}/${recoveryRoute.import}`,
             lazy: () =>
               import(`@/recovery/pages/recovery-import.page.tsx`).then((m) => ({
                 Component: m.RecoveryImportPage,
               })),
           },
           {
-            path: `/${route.recovery}/${recoveryRoute.export}`,
+            path: `/${rootRoute.recovery}/${recoveryRoute.export}`,
             lazy: () =>
               import(`@/recovery/pages/recovery-export.page.tsx`).then((m) => ({
                 Component: m.RecoveryExportPage,

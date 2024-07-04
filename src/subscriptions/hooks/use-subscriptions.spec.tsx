@@ -1,4 +1,5 @@
-import { db } from '@/db/globals/db.ts';
+import { cleanUpDb } from '@/db/utils/clean-up-db.ts';
+import { populateDb } from '@/db/utils/populate-db.ts';
 import { tag } from '@/tags/models/tag.mock.ts';
 import {
   act,
@@ -27,7 +28,7 @@ describe('useSubscriptions', () => {
     hook = screen.result;
   });
 
-  beforeEach(async () => await populateDb());
+  beforeEach(async () => await populateDb(subscriptions));
 
   afterEach(async () => await cleanUpDb());
 
@@ -124,43 +125,3 @@ describe('useSubscriptions', () => {
 const wrapper: FC<PropsWithChildren> = ({ children }) => {
   return <SubscriptionsProvider>{children}</SubscriptionsProvider>;
 };
-
-async function populateDb(): Promise<void> {
-  await db.transaction(
-    `rw`,
-    db.subscriptionsTags,
-    db.subscriptions,
-    db.tags,
-    async () => {
-      for (const { tags, ...subscription } of subscriptions) {
-        const tagPuts = tags.map((tag) => db.tags.put(tag));
-        const tagLinkPuts = tags.map((tag) =>
-          db.subscriptionsTags.put({
-            tagId: tag.id,
-            subscriptionId: subscription.id,
-          }),
-        );
-
-        await Promise.all([
-          ...tagPuts,
-          db.subscriptions.put(subscription),
-          ...tagLinkPuts,
-        ]);
-      }
-    },
-  );
-}
-
-async function cleanUpDb(): Promise<void> {
-  await db.transaction(
-    'rw',
-    db.subscriptionsTags,
-    db.subscriptions,
-    db.tags,
-    async () => {
-      await db.subscriptionsTags.clear();
-      await db.subscriptions.clear();
-      await db.tags.clear();
-    },
-  );
-}

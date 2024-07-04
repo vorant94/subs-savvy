@@ -1,8 +1,8 @@
-import { route } from '@/router/types/route.ts';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
 } from '@/ui/layouts/default.layout.tsx';
+import { rootRoute } from '@/ui/types/root-route.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +19,7 @@ export const RecoveryPage = memo(() => {
 
   const navigate = useNavigate();
   const navigateToTab = useCallback(
-    (tab: string | null) => navigate(`/${route.recovery}/${tab}`),
+    (tab: string | null) => navigate(`/${rootRoute.recovery}/${tab}`),
     [navigate],
   );
 

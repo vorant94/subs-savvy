@@ -1,11 +1,8 @@
-import {
-  NavLinksProvider,
-  type NavLink,
-} from '@/router/hooks/use-nav-links.tsx';
-import { route } from '@/router/types/route.ts';
 import { SubscriptionUpsertProvider } from '@/subscriptions/hooks/use-subscription-upsert.tsx';
 import { SubscriptionsProvider } from '@/subscriptions/hooks/use-subscriptions.tsx';
 import { DefaultLayoutProvider } from '@/ui/hooks/use-default-layout.tsx';
+import { NavLinksProvider, type NavLink } from '@/ui/hooks/use-nav-links.tsx';
+import { rootRoute } from '@/ui/types/root-route.ts';
 import {
   faChartSimple,
   faClockRotateLeft,
@@ -34,12 +31,12 @@ export const App = memo(() => {
 const topNavLinks = [
   {
     label: 'Dashboard',
-    path: `/${route.dashboard}`,
+    path: `/${rootRoute.dashboard}`,
     icon: <FontAwesomeIcon icon={faChartSimple} />,
   },
   {
     label: 'Subscriptions',
-    path: `/${route.subscriptions}`,
+    path: `/${rootRoute.subscriptions}`,
     icon: <FontAwesomeIcon icon={faCreditCard} />,
   },
 ] as const satisfies Array<NavLink>;
@@ -47,7 +44,7 @@ const topNavLinks = [
 const bottomNavLinks = [
   {
     label: 'Recovery',
-    path: `/${route.recovery}`,
+    path: `/${rootRoute.recovery}`,
     icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
   },
 ] as const satisfies Array<NavLink>;

@@ -1,4 +1,4 @@
-import { useNavLinks, type NavLink } from '@/router/hooks/use-nav-links.tsx';
+import { useNavLinks, type NavLink } from '@/ui/hooks/use-nav-links.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import {
   Affix,
