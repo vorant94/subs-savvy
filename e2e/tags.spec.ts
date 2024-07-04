@@ -1,61 +1,85 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import type { db } from '../src/db/globals/db';
 import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
-import { tag as tagMock } from '../src/tags/models/tag.mock';
-import type { InsertTagModel } from '../src/tags/models/tag.model';
+import { tag } from '../src/tags/models/tag.mock';
+import type { InsertTagModel, TagModel } from '../src/tags/models/tag.model';
 
-test.describe('subscriptions', () => {
+test.describe('tags', () => {
+  test('should find tags', async ({ page }) => {
+    const pom = new SubscriptionsPom(page);
+    const tags = [tag];
+
+    await pom.goto();
+    await populateDb(page, tags);
+
+    await pom.manageTagsButton.click();
+
+    for (const tag of tags) {
+      await expect(pom.tag(tag)).toBeVisible();
+    }
+  });
+
   test('should insert tag', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
-    const tag = {
-      ...tagMock,
+    const tagToCreate = {
+      ...tag,
     } as const satisfies InsertTagModel;
 
     await pom.goto();
 
     await pom.manageTagsButton.click();
     await pom.addTagButton.click();
-    await pom.fillTagForm(tag);
+    await pom.fillTagForm(tagToCreate);
     await pom.insertTagButton.click();
 
-    // TODO: move it to SubscriptionsPom
-    await expect(
-      page.getByRole('paragraph'),
-      `should show newly inserted tag name in list in modal`,
-    ).toHaveText(tag.name);
+    await expect(pom.tag(tagToCreate)).toBeVisible();
+  });
+
+  test('should update tag', async ({ page }) => {
+    const pom = new SubscriptionsPom(page);
+    const tagToUpdate = {
+      ...tag,
+    } as const satisfies InsertTagModel;
+    const updatedTag = {
+      ...tagToUpdate,
+      name: 'Housing',
+    } as const satisfies InsertTagModel;
+
+    await pom.goto();
+    await populateDb(page, [tagToUpdate]);
+
+    await pom.manageTagsButton.click();
+    await pom.editTagButton(tagToUpdate).click();
+    await pom.fillTagForm(updatedTag);
+    await pom.updateTagButton.click();
+
+    await expect(pom.tag(tagToUpdate)).not.toBeVisible();
+    await expect(pom.tag(updatedTag)).toBeVisible();
+  });
+
+  test('should delete tag', async ({ page }) => {
+    const pom = new SubscriptionsPom(page);
+    const tagToDelete = {
+      ...tag,
+    } as const satisfies TagModel;
+
+    await pom.goto();
+    await populateDb(page, [tagToDelete]);
+
+    await pom.manageTagsButton.click();
+    await pom.deleteTagButton(tagToDelete).click();
+
+    await expect(pom.tag(tagToDelete)).not.toBeVisible();
   });
 });
 
-// async function populateDb(
-//   page: Page,
-//   subscriptions: Array<SubscriptionModel>,
-// ): Promise<void> {
-//   await page.evaluate(async (subscriptions) => {
-//     await window.Dexie.transaction(
-//       'rw',
-//       window.Dexie.subscriptionsTags,
-//       window.Dexie.subscriptions,
-//       window.Dexie.tags,
-//       async () => {
-//         for (const { tags, ...subscription } of subscriptions) {
-//           const tagPuts = tags.map((tag) => window.Dexie.tags.put(tag));
-//           const tagLinkPuts = tags.map((tag) =>
-//             window.Dexie.subscriptionsTags.put({
-//               tagId: tag.id,
-//               subscriptionId: subscription.id,
-//             }),
-//           );
-//
-//           await Promise.all([
-//             ...tagPuts,
-//             window.Dexie.subscriptions.put(subscription),
-//             ...tagLinkPuts,
-//           ]);
-//         }
-//       },
-//     );
-//   }, subscriptions);
-// }
+async function populateDb(page: Page, tags: Array<TagModel>): Promise<void> {
+  await page.evaluate(async (tags) => {
+    await window.Dexie.transaction('rw', window.Dexie.tags, async () => {
+      await Promise.all(tags.map((tag) => window.Dexie.tags.put(tag)));
+    });
+  }, tags);
+}
 
 // TODO find a place to define global types for test files
 declare global {

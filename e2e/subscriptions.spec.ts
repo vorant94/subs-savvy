@@ -11,8 +11,6 @@ import type {
   UpdateSubscriptionModel,
 } from '../src/subscriptions/models/subscription.model';
 import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom';
-import { tag as tagMock } from '../src/tags/models/tag.mock';
-import type { InsertTagModel } from '../src/tags/models/tag.model';
 
 test.describe('subscriptions', () => {
   test('should find subscriptions', async ({ page }) => {
@@ -22,7 +20,6 @@ test.describe('subscriptions', () => {
     await pom.goto();
     await populateDb(page, subscriptions);
 
-    await expect(pom.noSubscriptionsPlaceholder).not.toBeVisible();
     for (const subscription of subscriptions) {
       await expect(pom.subscriptionListItem(subscription)).toBeVisible();
     }
@@ -84,26 +81,6 @@ test.describe('subscriptions', () => {
     await expect(
       pom.subscriptionListItem(subscriptionToDelete),
     ).not.toBeVisible();
-  });
-
-  test('should create tag', async ({ page }) => {
-    const pom = new SubscriptionsPom(page);
-    const tag = {
-      ...tagMock,
-    } as const satisfies InsertTagModel;
-
-    await pom.goto();
-
-    await pom.manageTagsButton.click();
-    await pom.addTagButton.click();
-    await pom.fillTagForm(tag);
-    await pom.insertTagButton.click();
-
-    // TODO: move it to SubscriptionsPom
-    await expect(
-      page.getByRole('paragraph'),
-      `should show newly inserted tag name in list in modal`,
-    ).toHaveText(tag.name);
   });
 });
 

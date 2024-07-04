@@ -1,5 +1,5 @@
 import { TagFormCom } from '@/tags/components/tag-form.com';
-import type { UpsertTagModel } from '@/tags/models/tag.model';
+import type { TagModel, UpsertTagModel } from '@/tags/models/tag.model';
 import type { Locator, Page } from '@playwright/test';
 import { SubscriptionUpsertCom } from '../components/subscription-upsert.com';
 import type {
@@ -85,5 +85,17 @@ export class SubscriptionsPom {
     name,
   }: SubscriptionModel | UpsertSubscriptionModel): Locator {
     return this.page.getByLabel(name);
+  }
+
+  tag({ name }: TagModel | UpsertTagModel): Locator {
+    return this.page.getByRole('paragraph').filter({ hasText: name });
+  }
+
+  editTagButton({ name }: TagModel | UpsertTagModel): Locator {
+    return this.page.getByRole('button', { name: `edit ${name} tag` });
+  }
+
+  deleteTagButton({ name }: TagModel | UpsertTagModel): Locator {
+    return this.page.getByRole('button', { name: `delete ${name} tag` });
   }
 }

@@ -22,14 +22,14 @@ export const TagList = memo(({ tags, onUpdate, onDelete }: TagListProps) => {
           <div className={cn(`flex-1`)} />
 
           <ActionIcon
-            aria-label="Update"
+            aria-label={`edit ${tag.name} tag`}
             variant="subtle"
             onClick={() => onUpdate(tag)}>
             <FontAwesomeIcon icon={faPen} />
           </ActionIcon>
 
           <ActionIcon
-            aria-label="Delete"
+            aria-label={`delete ${tag.name} tag`}
             variant="subtle"
             color="red"
             onClick={() => onDelete(tag.id)}>
