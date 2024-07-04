@@ -16,18 +16,15 @@ import {
 import { subscriptions } from '../models/subscription.mock.ts';
 
 describe('useSubscriptions', () => {
-  let renderResult: RenderHookResult<UseSubscriptions, void>;
+  let screen: RenderHookResult<UseSubscriptions, void>;
   let hook: RenderHookResult<UseSubscriptions, void>['result'];
 
   beforeEach(() => {
-    renderResult = renderHook<UseSubscriptions, void>(
-      () => useSubscriptions(),
-      {
-        wrapper,
-      },
-    );
+    screen = renderHook<UseSubscriptions, void>(() => useSubscriptions(), {
+      wrapper,
+    });
 
-    hook = renderResult.result;
+    hook = screen.result;
   });
 
   beforeEach(async () => await populateDb());

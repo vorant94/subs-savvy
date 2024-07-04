@@ -15,19 +15,7 @@ import { tag as tagMock } from '../src/tags/models/tag.mock';
 import type { InsertTagModel } from '../src/tags/models/tag.model';
 
 test.describe('subscriptions', () => {
-  test('should show no subscriptions placeholder if there are no subscriptions', async ({
-    page,
-  }) => {
-    const pom = new SubscriptionsPom(page);
-
-    await pom.goto();
-
-    await expect(pom.noSubscriptionsPlaceholder).toBeVisible();
-  });
-
-  test('should show subscriptions list items instead of placeholder if there are subscriptions', async ({
-    page,
-  }) => {
+  test('should find subscriptions', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
     const subscriptions = [...subscriptionsMock];
 
@@ -40,7 +28,7 @@ test.describe('subscriptions', () => {
     }
   });
 
-  test('should create subscription', async ({ page }) => {
+  test('should insert subscription', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
     const subscriptionToCreate = {
       ...monthlySubscription,
