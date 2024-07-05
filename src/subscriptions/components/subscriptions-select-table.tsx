@@ -31,7 +31,7 @@ export const SubscriptionsSelectTable = memo(
             <Table.Tr>
               <Table.Th>
                 <Checkbox
-                  aria-label="Select subscription"
+                  aria-label="Select all subscriptions"
                   checked={
                     subscriptions.length > 0 &&
                     selectedIds.length === subscriptions.length

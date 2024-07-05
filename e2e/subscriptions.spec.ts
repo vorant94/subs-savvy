@@ -85,7 +85,7 @@ test.describe('subscriptions', () => {
 
 async function populateDb(
   page: Page,
-  subscriptions: Array<SubscriptionModel>,
+  subscriptions: ReadonlyArray<SubscriptionModel>,
 ): Promise<void> {
   await page.evaluate(async (subscriptions) => {
     await window.Dexie.transaction(
