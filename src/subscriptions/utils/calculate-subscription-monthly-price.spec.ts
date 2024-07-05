@@ -7,12 +7,12 @@ import {
   yearlySubscription,
 } from '../models/subscription.mock.ts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
-import { cyclePeriodToCalculateMonthlyPrice } from './cycle-period-to-calculate-monthly-price.ts';
+import { calculateSubscriptionMonthlyPrice } from './calculate-subscription-monthly-price.ts';
 
-describe('cyclePeriodToCalculateMonthlyPrice', () => {
+describe('calculateSubscriptionMonthlyPrice', () => {
+  const startOfYear = dayjs(new Date()).startOf('year').toDate();
+
   describe('monthly', () => {
-    const calculateMonthlyPrice = cyclePeriodToCalculateMonthlyPrice.monthly;
-
     it('startedAtMonth < month && startedAtYear < year', () => {
       const subscription: SubscriptionModel = {
         ...monthlySubscription,
@@ -22,7 +22,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 3)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 3).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('startedAtMonth < month && startedAtYear = year', () => {
@@ -33,7 +38,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 3)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 3).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('startedAtMonth = month && startedAtYear = year', () => {
@@ -44,7 +54,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('month < startedAtMonth && startedAtYear = year', () => {
@@ -55,7 +70,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 1)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 1).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('month < startedAtMonth && year < startedAtYear', () => {
@@ -67,7 +87,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 1)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 1).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < endedAtMonth < month && startedAtYear < endedAtYear < year', () => {
@@ -83,7 +108,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 9)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 9).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < endedAtMonth < month && startedAtYear < year = endedAtYear', () => {
@@ -96,7 +126,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         endedAt: dayjs(monthlySubscription.startedAt).set('month', 6).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 9)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 9).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < month = endedAtMonth && startedAtYear < year = endedAtYear', () => {
@@ -109,7 +144,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         endedAt: dayjs(monthlySubscription.startedAt).set('month', 9).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 9)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 9).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < month < endedAtMonth && startedAtYear < year = endedAtYear', () => {
@@ -122,7 +162,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         endedAt: dayjs(monthlySubscription.startedAt).set('month', 9).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 6)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 6).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('startedAtMonth < month < endedAtMonth && startedAtYear < year < endedAtYear', () => {
@@ -138,7 +183,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 6)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 6).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('startedAtMonth < endedAtMonth < month && startedAtYear < year < endedAtYear', () => {
@@ -154,7 +204,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 9)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 9).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('each = 2 && startedAtMonth % month = 0 && startedAtYear < year', () => {
@@ -166,7 +221,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 4)).toEqual(826);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 4).toDate(),
+        ),
+      ).toEqual(826);
     });
 
     it('each = 2 && startedAtMonth % month = 1 && startedAtYear < year', () => {
@@ -178,13 +238,16 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 3)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 3).toDate(),
+        ),
+      ).toEqual(0);
     });
   });
 
   describe('yearly', () => {
-    const calculateMonthlyPrice = cyclePeriodToCalculateMonthlyPrice.yearly;
-
     it('startedAtMonth < month && startedAtYear < year', () => {
       const subscription: SubscriptionModel = {
         ...yearlySubscription,
@@ -194,7 +257,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 3)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 3).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < month && startedAtYear = year', () => {
@@ -203,7 +271,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         startedAt: dayjs(yearlySubscription.startedAt).set('month', 2).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 3)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 3).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth = month && startedAtYear = year', () => {
@@ -212,7 +285,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         startedAt: dayjs(yearlySubscription.startedAt).set('month', 2).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('startedAtMonth = month && startedAtYear < year', () => {
@@ -224,7 +302,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('month < startedAtMonth && startedAtYear = year', () => {
@@ -233,7 +316,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         startedAt: dayjs(yearlySubscription.startedAt).set('month', 4).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('month < startedAtMonth && year < startedAtYear', () => {
@@ -245,7 +333,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < endedAtMonth < month && startedAtYear < endedAtYear < year', () => {
@@ -261,7 +354,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 6)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 6).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < endedAtMonth < month && startedAtYear < year = endedAtYear', () => {
@@ -274,7 +372,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         endedAt: dayjs(yearlySubscription.startedAt).set('month', 4).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 6)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 6).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < month = endedAtMonth && startedAtYear < year = endedAtYear', () => {
@@ -287,7 +390,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
         endedAt: dayjs(yearlySubscription.startedAt).set('month', 4).toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 4)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 4).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth < month = endedAtMonth && startedAtYear = year < endedAtYear', () => {
@@ -300,7 +408,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 4)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 4).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('startedAtMonth = month < endedAtMonth && startedAtYear < year < endedAtYear', () => {
@@ -316,7 +429,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(13.33);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(13.33);
     });
 
     it('startedAtMonth = month < endedAtMonth && year < startedAtYear < endedAtYear', () => {
@@ -332,7 +450,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('month < startedAtMonth < endedAtMonth && year < startedAtYear < endedAtYear', () => {
@@ -348,7 +471,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 1)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 1).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('each = 2 && startedAtMonth = month && startedAtYear % year = 1', () => {
@@ -360,7 +488,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(0);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(0);
     });
 
     it('each = 2 && startedAtMonth = month && startedAtYear % year = 0', () => {
@@ -372,7 +505,12 @@ describe('cyclePeriodToCalculateMonthlyPrice', () => {
           .toDate(),
       };
 
-      expect(calculateMonthlyPrice(subscription, 2)).toEqual(300);
+      expect(
+        calculateSubscriptionMonthlyPrice(
+          subscription,
+          dayjs(startOfYear).set('month', 2).toDate(),
+        ),
+      ).toEqual(300);
     });
   });
 });

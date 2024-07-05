@@ -3,6 +3,7 @@ import { monthToMonthName, months } from '@/date/types/month.ts';
 import { roundToDecimal } from '@/math/utils/round-to-decimal.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { Card, Divider, Text, Title } from '@mantine/core';
+import dayjs from 'dayjs';
 import { Fragment, memo, useMemo } from 'react';
 import {
   Bar,
@@ -15,8 +16,8 @@ import {
 import type { TooltipProps } from 'recharts/types/component/Tooltip';
 import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
+import { calculateSubscriptionMonthlyPrice } from '../utils/calculate-subscription-monthly-price.ts';
 import { compareSubscriptionsDesc } from '../utils/compare-subscriptions.ts';
-import { cyclePeriodToCalculateMonthlyPrice } from '../utils/cycle-period-to-calculate-monthly-price.ts';
 
 // TODO color bars based on subscription tag color
 //  if sub has one tag - take it's color
@@ -73,6 +74,7 @@ const subscriptionsByMonthInitial: Array<SubscriptionsAggregatedByMonth> =
     month: monthToMonthName[month],
     subscriptions: [],
   }));
+const startOfYear = dayjs(new Date()).startOf('year').toDate();
 
 function aggregateSubscriptionsByMonth(
   subscriptions: Array<SubscriptionModel>,
@@ -81,10 +83,10 @@ function aggregateSubscriptionsByMonth(
 
   for (const subscription of subscriptions) {
     for (const month of months) {
-      const calculateMonthlyPrice =
-        cyclePeriodToCalculateMonthlyPrice[subscription.cycle.period];
-
-      const priceThisMonth = calculateMonthlyPrice(subscription, month);
+      const priceThisMonth = calculateSubscriptionMonthlyPrice(
+        subscription,
+        dayjs(startOfYear).set('month', month).toDate(),
+      );
       if (priceThisMonth === 0) {
         continue;
       }
