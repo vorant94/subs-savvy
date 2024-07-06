@@ -38,5 +38,6 @@ export async function updateTag(raw: UpdateTagModel): Promise<TagModel> {
 }
 
 export async function deleteTag(id: number): Promise<void> {
+  // TODO delete tag links
   await db.tags.delete(id);
 }

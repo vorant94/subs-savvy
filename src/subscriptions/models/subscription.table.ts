@@ -16,7 +16,7 @@ export function findSubscriptions(): Promise<Array<SubscriptionModel>> {
     db.subscriptionsTags,
     db.tags,
     async () => {
-      const raws = await db.subscriptions.toArray();
+      const raws = await db.subscriptions.orderBy('price').reverse().toArray();
 
       return await Promise.all(
         raws.map(async (raw) => {

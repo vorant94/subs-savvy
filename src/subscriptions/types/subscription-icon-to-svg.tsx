@@ -1,22 +1,28 @@
 import { cn } from '@/ui/utils/cn.ts';
 import {
   faBolt,
+  faBuilding,
   faCar,
   faCarBurst,
   faCat,
   faCity,
+  faCreditCard,
   faDumbbell,
   faEye,
   faFaucetDrip,
   faFireFlameSimple,
+  faGlobe,
   faHeart,
   faHouse,
   faKitMedical,
   faLandmark,
   faPeopleGroup,
+  faPhone,
   faPlaneArrival,
   faPlaneDeparture,
+  faReceipt,
   faSackDollar,
+  faScissors,
   faTooth,
   faYinYang,
 } from '@fortawesome/free-solid-svg-icons';
@@ -44,7 +50,7 @@ export const subscriptionIconToSvg = {
   youtube: <YouTube className={cn(`fill-[#FF0000]`)} />,
   house: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faHouse}
       className={cn(`text-slate-800`)}
     />
@@ -54,105 +60,105 @@ export const subscriptionIconToSvg = {
   moovit: <Moovit className={cn(`fill-[#FF6400]`)} />,
   tooth: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faTooth}
       className={cn(`text-slate-800`)}
     />
   ),
   car: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faCar}
       className={cn(`text-slate-800`)}
     />
   ),
   eye: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faEye}
       className={cn(`text-slate-800`)}
     />
   ),
   heart: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faHeart}
       className={cn(`text-slate-800`)}
     />
   ),
   city: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faCity}
       className={cn(`text-slate-800`)}
     />
   ),
   'plane-departure': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faPlaneDeparture}
       className={cn(`text-slate-800`)}
     />
   ),
   'plane-arrival': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faPlaneArrival}
       className={cn(`text-slate-800`)}
     />
   ),
   'car-burst': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faCarBurst}
       className={cn(`text-slate-800`)}
     />
   ),
   dumbbell: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faDumbbell}
       className={cn(`text-slate-800`)}
     />
   ),
   bolt: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faBolt}
       className={cn(`text-slate-800`)}
     />
   ),
   'people-group': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faPeopleGroup}
       className={cn(`text-slate-800`)}
     />
   ),
   'sack-dollar': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faSackDollar}
       className={cn(`text-slate-800`)}
     />
   ),
   'yin-yang': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faYinYang}
       className={cn(`text-slate-800`)}
     />
   ),
   cat: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faCat}
       className={cn(`text-slate-800`)}
     />
   ),
   'kit-medical': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faKitMedical}
       className={cn(`text-slate-800`)}
     />
@@ -162,22 +168,64 @@ export const subscriptionIconToSvg = {
   spotify: <Spotify className={cn(`fill-[#1DB954]`)} />,
   landmark: (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faLandmark}
       className={cn(`text-slate-800`)}
     />
   ),
   'faucet-drip': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faFaucetDrip}
       className={cn(`text-slate-800`)}
     />
   ),
   'fire-flame-simple': (
     <FontAwesomeIcon
-      size="2xl"
+      size={`2xl`}
       icon={faFireFlameSimple}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  scissors: (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faScissors}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  receipt: (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faReceipt}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  globe: (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faGlobe}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  building: (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faBuilding}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  phone: (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faPhone}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  'credit-card': (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faCreditCard}
       className={cn(`text-slate-800`)}
     />
   ),

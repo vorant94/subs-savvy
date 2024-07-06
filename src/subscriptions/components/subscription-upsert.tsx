@@ -209,6 +209,7 @@ export const SubscriptionUpsert = memo(() => {
         />
       </Fieldset>
 
+      {/*TODO color chips with tag color adn add color cycles in selection*/}
       <Controller
         control={control}
         name="tags"
