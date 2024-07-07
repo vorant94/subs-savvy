@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const tagSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  name: z.string().min(1),
   color: z.string(),
 });
 export type TagModel = z.infer<typeof tagSchema>;

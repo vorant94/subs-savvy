@@ -17,7 +17,12 @@ import {
 
 export const TagForm = memo(
   forwardRef<HTMLFormElement, TagFormProps>(({ onSubmit, tag }, ref) => {
-    const { register, handleSubmit, control } = useForm<UpsertTagModel>({
+    const {
+      register,
+      handleSubmit,
+      control,
+      formState: { errors },
+    } = useForm<UpsertTagModel>({
       resolver: zodResolver(tag ? updateTagSchema : insertTagSchema),
       defaultValues: tag ?? defaultValues,
     });
@@ -47,6 +52,7 @@ export const TagForm = memo(
           placeholder="Name"
           type="text"
           autoComplete="off"
+          error={errors.name?.message}
         />
 
         <Controller
@@ -59,6 +65,7 @@ export const TagForm = memo(
               onBlur={onBlur}
               label="Color"
               placeholder="Color"
+              error={errors.color?.message}
             />
           )}
         />

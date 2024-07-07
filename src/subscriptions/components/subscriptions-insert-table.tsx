@@ -26,8 +26,12 @@ import { subscriptionIconsComboboxData } from '../types/subscription-icon.ts';
 export const SubscriptionsInsertTable = memo(
   forwardRef<HTMLFormElement, SubscriptionsInsertTableProps>(
     ({ subscriptions, onInsert }, ref) => {
-      const { handleSubmit, control, register } =
-        useForm<SubscriptionsInsertTableFormValue>();
+      const {
+        handleSubmit,
+        control,
+        register,
+        formState: { errors },
+      } = useForm<SubscriptionsInsertTableFormValue>();
       const { fields, append, remove } = useFieldArray({
         control,
         name: 'subscriptions',
@@ -85,6 +89,7 @@ export const SubscriptionsInsertTable = memo(
                         {...register(`subscriptions.${index}.name`)}
                         placeholder="Name"
                         autoComplete="off"
+                        error={errors.subscriptions?.[index]?.name?.message}
                       />
                     </Table.Td>
 
@@ -92,6 +97,9 @@ export const SubscriptionsInsertTable = memo(
                       <TextInput
                         {...register(`subscriptions.${index}.description`)}
                         placeholder="Description"
+                        error={
+                          errors.subscriptions?.[index]?.description?.message
+                        }
                       />
                     </Table.Td>
 
@@ -106,6 +114,7 @@ export const SubscriptionsInsertTable = memo(
                             onBlur={onBlur}
                             placeholder="Icon"
                             data={subscriptionIconsComboboxData}
+                            error={errors.subscriptions?.[index]?.icon?.message}
                           />
                         )}
                       />
@@ -121,6 +130,9 @@ export const SubscriptionsInsertTable = memo(
                             onBlur={onBlur}
                             onChange={onChange}
                             placeholder="Price"
+                            error={
+                              errors.subscriptions?.[index]?.price?.message
+                            }
                           />
                         )}
                       />
@@ -137,6 +149,9 @@ export const SubscriptionsInsertTable = memo(
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
+                            error={
+                              errors.subscriptions?.[index]?.startedAt?.message
+                            }
                           />
                         )}
                       />
@@ -153,6 +168,9 @@ export const SubscriptionsInsertTable = memo(
                             value={value}
                             onChange={onChange}
                             onBlur={onBlur}
+                            error={
+                              errors.subscriptions?.[index]?.endedAt?.message
+                            }
                           />
                         )}
                       />
@@ -168,6 +186,10 @@ export const SubscriptionsInsertTable = memo(
                             onBlur={onBlur}
                             onChange={onChange}
                             placeholder="Each"
+                            error={
+                              errors.subscriptions?.[index]?.cycle?.each
+                                ?.message
+                            }
                           />
                         )}
                       />
@@ -184,6 +206,10 @@ export const SubscriptionsInsertTable = memo(
                             onBlur={onBlur}
                             placeholder="Period"
                             data={subscriptionCyclePeriodsComboboxData}
+                            error={
+                              errors.subscriptions?.[index]?.cycle?.period
+                                ?.message
+                            }
                           />
                         )}
                       />
@@ -208,6 +234,7 @@ export const SubscriptionsInsertTable = memo(
                               )
                             }
                             onBlur={onBlur}
+                            error={errors.subscriptions?.[index]?.tags?.message}
                           />
                         )}
                       />

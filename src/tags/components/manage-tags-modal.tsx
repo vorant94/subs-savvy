@@ -89,7 +89,7 @@ export const ManageTagsModal = memo(
         opened={isOpen}
         onClose={close}
         title="Manage Tags">
-        <div className={cn(`flex flex-col gap-4`)}>
+        <div className={cn(`flex flex-col gap-2`)}>
           {state.mode === 'view' ? (
             <TagList
               tags={tags ?? []}

@@ -4,7 +4,6 @@ import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-i
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
-  Divider,
   Fieldset,
   MultiSelect,
   NumberInput,
@@ -41,7 +40,12 @@ import { subscriptionIconsComboboxData } from '../types/subscription-icon.ts';
 export const SubscriptionUpsert = memo(() => {
   const { state, dispatch } = useSubscriptionUpsert();
 
-  const { register, handleSubmit, control } = useForm<UpsertSubscriptionModel>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<UpsertSubscriptionModel>({
     resolver: zodResolver(
       state.mode === 'update'
         ? updateSubscriptionSchema
@@ -83,8 +87,6 @@ export const SubscriptionUpsert = memo(() => {
     <form
       onSubmit={handleSubmit(upsertSubscription)}
       className={cn('flex flex-col gap-2 self-stretch')}>
-      <Divider />
-
       <Controller
         control={control}
         name="id"
@@ -103,12 +105,14 @@ export const SubscriptionUpsert = memo(() => {
         label="Name"
         placeholder="Name"
         autoComplete="off"
+        error={errors.name?.message}
       />
 
       <Textarea
         {...register('description')}
         label="Description"
         placeholder="Description"
+        error={errors.description?.message}
       />
 
       <Controller
@@ -122,6 +126,7 @@ export const SubscriptionUpsert = memo(() => {
             label="Icon"
             placeholder="Icon"
             data={subscriptionIconsComboboxData}
+            error={errors.icon?.message}
           />
         )}
       />
@@ -136,6 +141,7 @@ export const SubscriptionUpsert = memo(() => {
             onChange={onChange}
             label="Price"
             placeholder="Price"
+            error={errors.price?.message}
           />
         )}
       />
@@ -155,6 +161,7 @@ export const SubscriptionUpsert = memo(() => {
               value={value}
               onChange={onChange}
               onBlur={onBlur}
+              error={errors.startedAt?.message}
             />
           )}
         />
@@ -171,6 +178,7 @@ export const SubscriptionUpsert = memo(() => {
               value={value}
               onChange={onChange}
               onBlur={onBlur}
+              error={errors.endedAt?.message}
             />
           )}
         />
@@ -189,6 +197,7 @@ export const SubscriptionUpsert = memo(() => {
               onChange={onChange}
               label="Each"
               placeholder="Each"
+              error={errors.cycle?.each?.message}
             />
           )}
         />
@@ -204,6 +213,7 @@ export const SubscriptionUpsert = memo(() => {
               label="Period"
               placeholder="Period"
               data={subscriptionCyclePeriodsComboboxData}
+              error={errors.cycle?.period?.message}
             />
           )}
         />
@@ -228,11 +238,10 @@ export const SubscriptionUpsert = memo(() => {
               )
             }
             onBlur={onBlur}
+            error={errors.tags?.message}
           />
         )}
       />
-
-      <Divider />
 
       <div className={cn('flex justify-end gap-2')}>
         <Button type="submit">

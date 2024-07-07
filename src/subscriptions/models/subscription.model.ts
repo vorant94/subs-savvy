@@ -5,7 +5,7 @@ import { subscriptionIcons } from '../types/subscription-icon.ts';
 
 export const subscriptionSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  name: z.string().min(1),
   description: z.string().nullable().optional(),
   icon: z.enum(subscriptionIcons),
   // TODO add different currency support
