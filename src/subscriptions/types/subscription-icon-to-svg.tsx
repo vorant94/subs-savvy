@@ -2,6 +2,7 @@ import { cn } from '@/ui/utils/cn.ts';
 import {
   faBolt,
   faBuilding,
+  faCakeCandles,
   faCar,
   faCarBurst,
   faCat,
@@ -226,6 +227,13 @@ export const subscriptionIconToSvg = {
     <FontAwesomeIcon
       size={`2xl`}
       icon={faCreditCard}
+      className={cn(`text-slate-800`)}
+    />
+  ),
+  'cake-candles': (
+    <FontAwesomeIcon
+      size={`2xl`}
+      icon={faCakeCandles}
       className={cn(`text-slate-800`)}
     />
   ),

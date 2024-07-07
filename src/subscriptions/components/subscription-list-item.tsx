@@ -29,7 +29,7 @@ export const SubscriptionListItem = memo(
         withBorder
         aria-label={subscription.name}
         component="button"
-        className={cn(`block text-left`)}
+        className={cn(`block min-h-16 text-left`)}
         onClick={openSubscriptionUpdate}>
         <div className={cn(`flex items-center gap-2`)}>
           <Avatar

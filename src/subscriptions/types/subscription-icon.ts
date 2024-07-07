@@ -37,6 +37,7 @@ export const subscriptionIcons = [
   'building',
   'phone',
   'credit-card',
+  'cake-candles',
 ] as const;
 export type SubscriptionIcon = (typeof subscriptionIcons)[number];
 
@@ -77,6 +78,7 @@ export const subscriptionIconToLabel = {
   building: 'Building',
   phone: 'Phone',
   'credit-card': 'Credit Card',
+  'cake-candles': 'Cake Candles',
 } as const satisfies Record<SubscriptionIcon, string>;
 
 export const subscriptionIconsComboboxData: ComboboxData = subscriptionIcons
