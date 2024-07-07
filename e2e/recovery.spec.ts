@@ -1,12 +1,15 @@
 import { recoverySchema } from '@/recovery/models/recovery.model.ts';
-import { RecoveryExportPom } from '@/recovery/pages/recovery-export.pom.tsx';
-import { RecoveryPom } from '@/recovery/pages/recovery.pom.tsx';
+import { RecoveryExportPom } from '@/recovery/pages/recovery-export.pom.ts';
+import { RecoveryImportPom } from '@/recovery/pages/recovery-import.pom.ts';
+import { RecoveryPom } from '@/recovery/pages/recovery.pom.ts';
 import { recoveryRoute } from '@/recovery/types/recovery-route.ts';
 import { subscriptions } from '@/subscriptions/models/subscription.mock.ts';
 import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
 import { rootRoute } from '@/ui/types/root-route.ts';
 import { expect, test, type Page } from '@playwright/test';
 import fs from 'node:fs/promises';
+import path from 'node:path';
+import process from 'node:process';
 
 test.describe('recovery', () => {
   test('should redirect from recovery url to recovery import', async ({
@@ -35,19 +38,50 @@ test.describe('recovery', () => {
     const recoveryString = await fs.readFile(await download.path(), {
       encoding: 'utf-8',
     });
-    const recovery = recoverySchema.parse(JSON.parse(recoveryString));
+    const exportedRecovery = recoverySchema.parse(JSON.parse(recoveryString));
 
     const areAllSubscriptionsExported = subscriptionsToExport.every(
       (subscriptionToExport) =>
-        !!recovery.subscriptions.find(
-          (recoverySubscription) =>
-            recoverySubscription.name === subscriptionToExport.name,
+        !!exportedRecovery.subscriptions.find(
+          (exportedSubscription) =>
+            exportedSubscription.name === subscriptionToExport.name,
         ),
     );
     expect(areAllSubscriptionsExported).toBeTruthy();
   });
 
-  test.fixme('should import all subscriptions from a JSON file', () => {});
+  test('should import all subscriptions from a JSON file', async ({ page }) => {
+    const pom = new RecoveryImportPom(page);
+    const filePathToImport = path.join(
+      process.cwd(),
+      'e2e/assets/subscriptions.json',
+    );
+    const recoveryStringToImport = await fs.readFile(filePathToImport, {
+      encoding: 'utf-8',
+    });
+    const recoveryToImport = recoverySchema.parse(
+      JSON.parse(recoveryStringToImport),
+    );
+
+    await pom.goto();
+    const uploadEvent = page.waitForEvent('filechooser');
+    await pom.chooseFileButton.click();
+    const upload = await uploadEvent;
+    await upload.setFiles(filePathToImport);
+    await pom.importButton.click();
+    const importedSubscriptions = await page.evaluate(
+      async () => await window.Dexie.subscriptions.toArray(),
+    );
+
+    const areAllSubscriptionsImported = recoveryToImport.subscriptions.every(
+      (subscriptionToImport) =>
+        !!importedSubscriptions.find(
+          (importedSubscription) =>
+            importedSubscription.name === subscriptionToImport.name,
+        ),
+    );
+    expect(areAllSubscriptionsImported).toBeTruthy();
+  });
 });
 
 async function populateDb(

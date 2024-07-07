@@ -60,7 +60,11 @@ export const RecoveryImportPage = memo(() => {
 
   return (
     <div className={cn(`flex flex-col gap-4`)}>
+      {/* Playwright won't work without useFsAccessApi see https://github.com/microsoft/playwright/issues/8850 */}
       <Dropzone
+        useFsAccessApi={false}
+        component={'button'}
+        aria-label={`click or drag & drop to upload file`}
         onDrop={readExportFile}
         multiple={false}
         accept={['application/json']}>
