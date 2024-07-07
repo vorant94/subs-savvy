@@ -32,9 +32,10 @@ test.describe('recovery', () => {
     await populateDb(page, subscriptionsToExport);
 
     await pom.selectAllSubscriptions.fill(true);
-    const downloadEvent = page.waitForEvent('download');
-    await pom.exportButton.click();
-    const download = await downloadEvent;
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      pom.exportButton.click(),
+    ]);
     const recoveryString = await fs.readFile(await download.path(), {
       encoding: 'utf-8',
     });
@@ -64,10 +65,11 @@ test.describe('recovery', () => {
     );
 
     await pom.goto();
-    const uploadEvent = page.waitForEvent('filechooser');
-    await pom.chooseFileButton.click();
-    const upload = await uploadEvent;
-    await upload.setFiles(filePathToImport);
+    const [fileChooser] = await Promise.all([
+      page.waitForEvent('filechooser'),
+      pom.chooseFileButton.click(),
+    ]);
+    await fileChooser.setFiles(filePathToImport);
     await pom.importButton.click();
     const importedSubscriptions = await page.evaluate(
       async () => await window.Dexie.subscriptions.toArray(),
