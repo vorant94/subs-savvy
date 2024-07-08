@@ -1,17 +1,19 @@
-import dayjs from 'dayjs';
+import dayjs, { type ManipulateType } from 'dayjs';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 
 export function isSubscriptionExpired(
   subscription: SubscriptionModel,
-  compareTo = new Date(),
+  now = new Date(),
+  comparePeriod: ManipulateType = 'day',
 ): boolean {
   if (!subscription.endedAt) {
     return false;
   }
 
-  if (dayjs(subscription.endedAt).isSame(compareTo, 'day')) {
-    return false;
+  const endedAtDayJS = dayjs(subscription.endedAt);
+  if (endedAtDayJS.isSame(now, comparePeriod)) {
+    return true;
   }
 
-  return dayjs(subscription.endedAt).isBefore(compareTo);
+  return endedAtDayJS.isBefore(now, comparePeriod);
 }

@@ -16,7 +16,7 @@ import {
 import type { TooltipProps } from 'recharts/types/component/Tooltip';
 import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
-import { calculateSubscriptionMonthlyPrice } from '../utils/calculate-subscription-monthly-price.ts';
+import { calculateSubscriptionPriceForMonth } from '../utils/calculate-subscription-price-for-month.ts';
 import { compareSubscriptionsDesc } from '../utils/compare-subscriptions.ts';
 
 // TODO color bars based on subscription tag color
@@ -83,7 +83,7 @@ function aggregateSubscriptionsByMonth(
 
   for (const subscription of subscriptions) {
     for (const month of months) {
-      const priceThisMonth = calculateSubscriptionMonthlyPrice(
+      const priceThisMonth = calculateSubscriptionPriceForMonth(
         subscription,
         dayjs(startOfYear).set('month', month).toDate(),
       );

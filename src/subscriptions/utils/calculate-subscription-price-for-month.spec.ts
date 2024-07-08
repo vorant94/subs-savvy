@@ -7,9 +7,9 @@ import {
   yearlySubscription,
 } from '../models/subscription.mock.ts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
-import { calculateSubscriptionMonthlyPrice } from './calculate-subscription-monthly-price.ts';
+import { calculateSubscriptionPriceForMonth } from './calculate-subscription-price-for-month.ts';
 
-describe('calculateSubscriptionMonthlyPrice', () => {
+describe('calculateSubscriptionPriceForMonth', () => {
   const startOfYear = dayjs(new Date()).startOf('year').toDate();
 
   describe('monthly', () => {
@@ -23,7 +23,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 3).toDate(),
         ),
@@ -39,7 +39,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 3).toDate(),
         ),
@@ -55,7 +55,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -71,7 +71,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 1).toDate(),
         ),
@@ -88,7 +88,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 1).toDate(),
         ),
@@ -109,7 +109,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 9).toDate(),
         ),
@@ -127,7 +127,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 9).toDate(),
         ),
@@ -145,7 +145,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 9).toDate(),
         ),
@@ -163,7 +163,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 6).toDate(),
         ),
@@ -184,7 +184,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 6).toDate(),
         ),
@@ -205,7 +205,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 9).toDate(),
         ),
@@ -222,7 +222,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 4).toDate(),
         ),
@@ -239,7 +239,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 3).toDate(),
         ),
@@ -258,7 +258,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 3).toDate(),
         ),
@@ -272,7 +272,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 3).toDate(),
         ),
@@ -286,7 +286,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -303,7 +303,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -317,7 +317,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -334,7 +334,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -355,7 +355,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 6).toDate(),
         ),
@@ -373,7 +373,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 6).toDate(),
         ),
@@ -391,7 +391,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 4).toDate(),
         ),
@@ -409,7 +409,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 4).toDate(),
         ),
@@ -430,7 +430,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -451,7 +451,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -472,7 +472,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 1).toDate(),
         ),
@@ -489,7 +489,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
@@ -506,7 +506,7 @@ describe('calculateSubscriptionMonthlyPrice', () => {
       };
 
       expect(
-        calculateSubscriptionMonthlyPrice(
+        calculateSubscriptionPriceForMonth(
           subscription,
           dayjs(startOfYear).set('month', 2).toDate(),
         ),
