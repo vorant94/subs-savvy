@@ -1,6 +1,7 @@
 import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
 import { db } from '../globals/db.ts';
 
+// utility function for tests only
 export async function populateDb(
   subscriptions: ReadonlyArray<SubscriptionModel>,
 ): Promise<void> {

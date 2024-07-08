@@ -16,5 +16,20 @@ export default defineConfig({
     root: './src',
     setupFiles: ['./test-setup.ts'],
     mockReset: true,
+    coverage: {
+      reportsDirectory: '../coverage',
+      reporter: ['text', 'html'],
+      exclude: [
+        '**/types/*',
+        '**/globals/*',
+        '**/models/*',
+        '**/pages/*.pom.ts',
+        '**/pages/*.pom.tsx',
+        '**/components/*.com.ts',
+        '**/components/*.com.tsx',
+        'db/utils/populate-db.ts', // utility function for tests only
+        'db/utils/clean-up-db.ts', // utility function for tests only
+      ],
+    },
   },
 });

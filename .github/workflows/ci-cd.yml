@@ -31,7 +31,13 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      - run: npm run test
+      - run: npm run test:coverage
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 30
 
   e2e:
     timeout-minutes: 60
