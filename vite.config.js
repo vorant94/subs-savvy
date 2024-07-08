@@ -2,8 +2,8 @@ import react from '@vitejs/plugin-react-swc';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
+import postcss from './postcss.config.js';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
@@ -11,10 +11,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  // can't detect ESM-based postcss config by itself, see here https://github.com/vitejs/vite/issues/15869
+  css: { postcss },
   test: {
     environment: 'happy-dom',
     root: './src',
-    setupFiles: ['./test-setup.ts'],
+    setupFiles: ['./src/test-setup.ts'],
     mockReset: true,
     coverage: {
       reportsDirectory: '../coverage',
