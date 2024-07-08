@@ -48,11 +48,12 @@ export const RecoveryImportDropZone = memo(
 
     return (
       <button
-        className={cn(
-          `flex min-h-48 items-center justify-center rounded border-2 border-dashed hover:bg-gray-100`,
-        )}
-        aria-label={`click or drag & drop to upload file`}
-        {...getRootProps()}>
+        {...getRootProps({
+          className: cn(
+            `flex min-h-48 items-center justify-center rounded border-2 border-dashed hover:bg-gray-100`,
+          ),
+          'aria-label': `click or drag & drop to upload file`,
+        })}>
         <input {...getInputProps()} />
         <div className={cn(`grid auto-cols-auto grid-flow-col gap-x-4`)}>
           <FontAwesomeIcon
