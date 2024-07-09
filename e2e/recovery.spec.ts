@@ -93,25 +93,26 @@ async function populateDb(
   await page.evaluate(async (subscriptions) => {
     await window.Dexie.transaction(
       'rw',
-      window.Dexie.subscriptionsTags,
       window.Dexie.subscriptions,
-      window.Dexie.tags,
+      window.Dexie.categories,
       async () => {
-        for (const { tags, ...subscription } of subscriptions) {
-          const tagPuts = tags.map((tag) => window.Dexie.tags.put(tag));
-          const tagLinkPuts = tags.map((tag) =>
-            window.Dexie.subscriptionsTags.put({
-              tagId: tag.id,
-              subscriptionId: subscription.id,
+        const subscriptionPuts: Array<Promise<unknown>> = [];
+        const categoryPuts: Array<Promise<unknown>> = [];
+
+        for (const { category, ...subscription } of subscriptions) {
+          subscriptionPuts.push(
+            window.Dexie.subscriptions.put({
+              ...subscription,
+              categoryId: category?.id,
             }),
           );
 
-          await Promise.all([
-            ...tagPuts,
-            window.Dexie.subscriptions.put(subscription),
-            ...tagLinkPuts,
-          ]);
+          if (category) {
+            categoryPuts.push(window.Dexie.categories.put(category));
+          }
         }
+
+        await Promise.all([...subscriptionPuts, ...categoryPuts]);
       },
     );
   }, subscriptions);

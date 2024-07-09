@@ -58,7 +58,7 @@ export const RecoveryPage = memo(() => {
           size="sm"
           c="dimmed">
           Currently only subscriptions are supported during import/export. All
-          the tags and their subscription linkage are ignored.
+          the categories and their subscription linkage are ignored.
         </Text>
       </div>
     </DefaultLayout>

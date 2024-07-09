@@ -5,27 +5,23 @@ import { db } from '../globals/db.ts';
 export async function populateDb(
   subscriptions: ReadonlyArray<SubscriptionModel>,
 ): Promise<void> {
-  await db.transaction(
-    `rw`,
-    db.subscriptionsTags,
-    db.subscriptions,
-    db.tags,
-    async () => {
-      for (const { tags, ...subscription } of subscriptions) {
-        const tagPuts = tags.map((tag) => db.tags.put(tag));
-        const tagLinkPuts = tags.map((tag) =>
-          db.subscriptionsTags.put({
-            tagId: tag.id,
-            subscriptionId: subscription.id,
-          }),
-        );
+  await db.transaction(`rw`, db.subscriptions, db.categories, async () => {
+    const subscriptionPuts: Array<Promise<unknown>> = [];
+    const categoryPuts: Array<Promise<unknown>> = [];
 
-        await Promise.all([
-          ...tagPuts,
-          db.subscriptions.put(subscription),
-          ...tagLinkPuts,
-        ]);
+    for (const { category, ...subscription } of subscriptions) {
+      subscriptionPuts.push(
+        db.subscriptions.put({
+          ...subscription,
+          categoryId: category?.id,
+        }),
+      );
+
+      if (category) {
+        categoryPuts.push(db.categories.put(category));
       }
-    },
-  );
+    }
+
+    await Promise.all([...subscriptionPuts, ...categoryPuts]);
+  });
 }

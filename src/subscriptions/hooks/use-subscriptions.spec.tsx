@@ -1,6 +1,6 @@
+import { category } from '@/categories/models/category.mock.ts';
 import { cleanUpDb } from '@/db/utils/clean-up-db.ts';
 import { populateDb } from '@/db/utils/populate-db.ts';
-import { tag } from '@/tags/models/tag.mock.ts';
 import {
   act,
   renderHook,
@@ -32,18 +32,18 @@ describe('useSubscriptions', () => {
 
   afterEach(async () => await cleanUpDb());
 
-  it('should fetch subscriptions and tags', async () => {
+  it('should fetch subscriptions and categories', async () => {
     await Promise.all([
       waitFor(() =>
         expect(
-          hook.current.selectedTag,
-          'have initially no selected tag',
+          hook.current.selectedCategory,
+          'have initially no selected category',
         ).toBeFalsy(),
       ),
       waitFor(() =>
         expect(
-          hook.current.tags.length,
-          'have initially one populated tag',
+          hook.current.categories.length,
+          'have initially one populated category',
         ).toEqual(1),
       ),
       waitFor(() =>
@@ -55,18 +55,18 @@ describe('useSubscriptions', () => {
     ]);
   });
 
-  it('should filter out subscriptions based on selected tag', async () => {
+  it('should filter out subscriptions based on selected category', async () => {
     await Promise.all([
       waitFor(() =>
         expect(
-          hook.current.selectedTag,
-          'have initially no selected tag',
+          hook.current.selectedCategory,
+          'have initially no selected category',
         ).toBeFalsy(),
       ),
       waitFor(() =>
         expect(
-          hook.current.tags.length,
-          'have initially one populated tag',
+          hook.current.categories.length,
+          'have initially one populated category',
         ).toEqual(1),
       ),
       waitFor(() =>
@@ -77,14 +77,14 @@ describe('useSubscriptions', () => {
       ),
     ]);
 
-    act(() => hook.current.selectTag(`${tag.id}`));
+    act(() => hook.current.selectCategory(`${category.id}`));
 
     await Promise.all([
       waitFor(() =>
         expect(
-          hook.current.selectedTag?.id,
-          'selected tag to be there',
-        ).toEqual(tag.id),
+          hook.current.selectedCategory?.id,
+          'selected category to be there',
+        ).toEqual(category.id),
       ),
       waitFor(() =>
         expect(
@@ -96,20 +96,18 @@ describe('useSubscriptions', () => {
 
     for (const subscription of hook.current.subscriptions) {
       expect(
-        subscription.tags.find(
-          (tag) => tag.id === hook.current.selectedTag?.id,
-        ),
-        'all left subscriptions should have selected tag in it',
+        subscription.category?.id === hook.current.selectedCategory?.id,
+        'all left subscriptions should have selected category in it',
       ).toBeTruthy();
     }
 
-    act(() => hook.current.selectTag(null));
+    act(() => hook.current.selectCategory(null));
 
     await Promise.all([
       waitFor(() =>
         expect(
-          hook.current.selectedTag,
-          'selected tag to not be there',
+          hook.current.selectedCategory,
+          'selected category to not be there',
         ).toBeFalsy(),
       ),
       waitFor(() =>

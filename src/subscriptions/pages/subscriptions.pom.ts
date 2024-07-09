@@ -1,5 +1,8 @@
-import { TagFormCom } from '@/tags/components/tag-form.com';
-import type { TagModel, UpsertTagModel } from '@/tags/models/tag.model';
+import { CategoryFormCom } from '@/categories/components/category-form.com.ts';
+import type {
+  CategoryModel,
+  UpsertCategoryModel,
+} from '@/categories/models/category.model.ts';
 import type { Locator, Page } from '@playwright/test';
 import { SubscriptionUpsertCom } from '../components/subscription-upsert.com';
 import type {
@@ -13,12 +16,12 @@ export class SubscriptionsPom {
 
   subscriptionUpsert: SubscriptionUpsertCom;
 
-  manageTagsButton: Locator;
-  addTagButton: Locator;
-  insertTagButton: Locator;
-  updateTagButton: Locator;
+  manageCategoriesButton: Locator;
+  addCategoryButton: Locator;
+  insertCategoryButton: Locator;
+  updateCategoryButton: Locator;
 
-  tagForm: TagFormCom;
+  categoryForm: CategoryFormCom;
 
   subscriptionsNavLink: Locator;
 
@@ -30,16 +33,16 @@ export class SubscriptionsPom {
 
     this.subscriptionUpsert = new SubscriptionUpsertCom(this.page);
 
-    this.manageTagsButton = page.getByRole('button', { name: 'manage' });
-    this.addTagButton = page.getByRole('button', { name: 'add tag' });
-    this.insertTagButton = this.page.getByRole('button', {
+    this.manageCategoriesButton = page.getByRole('button', { name: 'manage' });
+    this.addCategoryButton = page.getByRole('button', { name: 'add category' });
+    this.insertCategoryButton = this.page.getByRole('button', {
       name: 'insert',
     });
-    this.updateTagButton = this.page.getByRole('button', {
+    this.updateCategoryButton = this.page.getByRole('button', {
       name: 'update',
     });
 
-    this.tagForm = new TagFormCom(this.page);
+    this.categoryForm = new CategoryFormCom(this.page);
 
     this.subscriptionsNavLink = this.page.getByRole('link', {
       name: 'subscriptions',
@@ -73,12 +76,12 @@ export class SubscriptionsPom {
     await this.subscriptionUpsert.eachControl.fill(subscription.cycle.each);
     await this.subscriptionUpsert.periodControl.fill(subscription.cycle.period);
 
-    // TODO: add filling tag multiselect here
+    // TODO: add filling category multiselect here
   }
 
-  async fillTagForm(tag: UpsertTagModel): Promise<void> {
-    await this.tagForm.nameControl.fill(tag.name);
-    await this.tagForm.colorControl.fill(tag.color);
+  async fillCategoryForm(category: UpsertCategoryModel): Promise<void> {
+    await this.categoryForm.nameControl.fill(category.name);
+    await this.categoryForm.colorControl.fill(category.color);
   }
 
   subscriptionListItem({
@@ -87,15 +90,15 @@ export class SubscriptionsPom {
     return this.page.getByLabel(name);
   }
 
-  tag({ name }: TagModel | UpsertTagModel): Locator {
+  category({ name }: CategoryModel | UpsertCategoryModel): Locator {
     return this.page.getByRole('paragraph').filter({ hasText: name });
   }
 
-  editTagButton({ name }: TagModel | UpsertTagModel): Locator {
-    return this.page.getByRole('button', { name: `edit ${name} tag` });
+  editCategoryButton({ name }: CategoryModel | UpsertCategoryModel): Locator {
+    return this.page.getByRole('button', { name: `edit ${name} category` });
   }
 
-  deleteTagButton({ name }: TagModel | UpsertTagModel): Locator {
-    return this.page.getByRole('button', { name: `delete ${name} tag` });
+  deleteCategoryButton({ name }: CategoryModel | UpsertCategoryModel): Locator {
+    return this.page.getByRole('button', { name: `delete ${name} category` });
   }
 }

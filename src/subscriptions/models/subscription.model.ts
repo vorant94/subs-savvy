@@ -1,4 +1,4 @@
-import { tagSchema } from '@/tags/models/tag.model.ts';
+import { categorySchema } from '@/categories/models/category.model.ts';
 import { z } from 'zod';
 import { subscriptionCyclePeriods } from '../types/subscription-cycle-period.ts';
 import { subscriptionIcons } from '../types/subscription-icon.ts';
@@ -17,7 +17,7 @@ export const subscriptionSchema = z.object({
     each: z.number(),
     period: z.enum(subscriptionCyclePeriods),
   }),
-  tags: z.array(tagSchema),
+  category: categorySchema.nullable().optional(),
 });
 export type SubscriptionModel = z.infer<typeof subscriptionSchema>;
 

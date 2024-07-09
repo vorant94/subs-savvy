@@ -12,30 +12,30 @@ import {
 } from '@mantine/core';
 import { useDisclosure, usePrevious } from '@mantine/hooks';
 import { memo, useEffect } from 'react';
-import { ManageTagsModal } from './manage-tags-modal.tsx';
+import { ManageCategoriesModal } from './manage-categories-modal.tsx';
 
-export const TagSelect = memo(() => {
-  const { tags, selectTag, selectedTag } = useSubscriptions();
-  const prevSelectedTag = usePrevious(selectedTag);
+export const CategorySelect = memo(() => {
+  const { categories, selectCategory, selectedCategory } = useSubscriptions();
+  const prevSelectedCategory = usePrevious(selectedCategory);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
 
   useEffect(() => {
-    if (selectedTag?.id !== prevSelectedTag?.id) {
+    if (selectedCategory?.id !== prevSelectedCategory?.id) {
       combobox.closeDropdown();
     }
-  }, [selectedTag, prevSelectedTag, combobox]);
+  }, [selectedCategory, prevSelectedCategory, combobox]);
 
-  const [isManageTagsOpen, manageTags] = useDisclosure(false);
+  const [isManageCategoriesOpen, manageCategories] = useDisclosure(false);
 
   return (
     <>
       <div className={cn(`flex items-center gap-2`)}>
         <Combobox
           store={combobox}
-          onOptionSubmit={selectTag}>
+          onOptionSubmit={selectCategory}>
           <Combobox.Target>
             <InputBase
               className={cn(`w-48`)}
@@ -43,44 +43,44 @@ export const TagSelect = memo(() => {
               type="button"
               pointer
               leftSection={
-                selectedTag ? (
+                selectedCategory ? (
                   <FontAwesomeIcon
-                    color={selectedTag.color}
+                    color={selectedCategory.color}
                     icon={faCircle}
                   />
                 ) : null
               }
               rightSection={
-                selectedTag ? (
+                selectedCategory ? (
                   <CloseButton
                     size="sm"
                     onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => selectTag(null)}
+                    onClick={() => selectCategory(null)}
                     aria-label="Clear value"
                   />
                 ) : (
                   <Combobox.Chevron />
                 )
               }
-              rightSectionPointerEvents={selectedTag ? 'all' : 'none'}
+              rightSectionPointerEvents={selectedCategory ? 'all' : 'none'}
               onClick={() => combobox.toggleDropdown()}>
-              {selectedTag?.name ?? (
-                <Input.Placeholder>Select tag</Input.Placeholder>
+              {selectedCategory?.name ?? (
+                <Input.Placeholder>Select category</Input.Placeholder>
               )}
             </InputBase>
           </Combobox.Target>
 
           <Combobox.Dropdown>
             <Combobox.Options>
-              {(tags ?? []).map((tag) => (
+              {categories.map((category) => (
                 <Combobox.Option
-                  value={`${tag.id}`}
-                  key={tag.id}>
+                  value={`${category.id}`}
+                  key={category.id}>
                   <FontAwesomeIcon
-                    color={tag.color}
+                    color={category.color}
                     icon={faCircle}
                   />{' '}
-                  {tag.name}
+                  {category.name}
                 </Combobox.Option>
               ))}
             </Combobox.Options>
@@ -88,8 +88,8 @@ export const TagSelect = memo(() => {
         </Combobox>
 
         <ActionIcon
-          aria-label="Manage Tags"
-          onClick={manageTags.open}
+          aria-label="Manage Categories"
+          onClick={manageCategories.open}
           size="lg"
           variant="light">
           <FontAwesomeIcon
@@ -99,9 +99,9 @@ export const TagSelect = memo(() => {
         </ActionIcon>
       </div>
 
-      <ManageTagsModal
-        isOpen={isManageTagsOpen}
-        close={manageTags.close}
+      <ManageCategoriesModal
+        isOpen={isManageCategoriesOpen}
+        close={manageCategories.close}
       />
     </>
   );

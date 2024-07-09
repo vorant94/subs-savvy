@@ -1,18 +1,22 @@
-import type { SubscriptionTagModel } from '@/subscriptions/models/subscription-tag.model.ts';
+import type { CategoryModel } from '@/categories/models/category.model.ts';
 import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
-import type { TagModel } from '@/tags/models/tag.model.ts';
-import Dexie, { type EntityTable, type Table } from 'dexie';
+import Dexie, { type EntityTable } from 'dexie';
 
-export const dbVersion = 4;
+export const dbVersion = 5;
 
-export const db = new Dexie('subs-savvy') as Dexie & {
-  subscriptions: EntityTable<Omit<SubscriptionModel, 'tags'>, 'id'>;
-  tags: EntityTable<TagModel, 'id'>;
-  subscriptionsTags: Table<SubscriptionTagModel, [number, number]>;
-};
+export const db = new Dexie('subs-savvy') as Db;
+
+export interface Db extends Dexie {
+  subscriptions: EntityTable<
+    Omit<SubscriptionModel, 'category'> & {
+      categoryId?: CategoryModel['id'] | null;
+    },
+    'id'
+  >;
+  categories: EntityTable<CategoryModel, 'id'>;
+}
 
 db.version(dbVersion).stores({
-  subscriptions: '++id,price',
-  tags: '++id',
-  subscriptionsTags: '[subscriptionId+tagId],subscriptionId,tagId',
+  subscriptions: '++id,price,categoryId',
+  categories: '++id',
 });

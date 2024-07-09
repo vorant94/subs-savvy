@@ -1,4 +1,4 @@
-import { TagSelect } from '@/tags/components/tag-select.tsx';
+import { CategorySelect } from '@/categories/components/category-select.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
@@ -17,7 +17,7 @@ export const SubscriptionsPage = memo(() => {
     <DefaultLayout
       header={
         <DefaultLayoutHeader actions={<AddSubscriptionButton />}>
-          <TagSelect />
+          <CategorySelect />
         </DefaultLayoutHeader>
       }
       drawerContent={<SubscriptionUpsert />}

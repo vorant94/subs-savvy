@@ -10,29 +10,29 @@ import {
   type Reducer,
 } from 'react';
 import type {
-  InsertTagModel,
-  TagModel,
-  UpdateTagModel,
-} from '../models/tag.model.ts';
+  CategoryModel,
+  InsertCategoryModel,
+  UpdateCategoryModel,
+} from '../models/category.model.ts';
 import {
-  deleteTag,
-  findTags,
-  insertTag,
-  updateTag,
-} from '../models/tag.table.ts';
-import { TagForm, type TagFormProps } from './tag-form.tsx';
-import { TagList, type TagListProps } from './tag-list.tsx';
+  deleteCategory,
+  findCategories,
+  insertCategory,
+  updateCategory,
+} from '../models/category.table.ts';
+import { CategoryForm, type CategoryFormProps } from './category-form.tsx';
+import { CategoryList, type CategoryListProps } from './category-list.tsx';
 
-export const ManageTagsModal = memo(
-  ({ isOpen, close }: ManageTagsModalProps) => {
-    const tags = useLiveQuery(() => findTags());
+export const ManageCategoriesModal = memo(
+  ({ isOpen, close }: ManageCategoriesModalProps) => {
+    const categories = useLiveQuery(() => findCategories(), [], []);
     const [state, dispatch] = useReducer<
-      Reducer<ManageTagsModalState, ManageTagsModalAction>
+      Reducer<ManageCategoriesModalState, ManageCategoriesModalAction>
     >((_, action) => {
       switch (action.type) {
         case 'upsert': {
-          return action.tag
-            ? { tag: action.tag, mode: 'update' }
+          return action.category
+            ? { category: action.category, mode: 'update' }
             : { mode: 'insert' };
         }
         case 'view': {
@@ -49,28 +49,34 @@ export const ManageTagsModal = memo(
       dispatch({ type: 'view' });
     }, []);
 
-    const switchToUpdateMode: TagListProps['onUpdate'] = useCallback((tag) => {
-      dispatch({ type: 'upsert', tag });
-    }, []);
+    const switchToUpdateMode: CategoryListProps['onUpdate'] = useCallback(
+      (category) => {
+        dispatch({ type: 'upsert', category });
+      },
+      [],
+    );
 
-    const upsertTag: TagFormProps['onSubmit'] = useCallback(
+    const upsertCategory: CategoryFormProps['onSubmit'] = useCallback(
       async (raw) => {
         if (state.mode === 'view') {
           throw new Error(`Nothing to upsert in view mode`);
         }
 
         state.mode === 'update'
-          ? await updateTag(raw as UpdateTagModel)
-          : await insertTag(raw as InsertTagModel);
+          ? await updateCategory(raw as UpdateCategoryModel)
+          : await insertCategory(raw as InsertCategoryModel);
 
         switchToViewMode();
       },
       [state, switchToViewMode],
     );
 
-    const deleteTagCb: TagListProps['onDelete'] = useCallback(async (id) => {
-      await deleteTag(id);
-    }, []);
+    const deleteCategoryCb: CategoryListProps['onDelete'] = useCallback(
+      async (id) => {
+        await deleteCategory(id);
+      },
+      [],
+    );
 
     useEffect(() => {
       if (!isOpen && state.mode !== 'view') {
@@ -88,19 +94,19 @@ export const ManageTagsModal = memo(
       <Modal
         opened={isOpen}
         onClose={close}
-        title="Manage Tags">
+        title="Manage Categories">
         <div className={cn(`flex flex-col gap-2`)}>
           {state.mode === 'view' ? (
-            <TagList
-              tags={tags ?? []}
+            <CategoryList
+              categories={categories}
               onUpdate={switchToUpdateMode}
-              onDelete={deleteTagCb}
+              onDelete={deleteCategoryCb}
             />
           ) : (
-            <TagForm
+            <CategoryForm
               ref={updateFormId}
-              onSubmit={upsertTag}
-              tag={state.mode === 'update' ? state.tag : null}
+              onSubmit={upsertCategory}
+              category={state.mode === 'update' ? state.category : null}
             />
           )}
 
@@ -108,14 +114,14 @@ export const ManageTagsModal = memo(
             {state.mode === 'view' ? (
               <Button
                 type="button"
-                key="add-tag"
+                key="add-category"
                 onClick={switchToInsertMode}>
-                add tag
+                add category
               </Button>
             ) : (
               <Button
                 type="submit"
-                key="submit-tag-form"
+                key="submit-category-form"
                 form={formId}>
                 {state.mode === 'update' ? 'Update' : 'Insert'}
               </Button>
@@ -123,7 +129,7 @@ export const ManageTagsModal = memo(
             {state.mode !== 'view' ? (
               <Button
                 type="button"
-                key="cancel-tag-form"
+                key="cancel-category-form"
                 variant="outline"
                 onClick={switchToViewMode}>
                 Cancel
@@ -136,14 +142,14 @@ export const ManageTagsModal = memo(
   },
 );
 
-export interface ManageTagsModalProps {
+export interface ManageCategoriesModalProps {
   isOpen: boolean;
   close: () => void;
 }
 
-type ManageTagsModalState =
+type ManageCategoriesModalState =
   | {
-      tag: TagModel;
+      category: CategoryModel;
       mode: 'update';
     }
   | {
@@ -153,19 +159,19 @@ type ManageTagsModalState =
       mode: 'insert';
     };
 
-const stateDefaults: ManageTagsModalState = {
+const stateDefaults: ManageCategoriesModalState = {
   mode: 'view',
 };
 
-interface ManageTagsModalUpsertAction {
+interface ManageCategoriesModalUpsertAction {
   type: 'upsert';
-  tag?: TagModel | null;
+  category?: CategoryModel | null;
 }
 
-interface ManageTagsModalViewAction {
+interface ManageCategoriesModalViewAction {
   type: 'view';
 }
 
-type ManageTagsModalAction =
-  | ManageTagsModalUpsertAction
-  | ManageTagsModalViewAction;
+type ManageCategoriesModalAction =
+  | ManageCategoriesModalUpsertAction
+  | ManageCategoriesModalViewAction;

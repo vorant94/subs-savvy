@@ -17,13 +17,6 @@ describe('subscription.table', () => {
       await deleteSubscription(subscription.id);
 
       expect(await db.subscriptions.get(subscription.id)).toBeFalsy();
-      expect(
-        (
-          await db.subscriptionsTags
-            .where({ subscriptionId: subscription.id })
-            .toArray()
-        ).length,
-      ).toEqual(0);
     });
   });
 });

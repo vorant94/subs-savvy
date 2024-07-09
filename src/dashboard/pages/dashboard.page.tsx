@@ -1,7 +1,7 @@
+import { CategorySelect } from '@/categories/components/category-select.tsx';
 import { AddSubscriptionButton } from '@/subscriptions/components/add-subscription-button.tsx';
 import { SubscriptionUpsert } from '@/subscriptions/components/subscription-upsert.tsx';
 import { useSubscriptionUpsert } from '@/subscriptions/hooks/use-subscription-upsert';
-import { TagSelect } from '@/tags/components/tag-select.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
@@ -18,7 +18,7 @@ export const DashboardPage = memo(() => {
     <DefaultLayout
       header={
         <DefaultLayoutHeader actions={<AddSubscriptionButton />}>
-          <TagSelect />
+          <CategorySelect />
         </DefaultLayoutHeader>
       }
       drawerContent={<SubscriptionUpsert />}

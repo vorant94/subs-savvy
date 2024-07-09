@@ -1,7 +1,6 @@
-import { findTags } from '@/tags/models/tag.table.ts';
+import { findCategories } from '@/categories/models/category.table.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import {
-  MultiSelect,
   NumberInput,
   Select,
   Table,
@@ -45,13 +44,13 @@ export const SubscriptionsInsertTable = memo(
         }
       }, [append, prevSubscriptions, remove, subscriptions]);
 
-      const tags = useLiveQuery(() => findTags(), [], []);
-      const tagsData: ComboboxData = useMemo(() => {
-        return tags.map((tag) => ({
-          label: tag.name,
-          value: `${tag.id}`,
+      const categories = useLiveQuery(() => findCategories(), [], []);
+      const categoriesData: ComboboxData = useMemo(() => {
+        return categories.map((category) => ({
+          label: category.name,
+          value: `${category.id}`,
         }));
-      }, [tags]);
+      }, [categories]);
 
       const insertSubscriptionsCb: SubmitHandler<
         SubscriptionsInsertTableFormValue
@@ -77,7 +76,7 @@ export const SubscriptionsInsertTable = memo(
                   <Table.Th>Ended At</Table.Th>
                   <Table.Th>Each</Table.Th>
                   <Table.Th>Period</Table.Th>
-                  <Table.Th>Tags</Table.Th>
+                  <Table.Th>Category</Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
@@ -218,23 +217,23 @@ export const SubscriptionsInsertTable = memo(
                     <Table.Td className={cn(`min-w-40`)}>
                       <Controller
                         control={control}
-                        name={`subscriptions.${index}.tags`}
+                        name={`subscriptions.${index}.category`}
                         render={({ field: { value, onChange, onBlur } }) => (
-                          <MultiSelect
-                            placeholder="Tags"
-                            clearable
-                            data={tagsData}
-                            value={value.map((tag) => `${tag.id}`)}
-                            onChange={(tagIds) =>
+                          <Select
+                            placeholder="Category"
+                            data={categoriesData}
+                            value={`${value?.id}`}
+                            onChange={(categoryId) =>
                               onChange(
-                                tagIds.map(
-                                  (tagId) =>
-                                    tags.find((tag) => `${tag.id}` === tagId)!,
+                                categories.find(
+                                  (category) => `${category.id}` === categoryId,
                                 ),
                               )
                             }
                             onBlur={onBlur}
-                            error={errors.subscriptions?.[index]?.tags?.message}
+                            error={
+                              errors.subscriptions?.[index]?.category?.message
+                            }
                           />
                         )}
                       />

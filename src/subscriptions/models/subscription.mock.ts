@@ -1,4 +1,4 @@
-import { tag } from '@/tags/models/tag.mock.ts';
+import { category } from '@/categories/models/category.mock.ts';
 import dayjs from 'dayjs';
 import type { SubscriptionModel } from './subscription.model.ts';
 
@@ -12,7 +12,7 @@ export const monthlySubscription = {
     each: 1,
     period: 'monthly',
   },
-  tags: [tag],
+  category,
 } as const satisfies SubscriptionModel;
 
 export const yearlySubscription = {
@@ -25,7 +25,6 @@ export const yearlySubscription = {
     each: 1,
     period: 'yearly',
   },
-  tags: [],
 } as const satisfies SubscriptionModel;
 
 export const twoMonthlySubscription = {
@@ -38,7 +37,7 @@ export const twoMonthlySubscription = {
     each: 2,
     period: 'monthly',
   },
-  tags: [tag],
+  category,
 } as const satisfies SubscriptionModel;
 
 export const twoYearlySubscription = {
@@ -51,7 +50,6 @@ export const twoYearlySubscription = {
     each: 2,
     period: 'yearly',
   },
-  tags: [],
 } as const satisfies SubscriptionModel;
 
 export const subscriptions = [monthlySubscription, yearlySubscription] as const;

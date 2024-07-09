@@ -20,7 +20,7 @@ export const RecoveryImportPage = memo(() => {
     useCallback(({ subscriptions }) => {
       setSubscriptions(
         subscriptions.map((subscription) =>
-          insertSubscriptionSchema.parse({ ...subscription, tags: [] }),
+          insertSubscriptionSchema.parse(subscription),
         ),
       );
     }, []);

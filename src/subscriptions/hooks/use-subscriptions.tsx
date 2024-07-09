@@ -1,5 +1,5 @@
-import type { TagModel } from '@/tags/models/tag.model.ts';
-import { findTags } from '@/tags/models/tag.table.ts';
+import type { CategoryModel } from '@/categories/models/category.model.ts';
+import { findCategories } from '@/categories/models/category.table.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   createContext,
@@ -19,9 +19,9 @@ export function useSubscriptions(): UseSubscriptions {
 
 export interface UseSubscriptions {
   subscriptions: Array<SubscriptionModel>;
-  tags: Array<TagModel>;
-  selectedTag: TagModel | null;
-  selectTag(tagId: string | null): void;
+  categories: Array<CategoryModel>;
+  selectedCategory: CategoryModel | null;
+  selectCategory(categoryId: string | null): void;
 }
 
 export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
@@ -30,37 +30,41 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
     [],
     [],
   );
-  const tags = useLiveQuery(() => findTags(), [], []);
-  const [selectedTag, setSelectedTag] = useState<TagModel | null>(null);
+  const categories = useLiveQuery(() => findCategories(), [], []);
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryModel | null>(null);
 
-  const selectTag: (tagId: string | null) => void = useCallback(
-    (tagId) => {
-      if (tagId) {
-        setSelectedTag(tags.find((tag) => `${tag.id}` === tagId) ?? null);
+  const selectCategory: (categoryId: string | null) => void = useCallback(
+    (categoryId) => {
+      if (categoryId) {
+        setSelectedCategory(
+          categories.find((category) => `${category.id}` === categoryId) ??
+            null,
+        );
       } else {
-        setSelectedTag(null);
+        setSelectedCategory(null);
       }
     },
-    [tags],
+    [categories],
   );
 
   const subscriptions = useMemo(
     () =>
       unfilteredSubscriptions.filter(
         (subscription) =>
-          !selectedTag ||
-          subscription.tags.find((subTag) => subTag.id === selectedTag.id),
+          !selectedCategory ||
+          subscription.category?.id === selectedCategory.id,
       ),
-    [selectedTag, unfilteredSubscriptions],
+    [selectedCategory, unfilteredSubscriptions],
   );
 
   return (
     <subscriptionsContext.Provider
       value={{
         subscriptions,
-        tags: tags ?? [],
-        selectedTag,
-        selectTag,
+        categories,
+        selectedCategory,
+        selectCategory,
       }}>
       {children}
     </subscriptionsContext.Provider>
@@ -69,7 +73,7 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
 
 const subscriptionsContext = createContext<UseSubscriptions>({
   subscriptions: [],
-  tags: [],
-  selectedTag: null,
-  selectTag() {},
+  categories: [],
+  selectedCategory: null,
+  selectCategory() {},
 });

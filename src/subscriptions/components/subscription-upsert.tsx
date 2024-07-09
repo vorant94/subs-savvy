@@ -1,11 +1,10 @@
-import { findTags } from '@/tags/models/tag.table.ts';
+import { findCategories } from '@/categories/models/category.table.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-input-aria-labels.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
   Fieldset,
-  MultiSelect,
   NumberInput,
   Select,
   TextInput,
@@ -75,13 +74,13 @@ export const SubscriptionUpsert = memo(() => {
     dispatch({ type: 'close' });
   }, [dispatch]);
 
-  const tags = useLiveQuery(() => findTags(), [], []);
-  const tagsData: ComboboxData = useMemo(() => {
-    return tags.map((tag) => ({
-      label: tag.name,
-      value: `${tag.id}`,
+  const categories = useLiveQuery(() => findCategories(), [], []);
+  const categoriesData: ComboboxData = useMemo(() => {
+    return categories.map((category) => ({
+      label: category.name,
+      value: `${category.id}`,
     }));
-  }, [tags]);
+  }, [categories]);
 
   return (
     <form
@@ -219,26 +218,22 @@ export const SubscriptionUpsert = memo(() => {
         />
       </Fieldset>
 
-      {/*TODO color chips with tag color adn add color cycles in selection*/}
       <Controller
         control={control}
-        name="tags"
+        name="category"
         render={({ field: { value, onChange, onBlur } }) => (
-          <MultiSelect
-            label="Tags"
-            placeholder="Tags"
-            clearable
-            data={tagsData}
-            value={value.map((tag) => `${tag.id}`)}
-            onChange={(tagIds) =>
+          <Select
+            label="Category"
+            placeholder="Category"
+            data={categoriesData}
+            value={`${value?.id}`}
+            onChange={(categoryId) =>
               onChange(
-                tagIds.map(
-                  (tagId) => tags.find((tag) => `${tag.id}` === tagId)!,
-                ),
+                categories.find((category) => `${category.id}` === categoryId),
               )
             }
             onBlur={onBlur}
-            error={errors.tags?.message}
+            error={errors.category?.message}
           />
         )}
       />
@@ -269,7 +264,6 @@ export const SubscriptionUpsert = memo(() => {
 
 const defaultValues: DefaultValues<UpsertSubscriptionModel> = {
   startedAt: new Date(),
-  tags: [],
   cycle: {
     each: 1,
     period: 'monthly',

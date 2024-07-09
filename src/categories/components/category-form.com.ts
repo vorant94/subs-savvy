@@ -1,7 +1,7 @@
 import { InputCom } from '@/ui/components/input.com';
 import type { Page } from '@playwright/test';
 
-export class TagFormCom {
+export class CategoryFormCom {
   nameControl: InputCom;
   colorControl: InputCom;
 

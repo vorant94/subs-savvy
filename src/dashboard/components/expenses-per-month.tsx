@@ -19,11 +19,6 @@ import {
 } from 'recharts';
 import type { TooltipProps } from 'recharts/types/component/Tooltip';
 
-// TODO color bars based on subscription tag color
-//  if sub has one tag - take it's color
-//  if sub has no tags - use "default"
-//  if sub has multiple - use "rainbow"
-//  if sub has two tags and one of them is selected - use color of the second one
 export const ExpensesPerMonth = memo(() => {
   const { subscriptions } = useSubscriptions();
 
