@@ -5,9 +5,9 @@ import {
   yearlySubscription,
 } from '../models/subscription.mock.ts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
-import { getSubscriptionNextPaymentDate } from './get-subscription-next-payment-date.ts';
+import { getSubscriptionNextPaymentAt } from './get-subscription-next-payment-at.ts';
 
-describe('getSubscriptionNextPaymentDate', () => {
+describe('getSubscriptionNextPaymentAt', () => {
   it('monthly subscription', () => {
     const subscription = {
       ...monthlySubscription,
@@ -19,7 +19,7 @@ describe('getSubscriptionNextPaymentDate', () => {
 
     const expectedDayJS = dayjs(new Date()).add(1, 'month').set('date', 1);
     expect(
-      expectedDayJS.isSame(getSubscriptionNextPaymentDate(subscription), 'day'),
+      expectedDayJS.isSame(getSubscriptionNextPaymentAt(subscription), 'day'),
     ).toBeTruthy();
   });
 
@@ -37,7 +37,7 @@ describe('getSubscriptionNextPaymentDate', () => {
     const expectedDayJS = dayjs(subscription.startedAt).add(1, 'year');
     expect(
       expectedDayJS.isSame(
-        getSubscriptionNextPaymentDate(subscription, now),
+        getSubscriptionNextPaymentAt(subscription, now),
         'day',
       ),
     ).toBeTruthy();
@@ -57,7 +57,7 @@ describe('getSubscriptionNextPaymentDate', () => {
         .toDate(),
     } satisfies SubscriptionModel;
 
-    expect(getSubscriptionNextPaymentDate(subscription)).toBeNull();
+    expect(getSubscriptionNextPaymentAt(subscription)).toBeNull();
   });
 
   it('will expire before supposed next payment date', () => {
@@ -75,6 +75,18 @@ describe('getSubscriptionNextPaymentDate', () => {
     } satisfies SubscriptionModel;
     const now = dayjs(subscription.endedAt).subtract(2, 'days').toDate();
 
-    expect(getSubscriptionNextPaymentDate(subscription, now)).toBeNull();
+    expect(getSubscriptionNextPaymentAt(subscription, now)).toBeNull();
+  });
+
+  it('startedAt is in the future', () => {
+    const subscription = {
+      ...monthlySubscription,
+      startedAt: dayjs(monthlySubscription.startedAt).add(3, 'year').toDate(),
+    } satisfies SubscriptionModel;
+
+    const expectedDayJS = dayjs(subscription.startedAt);
+    expect(
+      expectedDayJS.isSame(getSubscriptionNextPaymentAt(subscription), 'day'),
+    ).toBeTruthy();
   });
 });

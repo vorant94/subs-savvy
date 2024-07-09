@@ -3,7 +3,7 @@ import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { subscriptionCyclePeriodToManipulateUnit } from '../types/subscription-cycle-period.ts';
 import { isSubscriptionExpired } from './is-subscription-expired.ts';
 
-export function getSubscriptionNextPaymentDate(
+export function getSubscriptionNextPaymentAt(
   subscription: SubscriptionModel,
   now: Date = new Date(),
 ): Date | null {
@@ -18,6 +18,10 @@ export function getSubscriptionNextPaymentDate(
   const nextPaymentDate = dayjs(now).add(1, manipulateUnit).toDate();
   if (isSubscriptionExpired(subscription, nextPaymentDate)) {
     return null;
+  }
+
+  if (startedAtDayJs.isAfter(now)) {
+    return subscription.startedAt;
   }
 
   const differenceInPeriods = startedAtDayJs

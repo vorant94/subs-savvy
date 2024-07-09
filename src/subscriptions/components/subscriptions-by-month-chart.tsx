@@ -44,6 +44,7 @@ export const SubscriptionsByMonthChart = memo(() => {
         order={5}>
         Expenses per Month
       </Title>
+
       <ResponsiveContainer
         width="100%"
         height="100%">

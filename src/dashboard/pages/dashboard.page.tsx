@@ -1,6 +1,7 @@
 import { AddSubscriptionButton } from '@/subscriptions/components/add-subscription-button.tsx';
 import { SubscriptionUpsert } from '@/subscriptions/components/subscription-upsert.tsx';
 import { SubscriptionsByMonthChart } from '@/subscriptions/components/subscriptions-by-month-chart.tsx';
+import { UpcomingSubscriptionPaymentsChart } from '@/subscriptions/components/upcoming-subscription-payments-chart';
 import { useSubscriptionUpsert } from '@/subscriptions/hooks/use-subscription-upsert';
 import { TagSelect } from '@/tags/components/tag-select.tsx';
 import {
@@ -24,9 +25,11 @@ export const DashboardPage = memo(() => {
       drawerTitle={`${upsert.state.mode === 'update' ? 'Update' : 'Insert'} Subscription`}>
       <div
         className={cn(
-          `grid flex-1 grid-cols-1 grid-rows-2 gap-4 lg:grid-cols-2`,
+          `grid flex-1 grid-flow-row auto-rows-[50%] grid-cols-1 gap-4 lg:grid-cols-2`,
         )}>
         <SubscriptionsByMonthChart />
+
+        <UpcomingSubscriptionPaymentsChart />
       </div>
     </DefaultLayout>
   );
