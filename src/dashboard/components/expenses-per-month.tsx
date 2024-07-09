@@ -1,6 +1,10 @@
 import type { MonthName } from '@/date/types/month-name.ts';
 import { monthToMonthName, months } from '@/date/types/month.ts';
 import { roundToDecimal } from '@/math/utils/round-to-decimal.ts';
+import { useSubscriptions } from '@/subscriptions/hooks/use-subscriptions.tsx';
+import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
+import { calculateSubscriptionPriceForMonth } from '@/subscriptions/utils/calculate-subscription-price-for-month.ts';
+import { compareSubscriptionsDesc } from '@/subscriptions/utils/compare-subscriptions.ts';
 import { cn } from '@/ui/utils/cn.ts';
 import { Card, Divider, Text, Title } from '@mantine/core';
 import dayjs from 'dayjs';
@@ -14,17 +18,13 @@ import {
   XAxis,
 } from 'recharts';
 import type { TooltipProps } from 'recharts/types/component/Tooltip';
-import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
-import type { SubscriptionModel } from '../models/subscription.model.ts';
-import { calculateSubscriptionPriceForMonth } from '../utils/calculate-subscription-price-for-month.ts';
-import { compareSubscriptionsDesc } from '../utils/compare-subscriptions.ts';
 
 // TODO color bars based on subscription tag color
 //  if sub has one tag - take it's color
 //  if sub has no tags - use "default"
 //  if sub has multiple - use "rainbow"
 //  if sub has two tags and one of them is selected - use color of the second one
-export const SubscriptionsByMonthChart = memo(() => {
+export const ExpensesPerMonth = memo(() => {
   const { subscriptions } = useSubscriptions();
 
   const aggregatedSubscriptions = useMemo(

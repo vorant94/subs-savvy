@@ -1,7 +1,5 @@
 import { AddSubscriptionButton } from '@/subscriptions/components/add-subscription-button.tsx';
 import { SubscriptionUpsert } from '@/subscriptions/components/subscription-upsert.tsx';
-import { SubscriptionsByMonthChart } from '@/subscriptions/components/subscriptions-by-month-chart.tsx';
-import { UpcomingSubscriptionPaymentsChart } from '@/subscriptions/components/upcoming-subscription-payments-chart';
 import { useSubscriptionUpsert } from '@/subscriptions/hooks/use-subscription-upsert';
 import { TagSelect } from '@/tags/components/tag-select.tsx';
 import {
@@ -10,6 +8,8 @@ import {
 } from '@/ui/layouts/default.layout.tsx';
 import { cn } from '@/ui/utils/cn.ts';
 import { memo } from 'react';
+import { ExpensesPerMonth } from '../components/expenses-per-month.tsx';
+import { UpcomingPayments } from '../components/upcoming-payments.tsx';
 
 export const DashboardPage = memo(() => {
   const upsert = useSubscriptionUpsert();
@@ -27,9 +27,9 @@ export const DashboardPage = memo(() => {
         className={cn(
           `grid flex-1 grid-flow-row auto-rows-[50%] grid-cols-1 gap-4 lg:grid-cols-2`,
         )}>
-        <SubscriptionsByMonthChart />
+        <ExpensesPerMonth />
 
-        <UpcomingSubscriptionPaymentsChart />
+        <UpcomingPayments />
       </div>
     </DefaultLayout>
   );
