@@ -41,6 +41,8 @@ export default [
       'playwright-report/',
       'blob-report/',
       'playwright/.cache/',
+      '/coverage/',
+      '.vercel',
     ],
   },
   ...fixupConfigRules(
