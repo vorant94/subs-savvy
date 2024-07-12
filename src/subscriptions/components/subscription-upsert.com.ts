@@ -1,8 +1,8 @@
-import { DatePickerInputCom } from '@/ui/components/date-picker-input.com';
-import { InputCom } from '@/ui/components/input.com';
-import { SelectCom } from '@/ui/components/select.com';
-import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-input-aria-labels';
 import type { Locator, Page } from '@playwright/test';
+import { DatePickerInputCom } from '../../ui/components/date-picker-input.com';
+import { InputCom } from '../../ui/components/input.com';
+import { SelectCom } from '../../ui/components/select.com';
+import { createDatePickerInputAriaLabels } from '../../ui/utils/create-date-picker-input-aria-labels';
 import {
   subscriptionCyclePeriodToLabel,
   type SubscriptionCyclePeriod,

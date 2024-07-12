@@ -1,10 +1,10 @@
-import { useSubscriptions } from '@/subscriptions/hooks/use-subscriptions.tsx';
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
-import { getSubscriptionNextPaymentAt } from '@/subscriptions/utils/get-subscription-next-payment-at.ts';
-import { cn } from '@/ui/utils/cn.ts';
 import { Card, Title } from '@mantine/core';
 import dayjs from 'dayjs';
 import { memo, useMemo } from 'react';
+import { useSubscriptions } from '../../subscriptions/hooks/use-subscriptions.tsx';
+import type { SubscriptionModel } from '../../subscriptions/models/subscription.model.ts';
+import { getSubscriptionNextPaymentAt } from '../../subscriptions/utils/get-subscription-next-payment-at.ts';
+import { cn } from '../../ui/utils/cn.ts';
 
 export const UpcomingPayments = memo(() => {
   const { subscriptions } = useSubscriptions();

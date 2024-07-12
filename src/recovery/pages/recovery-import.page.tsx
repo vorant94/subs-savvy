@@ -1,11 +1,11 @@
-import { SubscriptionsInsertTable } from '@/subscriptions/components/subscriptions-insert-table.tsx';
+import { Button } from '@mantine/core';
+import { memo, useCallback, useState } from 'react';
+import { SubscriptionsInsertTable } from '../../subscriptions/components/subscriptions-insert-table.tsx';
 import {
   insertSubscriptionSchema,
   type InsertSubscriptionModel,
-} from '@/subscriptions/models/subscription.model.ts';
-import { cn } from '@/ui/utils/cn.ts';
-import { Button } from '@mantine/core';
-import { memo, useCallback, useState } from 'react';
+} from '../../subscriptions/models/subscription.model.ts';
+import { cn } from '../../ui/utils/cn.ts';
 import {
   RecoveryImportDropZone,
   type RecoveryImportDropZoneProps,

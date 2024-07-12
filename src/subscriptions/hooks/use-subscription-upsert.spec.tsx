@@ -1,12 +1,12 @@
-import {
-  DefaultLayoutProvider,
-  useDefaultLayout,
-  type UseDefaultLayout,
-} from '@/ui/hooks/use-default-layout.tsx';
 import { act, renderHook, type RenderHookResult } from '@testing-library/react';
 import type { FC, PropsWithChildren } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  DefaultLayoutProvider,
+  useDefaultLayout,
+  type UseDefaultLayout,
+} from '../../ui/hooks/use-default-layout.tsx';
 import {
   SubscriptionUpsertProvider,
   useSubscriptionUpsert,

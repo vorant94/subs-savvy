@@ -1,5 +1,3 @@
-import type { CategoryModel } from '@/categories/models/category.model.ts';
-import { findCategories } from '@/categories/models/category.table.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
   createContext,
@@ -10,6 +8,8 @@ import {
   useState,
   type PropsWithChildren,
 } from 'react';
+import type { CategoryModel } from '../../categories/models/category.model.ts';
+import { findCategories } from '../../categories/models/category.table.ts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 

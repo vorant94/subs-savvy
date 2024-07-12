@@ -1,6 +1,6 @@
-import { cn } from '@/ui/utils/cn.ts';
 import { Avatar, Card, Indicator, Text, Title } from '@mantine/core';
 import { memo, useCallback, useMemo } from 'react';
+import { cn } from '../../ui/utils/cn.ts';
 import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 import { type SubscriptionModel } from '../models/subscription.model.ts';
 import { subscriptionIconToSvg } from '../types/subscription-icon-to-svg.tsx';

@@ -1,7 +1,7 @@
-import { db } from '@/db/globals/db.ts';
-import { cleanUpDb } from '@/db/utils/clean-up-db.ts';
-import { populateDb } from '@/db/utils/populate-db.ts';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { db } from '../../db/globals/db.ts';
+import { cleanUpDb } from '../../db/utils/clean-up-db.ts';
+import { populateDb } from '../../db/utils/populate-db.ts';
 import { monthlySubscription, subscriptions } from './subscription.mock.ts';
 import { deleteSubscription } from './subscription.table.ts';
 

@@ -1,4 +1,4 @@
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
+import type { SubscriptionModel } from '../../subscriptions/models/subscription.model.ts';
 import { db } from '../globals/db.ts';
 
 // utility function for tests only

@@ -1,9 +1,9 @@
-import { CategoryFormCom } from '@/categories/components/category-form.com.ts';
+import type { Locator, Page } from '@playwright/test';
+import { CategoryFormCom } from '../../categories/components/category-form.com.ts';
 import type {
   CategoryModel,
   UpsertCategoryModel,
-} from '@/categories/models/category.model.ts';
-import type { Locator, Page } from '@playwright/test';
+} from '../../categories/models/category.model.ts';
 import { SubscriptionUpsertCom } from '../components/subscription-upsert.com';
 import type {
   SubscriptionModel,

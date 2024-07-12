@@ -1,4 +1,4 @@
-import { db } from '@/db/globals/db.ts';
+import { db } from '../../db/globals/db.ts';
 import {
   categorySchema,
   insertCategorySchema,

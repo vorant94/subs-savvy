@@ -1,15 +1,15 @@
-import { recoverySchema } from '@/recovery/models/recovery.model.ts';
-import { RecoveryExportPom } from '@/recovery/pages/recovery-export.pom.ts';
-import { RecoveryImportPom } from '@/recovery/pages/recovery-import.pom.ts';
-import { RecoveryPom } from '@/recovery/pages/recovery.pom.ts';
-import { recoveryRoute } from '@/recovery/types/recovery-route.ts';
-import { subscriptions } from '@/subscriptions/models/subscription.mock.ts';
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
-import { rootRoute } from '@/ui/types/root-route.ts';
 import { expect, test, type Page } from '@playwright/test';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { recoverySchema } from '../src/recovery/models/recovery.model.ts';
+import { RecoveryExportPom } from '../src/recovery/pages/recovery-export.pom.ts';
+import { RecoveryImportPom } from '../src/recovery/pages/recovery-import.pom.ts';
+import { RecoveryPom } from '../src/recovery/pages/recovery.pom.ts';
+import { recoveryRoute } from '../src/recovery/types/recovery-route.ts';
+import { subscriptions } from '../src/subscriptions/models/subscription.mock.ts';
+import type { SubscriptionModel } from '../src/subscriptions/models/subscription.model.ts';
+import { rootRoute } from '../src/ui/types/root-route.ts';
 
 test.describe('recovery', () => {
   test('should redirect from recovery url to recovery import', async ({

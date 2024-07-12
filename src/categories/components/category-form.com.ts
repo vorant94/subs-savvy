@@ -1,5 +1,5 @@
-import { InputCom } from '@/ui/components/input.com';
 import type { Page } from '@playwright/test';
+import { InputCom } from '../../ui/components/input.com';
 
 export class CategoryFormCom {
   nameControl: InputCom;

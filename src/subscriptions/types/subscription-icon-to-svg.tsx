@@ -1,4 +1,3 @@
-import { cn } from '@/ui/utils/cn.ts';
 import {
   faBolt,
   faBuilding,
@@ -39,6 +38,7 @@ import ProtonMail from 'simple-icons/icons/protonmail.svg?react';
 import Spotify from 'simple-icons/icons/spotify.svg?react';
 import Telegram from 'simple-icons/icons/telegram.svg?react';
 import YouTube from 'simple-icons/icons/youtube.svg?react';
+import { cn } from '../../ui/utils/cn.ts';
 import Moovit from '../assets/moovit.svg?react';
 import type { SubscriptionIcon } from './subscription-icon.ts';
 

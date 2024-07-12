@@ -1,5 +1,5 @@
-import { subscriptionSchema } from '@/subscriptions/models/subscription.model.ts';
 import { z } from 'zod';
+import { subscriptionSchema } from '../../subscriptions/models/subscription.model.ts';
 
 // TODO add support for exporting with categories as well
 export const recoverySchema = z.object({

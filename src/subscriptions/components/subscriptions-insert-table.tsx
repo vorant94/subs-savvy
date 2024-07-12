@@ -1,5 +1,3 @@
-import { findCategories } from '@/categories/models/category.table.ts';
-import { cn } from '@/ui/utils/cn.ts';
 import {
   NumberInput,
   Select,
@@ -17,6 +15,8 @@ import {
   useForm,
   type SubmitHandler,
 } from 'react-hook-form';
+import { findCategories } from '../../categories/models/category.table.ts';
+import { cn } from '../../ui/utils/cn.ts';
 import type { InsertSubscriptionModel } from '../models/subscription.model.ts';
 import { insertSubscriptions } from '../models/subscription.table.ts';
 import { subscriptionCyclePeriodsComboboxData } from '../types/subscription-cycle-period.ts';

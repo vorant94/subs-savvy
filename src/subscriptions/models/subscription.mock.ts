@@ -1,5 +1,5 @@
-import { category } from '@/categories/models/category.mock.ts';
 import dayjs from 'dayjs';
+import { category } from '../../categories/models/category.mock.ts';
 import type { SubscriptionModel } from './subscription.model.ts';
 
 export const monthlySubscription = {

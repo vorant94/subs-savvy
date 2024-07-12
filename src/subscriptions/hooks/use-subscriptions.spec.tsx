@@ -1,6 +1,3 @@
-import { category } from '@/categories/models/category.mock.ts';
-import { cleanUpDb } from '@/db/utils/clean-up-db.ts';
-import { populateDb } from '@/db/utils/populate-db.ts';
 import {
   act,
   renderHook,
@@ -9,12 +6,15 @@ import {
 } from '@testing-library/react';
 import type { FC, PropsWithChildren } from 'react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { category } from '../../categories/models/category.mock.ts';
+import { cleanUpDb } from '../../db/utils/clean-up-db.ts';
+import { populateDb } from '../../db/utils/populate-db.ts';
+import { subscriptions } from '../models/subscription.mock.ts';
 import {
   SubscriptionsProvider,
   useSubscriptions,
   type UseSubscriptions,
-} from '../hooks/use-subscriptions.tsx';
-import { subscriptions } from '../models/subscription.mock.ts';
+} from './use-subscriptions.tsx';
 
 describe('useSubscriptions', () => {
   let screen: RenderHookResult<UseSubscriptions, void>;

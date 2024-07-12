@@ -1,5 +1,3 @@
-import { useNavLinks, type NavLink } from '@/ui/hooks/use-nav-links.tsx';
-import { cn } from '@/ui/utils/cn.ts';
 import {
   Affix,
   AppShell,
@@ -9,6 +7,8 @@ import {
 } from '@mantine/core';
 import { memo, type PropsWithChildren, type ReactElement } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useNavLinks, type NavLink } from '../../ui/hooks/use-nav-links.tsx';
+import { cn } from '../../ui/utils/cn.ts';
 import { useBreakpoint } from '../hooks/use-breakpoint.ts';
 import { useDefaultLayout } from '../hooks/use-default-layout.tsx';
 

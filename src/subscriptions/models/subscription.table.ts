@@ -1,5 +1,5 @@
-import type { CategoryModel } from '@/categories/models/category.model.ts';
-import { db } from '@/db/globals/db.ts';
+import type { CategoryModel } from '../../categories/models/category.model.ts';
+import { db } from '../../db/globals/db.ts';
 import {
   insertSubscriptionSchema,
   subscriptionSchema,

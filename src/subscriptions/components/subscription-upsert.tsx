@@ -1,6 +1,3 @@
-import { findCategories } from '@/categories/models/category.table.ts';
-import { cn } from '@/ui/utils/cn.ts';
-import { createDatePickerInputAriaLabels } from '@/ui/utils/create-date-picker-input-aria-labels.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -20,6 +17,9 @@ import {
   type DefaultValues,
   type SubmitHandler,
 } from 'react-hook-form';
+import { findCategories } from '../../categories/models/category.table.ts';
+import { cn } from '../../ui/utils/cn.ts';
+import { createDatePickerInputAriaLabels } from '../../ui/utils/create-date-picker-input-aria-labels.ts';
 import { useSubscriptionUpsert } from '../hooks/use-subscription-upsert.tsx';
 import {
   insertSubscriptionSchema,

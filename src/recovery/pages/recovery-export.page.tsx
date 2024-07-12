@@ -1,10 +1,10 @@
-import { dbVersion } from '@/db/globals/db.ts';
-import { SubscriptionsSelectTable } from '@/subscriptions/components/subscriptions-select-table.tsx';
-import { findSubscriptions } from '@/subscriptions/models/subscription.table.ts';
-import { cn } from '@/ui/utils/cn.ts';
 import { Button, Switch } from '@mantine/core';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { memo, useCallback, useState } from 'react';
+import { dbVersion } from '../../db/globals/db.ts';
+import { SubscriptionsSelectTable } from '../../subscriptions/components/subscriptions-select-table.tsx';
+import { findSubscriptions } from '../../subscriptions/models/subscription.table.ts';
+import { cn } from '../../ui/utils/cn.ts';
 import { recoverySchema } from '../models/recovery.model.ts';
 
 export const RecoveryExportPage = memo(() => {

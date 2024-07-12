@@ -1,4 +1,3 @@
-import { cn } from '@/ui/utils/cn.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ColorInput, NumberInput, TextInput } from '@mantine/core';
 import { forwardRef, memo } from 'react';
@@ -8,6 +7,7 @@ import {
   type DefaultValues,
   type SubmitHandler,
 } from 'react-hook-form';
+import { cn } from '../../ui/utils/cn.ts';
 import {
   insertCategorySchema,
   updateCategorySchema,

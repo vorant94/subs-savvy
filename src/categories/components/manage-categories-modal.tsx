@@ -1,4 +1,3 @@
-import { cn } from '@/ui/utils/cn.ts';
 import { Button, Modal } from '@mantine/core';
 import { useLiveQuery } from 'dexie-react-hooks';
 import {
@@ -9,6 +8,7 @@ import {
   useState,
   type Reducer,
 } from 'react';
+import { cn } from '../../ui/utils/cn.ts';
 import type {
   CategoryModel,
   InsertCategoryModel,

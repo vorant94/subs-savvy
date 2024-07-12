@@ -1,4 +1,4 @@
-import type { db } from '@/db/globals/db.ts';
+import type { db } from './db/globals/db.ts';
 
 declare global {
   interface Window {

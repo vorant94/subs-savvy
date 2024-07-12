@@ -1,9 +1,9 @@
-import { cleanUpDb } from '@/db/utils/clean-up-db.ts';
-import { populateDb } from '@/db/utils/populate-db.ts';
 import { MantineProvider } from '@mantine/core';
 import { render, type RenderResult, waitFor } from '@testing-library/react';
 import type { FC, PropsWithChildren } from 'react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { cleanUpDb } from '../../db/utils/clean-up-db.ts';
+import { populateDb } from '../../db/utils/populate-db.ts';
 import { SubscriptionsProvider } from '../hooks/use-subscriptions';
 import { subscriptions } from '../models/subscription.mock.ts';
 import { SubscriptionList } from './subscription-list';

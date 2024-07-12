@@ -1,15 +1,15 @@
+import { expect, test, type Page } from '@playwright/test';
+import dayjs from 'dayjs';
 import {
   monthlySubscription,
   subscriptions as subscriptionsMock,
-} from '@/subscriptions/models/subscription.mock';
+} from '../src/subscriptions/models/subscription.mock';
 import type {
   InsertSubscriptionModel,
   SubscriptionModel,
   UpdateSubscriptionModel,
-} from '@/subscriptions/models/subscription.model.ts';
-import { SubscriptionsPom } from '@/subscriptions/pages/subscriptions.pom.ts';
-import { expect, test, type Page } from '@playwright/test';
-import dayjs from 'dayjs';
+} from '../src/subscriptions/models/subscription.model.ts';
+import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom.ts';
 
 test.describe('subscriptions', () => {
   test('should find subscriptions', async ({ page }) => {

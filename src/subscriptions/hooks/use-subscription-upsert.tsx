@@ -1,4 +1,3 @@
-import { useDefaultLayout } from '@/ui/hooks/use-default-layout.tsx';
 import { usePrevious } from '@mantine/hooks';
 import {
   createContext,
@@ -10,6 +9,7 @@ import {
   type PropsWithChildren,
   type Reducer,
 } from 'react';
+import { useDefaultLayout } from '../../ui/hooks/use-default-layout.tsx';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 
 export function useSubscriptionUpsert() {

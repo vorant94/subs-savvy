@@ -1,13 +1,13 @@
-import { CategorySelect } from '@/categories/components/category-select.tsx';
-import { AddSubscriptionButton } from '@/subscriptions/components/add-subscription-button.tsx';
-import { SubscriptionUpsert } from '@/subscriptions/components/subscription-upsert.tsx';
-import { useSubscriptionUpsert } from '@/subscriptions/hooks/use-subscription-upsert';
+import { memo } from 'react';
+import { CategorySelect } from '../../categories/components/category-select.tsx';
+import { AddSubscriptionButton } from '../../subscriptions/components/add-subscription-button.tsx';
+import { SubscriptionUpsert } from '../../subscriptions/components/subscription-upsert.tsx';
+import { useSubscriptionUpsert } from '../../subscriptions/hooks/use-subscription-upsert';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
-} from '@/ui/layouts/default.layout.tsx';
-import { cn } from '@/ui/utils/cn.ts';
-import { memo } from 'react';
+} from '../../ui/layouts/default.layout.tsx';
+import { cn } from '../../ui/utils/cn.ts';
 import { ExpensesPerMonth } from '../components/expenses-per-month.tsx';
 import { UpcomingPayments } from '../components/upcoming-payments.tsx';
 

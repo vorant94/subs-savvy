@@ -1,9 +1,9 @@
-import { cn } from '@/ui/utils/cn.ts';
 import { faFileCode } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '@mantine/core';
 import { memo, useCallback, useEffect } from 'react';
 import { type FileWithPath, useDropzone } from 'react-dropzone';
+import { cn } from '../../ui/utils/cn.ts';
 import {
   type RecoveryModel,
   recoverySchema,

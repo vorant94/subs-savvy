@@ -1,6 +1,6 @@
-import type { CategoryModel } from '@/categories/models/category.model.ts';
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
 import Dexie, { type EntityTable } from 'dexie';
+import type { CategoryModel } from '../../categories/models/category.model.ts';
+import type { SubscriptionModel } from '../../subscriptions/models/subscription.model.ts';
 
 export const dbVersion = 5;
 

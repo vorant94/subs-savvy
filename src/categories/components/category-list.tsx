@@ -1,8 +1,8 @@
-import { cn } from '@/ui/utils/cn.ts';
 import { faCircle, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ActionIcon, Text } from '@mantine/core';
 import { memo } from 'react';
+import { cn } from '../../ui/utils/cn.ts';
 import type { CategoryModel } from '../models/category.model.ts';
 
 export const CategoryList = memo(

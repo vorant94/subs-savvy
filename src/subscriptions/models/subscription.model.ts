@@ -1,5 +1,5 @@
-import { categorySchema } from '@/categories/models/category.model.ts';
 import { z } from 'zod';
+import { categorySchema } from '../../categories/models/category.model.ts';
 import { subscriptionCyclePeriods } from '../types/subscription-cycle-period.ts';
 import { subscriptionIcons } from '../types/subscription-icon.ts';
 

@@ -1,11 +1,3 @@
-import type { MonthName } from '@/date/types/month-name.ts';
-import { monthToMonthName, months } from '@/date/types/month.ts';
-import { roundToDecimal } from '@/math/utils/round-to-decimal.ts';
-import { useSubscriptions } from '@/subscriptions/hooks/use-subscriptions.tsx';
-import type { SubscriptionModel } from '@/subscriptions/models/subscription.model.ts';
-import { calculateSubscriptionPriceForMonth } from '@/subscriptions/utils/calculate-subscription-price-for-month.ts';
-import { compareSubscriptionsDesc } from '@/subscriptions/utils/compare-subscriptions.ts';
-import { cn } from '@/ui/utils/cn.ts';
 import { Card, Divider, Text, Title } from '@mantine/core';
 import dayjs from 'dayjs';
 import { Fragment, memo, useMemo } from 'react';
@@ -18,6 +10,14 @@ import {
   XAxis,
 } from 'recharts';
 import type { TooltipProps } from 'recharts/types/component/Tooltip';
+import type { MonthName } from '../../date/types/month-name.ts';
+import { monthToMonthName, months } from '../../date/types/month.ts';
+import { roundToDecimal } from '../../math/utils/round-to-decimal.ts';
+import { useSubscriptions } from '../../subscriptions/hooks/use-subscriptions.tsx';
+import type { SubscriptionModel } from '../../subscriptions/models/subscription.model.ts';
+import { calculateSubscriptionPriceForMonth } from '../../subscriptions/utils/calculate-subscription-price-for-month.ts';
+import { compareSubscriptionsDesc } from '../../subscriptions/utils/compare-subscriptions.ts';
+import { cn } from '../../ui/utils/cn.ts';
 
 export const ExpensesPerMonth = memo(() => {
   const { subscriptions } = useSubscriptions();

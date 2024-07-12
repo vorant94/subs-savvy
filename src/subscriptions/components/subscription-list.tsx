@@ -1,5 +1,5 @@
-import { cn } from '@/ui/utils/cn.ts';
 import { memo } from 'react';
+import { cn } from '../../ui/utils/cn.ts';
 import { useSubscriptions } from '../hooks/use-subscriptions.tsx';
 import { SubscriptionListItem } from './subscription-list-item.tsx';
 

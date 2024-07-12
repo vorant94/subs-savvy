@@ -1,9 +1,9 @@
-import { CategorySelect } from '@/categories/components/category-select.tsx';
+import { memo } from 'react';
+import { CategorySelect } from '../../categories/components/category-select.tsx';
 import {
   DefaultLayout,
   DefaultLayoutHeader,
-} from '@/ui/layouts/default.layout.tsx';
-import { memo } from 'react';
+} from '../../ui/layouts/default.layout.tsx';
 import { AddSubscriptionButton } from '../components/add-subscription-button.tsx';
 import { SubscriptionList } from '../components/subscription-list.tsx';
 import { SubscriptionUpsert } from '../components/subscription-upsert.tsx';

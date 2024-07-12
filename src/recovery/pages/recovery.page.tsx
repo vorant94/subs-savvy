@@ -1,14 +1,14 @@
-import {
-  DefaultLayout,
-  DefaultLayoutHeader,
-} from '@/ui/layouts/default.layout.tsx';
-import { rootRoute } from '@/ui/types/root-route.ts';
-import { cn } from '@/ui/utils/cn.ts';
 import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tabs, Text } from '@mantine/core';
 import { memo, useCallback, useMemo } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import {
+  DefaultLayout,
+  DefaultLayoutHeader,
+} from '../../ui/layouts/default.layout.tsx';
+import { rootRoute } from '../../ui/types/root-route.ts';
+import { cn } from '../../ui/utils/cn.ts';
 import { recoveryRoute } from '../types/recovery-route.ts';
 
 export const RecoveryPage = memo(() => {

@@ -1,5 +1,3 @@
-import { useSubscriptions } from '@/subscriptions/hooks/use-subscriptions.tsx';
-import { cn } from '@/ui/utils/cn.ts';
 import { faCircle, faSliders } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,6 +10,8 @@ import {
 } from '@mantine/core';
 import { useDisclosure, usePrevious } from '@mantine/hooks';
 import { memo, useEffect } from 'react';
+import { useSubscriptions } from '../../subscriptions/hooks/use-subscriptions.tsx';
+import { cn } from '../../ui/utils/cn.ts';
 import { ManageCategoriesModal } from './manage-categories-modal.tsx';
 
 export const CategorySelect = memo(() => {

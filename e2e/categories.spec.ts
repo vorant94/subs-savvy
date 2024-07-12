@@ -1,10 +1,10 @@
-import { category } from '@/categories/models/category.mock.ts';
+import { expect, test, type Page } from '@playwright/test';
+import { category } from '../src/categories/models/category.mock.ts';
 import type {
   CategoryModel,
   InsertCategoryModel,
-} from '@/categories/models/category.model.ts';
-import { SubscriptionsPom } from '@/subscriptions/pages/subscriptions.pom.ts';
-import { expect, test, type Page } from '@playwright/test';
+} from '../src/categories/models/category.model.ts';
+import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom.ts';
 
 test.describe('categories', () => {
   test('should find categories', async ({ page }) => {
