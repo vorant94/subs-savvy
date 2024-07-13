@@ -44,3 +44,7 @@
 ### Random Concept from the Web
 
 ![finance-app-concept.jpg](assets/finance-app-concept.jpg)
+
+###### Pros
+
+- nice minimalistic combo of subscription list and visualized expenses data
