@@ -2,6 +2,8 @@
 
 ### Bobby
 
+![bobby.png](assets/bobby.png)
+
 [link](https://bobbyapp.co/)
 
 ###### Pros
@@ -21,6 +23,8 @@
 
 ### Param
 
+![param.webp](assets/param.webp)
+
 [link](https://www.paramapp.com/)
 
 ###### Pros
@@ -36,3 +40,7 @@
 - 3-rd party sync (need to create param account, can't use user-side storage like iCloud or Google Drive)
 - weird expenses calculation (if I add monthly subscription started on 01.01.2024, the app counts 1/31 of its price to be daily expense in each day of month, while it is full price on 01.01 and zero on any other day of the same month)
 - limited organizing capabilities (only one-to-many tags for filtering purposes)
+
+### Random Concept from the Web
+
+![finance-app-concept.jpg](assets/finance-app-concept.jpg)
