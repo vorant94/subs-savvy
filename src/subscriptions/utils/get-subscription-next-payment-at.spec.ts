@@ -17,10 +17,11 @@ describe('getSubscriptionNextPaymentAt', () => {
         .toDate(),
     } satisfies SubscriptionModel;
 
-    const expectedDayJS = dayjs(new Date()).add(1, 'month').set('date', 1);
-    expect(
-      expectedDayJS.isSame(getSubscriptionNextPaymentAt(subscription), 'day'),
-    ).toBeTruthy();
+    const expected = dayjs(new Date()).add(1, 'month').set('date', 1).toDate();
+    expect(getSubscriptionNextPaymentAt(subscription)).toBeSame(
+      expected,
+      'day',
+    );
   });
 
   it('yearly subscription', () => {
@@ -34,13 +35,11 @@ describe('getSubscriptionNextPaymentAt', () => {
     } satisfies SubscriptionModel;
     const now = dayjs(subscription.startedAt).add(6, 'month').toDate();
 
-    const expectedDayJS = dayjs(subscription.startedAt).add(1, 'year');
-    expect(
-      expectedDayJS.isSame(
-        getSubscriptionNextPaymentAt(subscription, now),
-        'day',
-      ),
-    ).toBeTruthy();
+    const expected = dayjs(subscription.startedAt).add(1, 'year').toDate();
+    expect(getSubscriptionNextPaymentAt(subscription, now)).toBeSame(
+      expected,
+      'day',
+    );
   });
 
   it('expired subscription', () => {
@@ -84,9 +83,10 @@ describe('getSubscriptionNextPaymentAt', () => {
       startedAt: dayjs(monthlySubscription.startedAt).add(3, 'year').toDate(),
     } satisfies SubscriptionModel;
 
-    const expectedDayJS = dayjs(subscription.startedAt);
-    expect(
-      expectedDayJS.isSame(getSubscriptionNextPaymentAt(subscription), 'day'),
-    ).toBeTruthy();
+    const expected = dayjs(subscription.startedAt).toDate();
+    expect(getSubscriptionNextPaymentAt(subscription)).toBeSame(
+      expected,
+      'day',
+    );
   });
 });

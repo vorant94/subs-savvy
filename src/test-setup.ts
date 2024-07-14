@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import 'fake-indexeddb/auto';
-import { afterEach, vi } from 'vitest';
+import { afterEach, expect, vi } from 'vitest';
+import { dateMatchers } from './date/utils/date-matchers.ts';
 
 // react testing library
 afterEach(() => {
@@ -34,3 +35,6 @@ class ResizeObserverStub implements ResizeObserver {
 }
 
 window.ResizeObserver = ResizeObserverStub;
+
+// date matchers
+expect.extend(dateMatchers);

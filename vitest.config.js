@@ -23,6 +23,7 @@ export default mergeConfig(
           '**/pages/*.pom.tsx',
           '**/components/*.com.ts',
           '**/components/*.com.tsx',
+          'date/utils/date-matchers.ts', // test matchers, that are used in tests only
           'db/utils/populate-db.ts', // utility function for tests only
           'db/utils/clean-up-db.ts', // utility function for tests only
           'ui/hooks/use-breakpoint.ts', // a simple wrapper with mapped arguments
