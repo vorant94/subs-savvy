@@ -15,7 +15,7 @@ export class DatePickerInputCom {
 
     const currentDateString = await this.locators.monthLevelControl.innerText();
     const currentDate = dayjs(currentDateString, 'MMMM YYYY').toDate();
-    const diffInMonths = Math.round(
+    const diffInMonths = Math.floor(
       dayjs(value).diff(currentDate, 'month', true),
     );
     for (let i = 0; i < Math.abs(diffInMonths); i++) {
