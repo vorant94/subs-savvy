@@ -36,5 +36,5 @@ class ResizeObserverStub implements ResizeObserver {
 
 window.ResizeObserver = ResizeObserverStub;
 
-// date matchers
+// custom matchers
 expect.extend(dateMatchers);
