@@ -13,3 +13,5 @@
 2. As a **fan of desktop apps experience**, I want to **all apps I'm using on my phone/desktop to be deeply integrated into respective OS**, so that I can **use the app when I'm offline** (app data isn't changing too often by its nature) as well as I can **deeper integrate the app with OS** (open it via Spotlight/Alfred, get native notifications etc.)
 
 3. As a **person with bunch of regular but manual payments**, I want to **set up reminders on some of them**, so that I can **rely on the app to remember them** and therefore have less "routine" info in my head
+
+4. As a **subscriber for international services**, I want to **set up subscription price both in my local currency as well in service currency**, so that I can **use my local currency in all calculations, but the subscription info itself reflects the same numbers, that I saw on a service website**

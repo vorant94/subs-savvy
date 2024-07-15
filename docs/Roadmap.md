@@ -12,4 +12,4 @@ After [Main values](./User Stories.md#main-value) of the app achieved we should 
 
 ### Phase 3: Separate client apps for desktop and mobile
 
-Since the app itself is technically isn't very complex and the value it brings to the user is very focused in order to stand out from competitors the app should provide better user experience i.e. feel more native to user OS, look nicer and so on.
+Since the app itself is technically isn't very complex and the value it brings to the user is very focused in order to stand out from competitors the app should provide better user experience i.e. feel more native to user OS, look nicer and so on. In terms of user stories it means to implement [Additional conveniences](./User Stories.md#additional-conveniences) stories #2, #3 and #4
