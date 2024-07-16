@@ -2,13 +2,18 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../../db/globals/db.ts';
 import { cleanUpDb } from '../../db/utils/clean-up-db.ts';
 import { populateDb } from '../../db/utils/populate-db.ts';
-import { subscriptions } from '../../subscriptions/models/subscription.mock.ts';
-import { category as categoryMock } from './category.mock.ts';
+import {
+  monthlySubscription,
+  yearlySubscription,
+} from '../../subscriptions/models/subscription.mock.ts';
+import { categoryMock } from './category.mock.ts';
 import { deleteCategory } from './category.table.ts';
 
 describe('category.table', () => {
   describe('with data', () => {
-    beforeEach(async () => await populateDb(subscriptions));
+    beforeEach(
+      async () => await populateDb([monthlySubscription, yearlySubscription]),
+    );
 
     afterEach(async () => await cleanUpDb());
 

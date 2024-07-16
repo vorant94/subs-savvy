@@ -52,6 +52,13 @@ export function updateSubscription(
   return db.transaction('rw', db.subscriptions, db.categories, async () => {
     const { id, category, ...rest } = updateSubscriptionSchema.parse(raw);
 
+    if (category) {
+      const rawCategory = await db.categories.get(category.id);
+      if (!rawCategory) {
+        throw new Error(`No category with id ${category.id}`);
+      }
+    }
+
     await db.subscriptions.update(id, {
       ...rest,
       categoryId: category?.id ?? null,
@@ -89,6 +96,13 @@ async function _insertSubscription(
   raw: InsertSubscriptionModel,
 ): Promise<SubscriptionModel> {
   const { category, ...rest } = insertSubscriptionSchema.parse(raw);
+
+  if (category) {
+    const rawCategory = await db.categories.get(category.id);
+    if (!rawCategory) {
+      throw new Error(`No category with id ${category.id}`);
+    }
+  }
 
   const id = await db.subscriptions.add({ ...rest, categoryId: category?.id });
   return _getSubscription(id);

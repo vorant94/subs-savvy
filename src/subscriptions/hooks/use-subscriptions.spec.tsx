@@ -6,10 +6,13 @@ import {
 } from '@testing-library/react';
 import type { FC, PropsWithChildren } from 'react';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { categories } from '../../categories/models/category.mock.ts';
+import { categoryMock } from '../../categories/models/category.mock.ts';
 import type { CategoryModel } from '../../categories/models/category.model.ts';
 import { findCategories } from '../../categories/models/category.table.ts';
-import { subscriptions } from '../models/subscription.mock.ts';
+import {
+  monthlySubscription,
+  yearlySubscription,
+} from '../models/subscription.mock.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 import {
   SubscriptionsProvider,
@@ -25,8 +28,11 @@ describe('useSubscriptions', () => {
   let hook: RenderHookResult<UseSubscriptions, void>['result'];
 
   beforeAll(() => {
-    vi.mocked(findSubscriptions).mockResolvedValue(subscriptions);
-    vi.mocked(findCategories).mockResolvedValue(categories);
+    vi.mocked(findSubscriptions).mockResolvedValue([
+      monthlySubscription,
+      yearlySubscription,
+    ]);
+    vi.mocked(findCategories).mockResolvedValue([categoryMock]);
   });
 
   beforeEach(() => {
@@ -47,7 +53,7 @@ describe('useSubscriptions', () => {
 
   it('should filter/unfilter subscriptions based on selected category', async () => {
     const category = {
-      ...categories[0],
+      ...categoryMock,
     } satisfies CategoryModel;
 
     // not real validation, but just to ensure that component is stable and is ready for upcoming `act` to be called

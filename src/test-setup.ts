@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import 'fake-indexeddb/auto';
 import { afterEach, expect, vi } from 'vitest';
+import { arrayMatchers } from './array/utils/array-matchers.ts';
 import { dateMatchers } from './date/utils/date-matchers.ts';
 
 // react testing library
@@ -38,3 +39,4 @@ window.ResizeObserver = ResizeObserverStub;
 
 // custom matchers
 expect.extend(dateMatchers);
+expect.extend(arrayMatchers);

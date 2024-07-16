@@ -11,7 +11,10 @@ import {
   vi,
 } from 'vitest';
 import { SubscriptionsProvider } from '../hooks/use-subscriptions';
-import { subscriptions } from '../models/subscription.mock.ts';
+import {
+  monthlySubscription,
+  yearlySubscription,
+} from '../models/subscription.mock.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
 import { SubscriptionList } from './subscription-list';
 
@@ -42,7 +45,10 @@ describe('SubscriptionList', () => {
 
   describe('with subscriptions', () => {
     beforeAll(() => {
-      vi.mocked(findSubscriptions).mockResolvedValue(subscriptions);
+      vi.mocked(findSubscriptions).mockResolvedValue([
+        monthlySubscription,
+        yearlySubscription,
+      ]);
     });
 
     it('should hide no subscription placeholder', async () => {

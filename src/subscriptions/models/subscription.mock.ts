@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { category } from '../../categories/models/category.mock.ts';
+import { categoryMock } from '../../categories/models/category.mock.ts';
 import type { SubscriptionModel } from './subscription.model.ts';
 
 export const monthlySubscription = {
@@ -12,7 +12,7 @@ export const monthlySubscription = {
     each: 1,
     period: 'monthly',
   },
-  category,
+  category: categoryMock,
 } as const satisfies SubscriptionModel;
 
 export const yearlySubscription = {
@@ -25,6 +25,7 @@ export const yearlySubscription = {
     each: 1,
     period: 'yearly',
   },
+  category: null,
 } as const satisfies SubscriptionModel;
 
 export const twoMonthlySubscription = {
@@ -37,7 +38,7 @@ export const twoMonthlySubscription = {
     each: 2,
     period: 'monthly',
   },
-  category,
+  category: categoryMock,
 } as const satisfies SubscriptionModel;
 
 export const twoYearlySubscription = {
@@ -50,6 +51,5 @@ export const twoYearlySubscription = {
     each: 2,
     period: 'yearly',
   },
+  category: null,
 } as const satisfies SubscriptionModel;
-
-export const subscriptions = [monthlySubscription, yearlySubscription] as const;

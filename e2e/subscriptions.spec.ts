@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import dayjs from 'dayjs';
 import {
   monthlySubscription,
-  subscriptions as subscriptionsMock,
+  yearlySubscription,
 } from '../src/subscriptions/models/subscription.mock';
 import type {
   InsertSubscriptionModel,
@@ -14,7 +14,10 @@ import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom.t
 test.describe('subscriptions', () => {
   test('should find subscriptions', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
-    const subscriptions = [...subscriptionsMock];
+    const subscriptions = [
+      monthlySubscription,
+      yearlySubscription,
+    ] satisfies ReadonlyArray<SubscriptionModel>;
 
     await pom.goto();
     await populateDb(page, subscriptions);

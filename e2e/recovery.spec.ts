@@ -7,7 +7,10 @@ import { RecoveryExportPom } from '../src/recovery/pages/recovery-export.pom.ts'
 import { RecoveryImportPom } from '../src/recovery/pages/recovery-import.pom.ts';
 import { RecoveryPom } from '../src/recovery/pages/recovery.pom.ts';
 import { recoveryRoute } from '../src/recovery/types/recovery-route.ts';
-import { subscriptions } from '../src/subscriptions/models/subscription.mock.ts';
+import {
+  monthlySubscription,
+  yearlySubscription,
+} from '../src/subscriptions/models/subscription.mock.ts';
 import type { SubscriptionModel } from '../src/subscriptions/models/subscription.model.ts';
 import { rootRoute } from '../src/ui/types/root-route.ts';
 
@@ -26,7 +29,10 @@ test.describe('recovery', () => {
 
   test('should export all subscriptions as a JSON file', async ({ page }) => {
     const pom = new RecoveryExportPom(page);
-    const subscriptionsToExport = subscriptions;
+    const subscriptionsToExport = [
+      monthlySubscription,
+      yearlySubscription,
+    ] satisfies ReadonlyArray<SubscriptionModel>;
 
     await pom.goto();
     await populateDb(page, subscriptionsToExport);

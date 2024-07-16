@@ -2,17 +2,34 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../../db/globals/db.ts';
 import { cleanUpDb } from '../../db/utils/clean-up-db.ts';
 import { populateDb } from '../../db/utils/populate-db.ts';
-import { monthlySubscription, subscriptions } from './subscription.mock.ts';
-import { deleteSubscription } from './subscription.table.ts';
+import {
+  monthlySubscription,
+  yearlySubscription,
+} from './subscription.mock.ts';
+import type { SubscriptionModel } from './subscription.model.ts';
+import { deleteSubscription, findSubscriptions } from './subscription.table.ts';
 
 describe('subscription.table', () => {
   describe('with data', () => {
-    beforeEach(async () => await populateDb(subscriptions));
+    beforeEach(
+      async () => await populateDb([monthlySubscription, yearlySubscription]),
+    );
 
     afterEach(async () => await cleanUpDb());
 
-    it('should delete subscription with all its links', async () => {
-      const subscription = monthlySubscription;
+    it('should find subscriptions', async () => {
+      const subscriptions = [
+        monthlySubscription,
+        yearlySubscription,
+      ] satisfies ReadonlyArray<SubscriptionModel>;
+
+      expect(await findSubscriptions()).toEqualIgnoreOrder(subscriptions);
+    });
+
+    it('should delete subscription', async () => {
+      const subscription = {
+        ...monthlySubscription,
+      } satisfies SubscriptionModel;
 
       await deleteSubscription(subscription.id);
 

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { category } from '../src/categories/models/category.mock.ts';
+import { categoryMock } from '../src/categories/models/category.mock.ts';
 import type {
   CategoryModel,
   InsertCategoryModel,
@@ -9,7 +9,7 @@ import { SubscriptionsPom } from '../src/subscriptions/pages/subscriptions.pom.t
 test.describe('categories', () => {
   test('should find categories', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
-    const categories = [category];
+    const categories = [categoryMock];
 
     await pom.goto();
     await populateDb(page, categories);
@@ -24,7 +24,7 @@ test.describe('categories', () => {
   test('should insert category', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
     const categoryToCreate = {
-      ...category,
+      ...categoryMock,
     } as const satisfies InsertCategoryModel;
 
     await pom.goto();
@@ -40,7 +40,7 @@ test.describe('categories', () => {
   test('should update category', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
     const categoryToUpdate = {
-      ...category,
+      ...categoryMock,
     } as const satisfies InsertCategoryModel;
     const updatedCategory = {
       ...categoryToUpdate,
@@ -62,7 +62,7 @@ test.describe('categories', () => {
   test('should delete category', async ({ page }) => {
     const pom = new SubscriptionsPom(page);
     const categoryToDelete = {
-      ...category,
+      ...categoryMock,
     } as const satisfies CategoryModel;
 
     await pom.goto();
