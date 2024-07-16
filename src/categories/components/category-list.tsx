@@ -44,7 +44,7 @@ export const CategoryList = memo(
 );
 
 export interface CategoryListProps {
-  categories: Array<CategoryModel>;
+  categories: ReadonlyArray<CategoryModel>;
   onDelete(id: number): Promise<void> | void;
   onUpdate(category: CategoryModel): Promise<void> | void;
 }

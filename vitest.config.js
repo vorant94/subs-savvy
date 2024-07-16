@@ -8,11 +8,11 @@ export default mergeConfig(
       environment: 'happy-dom',
       root: './src',
       setupFiles: ['./src/test-setup.ts'],
-      mockReset: true,
       coverage: {
         reportsDirectory: '../coverage',
         reporter: ['text', 'html'],
         exclude: [
+          '**/*.spec.*',
           '**/types/*',
           '**/globals/*',
           '**/models/*.model.ts',

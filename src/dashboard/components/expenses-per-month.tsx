@@ -73,7 +73,7 @@ const subscriptionsByMonthInitial: Array<SubscriptionsAggregatedByMonth> =
 const startOfYear = dayjs(new Date()).startOf('year').toDate();
 
 function aggregateSubscriptionsByMonth(
-  subscriptions: Array<SubscriptionModel>,
+  subscriptions: ReadonlyArray<SubscriptionModel>,
 ): Array<SubscriptionsAggregatedByMonth> {
   const subscriptionsByMonth = structuredClone(subscriptionsByMonthInitial);
 

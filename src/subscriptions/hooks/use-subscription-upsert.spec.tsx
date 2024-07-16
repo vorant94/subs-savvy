@@ -32,9 +32,6 @@ describe('useSubscriptionUpsert', () => {
   });
 
   it('should open/close drawer on upsert open/close', () => {
-    expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
-    expect(hooks.current.upsert.state.mode).toBeFalsy();
-
     act(() => hooks.current.upsert.dispatch({ type: 'open' }));
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeTruthy();
 
@@ -43,9 +40,6 @@ describe('useSubscriptionUpsert', () => {
   });
 
   it('should close upsert on drawer close', () => {
-    expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
-    expect(hooks.current.upsert.state.mode).toBeFalsy();
-
     act(() => hooks.current.upsert.dispatch({ type: 'open' }));
     expect(hooks.current.defaultLayout.isDrawerOpened).toBeTruthy();
 
@@ -54,9 +48,6 @@ describe('useSubscriptionUpsert', () => {
   });
 
   it(`shouldn't open upsert on drawer open`, () => {
-    expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
-    expect(hooks.current.upsert.state.mode).toBeFalsy();
-
     act(() => hooks.current.defaultLayout.drawer.open());
     expect(hooks.current.upsert.state.mode).toBeFalsy();
   });

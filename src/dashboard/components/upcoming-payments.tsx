@@ -43,8 +43,8 @@ interface SubscriptionWithNextPaymentAt extends SubscriptionModel {
 }
 
 function filterSubscriptionsWithNextPaymentAt(
-  subscriptions: Array<SubscriptionModel>,
-): Array<SubscriptionWithNextPaymentAt> {
+  subscriptions: ReadonlyArray<SubscriptionModel>,
+): ReadonlyArray<SubscriptionWithNextPaymentAt> {
   return subscriptions
     .map((subscription) => ({
       ...subscription,

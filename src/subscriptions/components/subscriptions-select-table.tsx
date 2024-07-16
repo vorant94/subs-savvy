@@ -91,7 +91,7 @@ export const SubscriptionsSelectTable = memo(
 );
 
 export interface SubscriptionsSelectTableProps {
-  subscriptions: Array<SubscriptionModel>;
+  subscriptions: ReadonlyArray<SubscriptionModel>;
   selectedIds: Array<number>;
   setSelectedIds: Dispatch<SetStateAction<Array<number>>>;
 }

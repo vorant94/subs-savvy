@@ -8,7 +8,7 @@ import {
   type UpdateCategoryModel,
 } from './category.model.ts';
 
-export async function findCategories(): Promise<Array<CategoryModel>> {
+export async function findCategories(): Promise<ReadonlyArray<CategoryModel>> {
   return db.transaction('r', db.categories, async () => {
     const raws = await db.categories.toArray();
 

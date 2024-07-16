@@ -18,8 +18,8 @@ export function useSubscriptions(): UseSubscriptions {
 }
 
 export interface UseSubscriptions {
-  subscriptions: Array<SubscriptionModel>;
-  categories: Array<CategoryModel>;
+  subscriptions: ReadonlyArray<SubscriptionModel>;
+  categories: ReadonlyArray<CategoryModel>;
   selectedCategory: CategoryModel | null;
   selectCategory(categoryId: string | null): void;
 }

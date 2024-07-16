@@ -9,7 +9,7 @@ import {
   type UpdateSubscriptionModel,
 } from './subscription.model.ts';
 
-export function findSubscriptions(): Promise<Array<SubscriptionModel>> {
+export function findSubscriptions(): Promise<ReadonlyArray<SubscriptionModel>> {
   return db.transaction('r', db.subscriptions, db.categories, async () => {
     const raws = await db.subscriptions.orderBy('price').reverse().toArray();
 

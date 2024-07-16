@@ -5,3 +5,5 @@ export const category = {
   name: 'Basics',
   color: '#000000',
 } as const satisfies CategoryModel;
+
+export const categories = [category] as const;
