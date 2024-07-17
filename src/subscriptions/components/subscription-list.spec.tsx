@@ -10,15 +10,15 @@ import {
   it,
   vi,
 } from 'vitest';
-import { SubscriptionsProvider } from '../hooks/use-subscriptions';
+import { useSubscriptions } from '../hooks/use-subscriptions';
+import { useSubscriptionsMock } from '../hooks/use-subscriptions.mock.ts';
 import {
   monthlySubscription,
   yearlySubscription,
 } from '../models/subscription.mock.ts';
-import { findSubscriptions } from '../models/subscription.table.ts';
 import { SubscriptionList } from './subscription-list';
 
-vi.mock(import('../models/subscription.table.ts'));
+vi.mock(import('../hooks/use-subscriptions.tsx'));
 
 describe('SubscriptionList', () => {
   let screen: RenderResult;
@@ -31,24 +31,12 @@ describe('SubscriptionList', () => {
     vi.restoreAllMocks();
   });
 
-  describe('without subscriptions', () => {
+  describe('with data', () => {
     beforeAll(() => {
-      vi.mocked(findSubscriptions).mockResolvedValue([]);
-    });
-
-    it('should show no subscription placeholder', async () => {
-      await waitFor(() =>
-        expect(screen.queryByText('No Subscriptions')).toBeVisible(),
-      );
-    });
-  });
-
-  describe('with subscriptions', () => {
-    beforeAll(() => {
-      vi.mocked(findSubscriptions).mockResolvedValue([
-        monthlySubscription,
-        yearlySubscription,
-      ]);
+      vi.mocked(useSubscriptions).mockReturnValue({
+        ...useSubscriptionsMock,
+        subscriptions: [monthlySubscription, yearlySubscription],
+      });
     });
 
     it('should hide no subscription placeholder', async () => {
@@ -57,12 +45,20 @@ describe('SubscriptionList', () => {
       );
     });
   });
+
+  describe('without data', () => {
+    beforeAll(() => {
+      vi.mocked(useSubscriptions).mockReturnValue({ ...useSubscriptionsMock });
+    });
+
+    it('should show no subscription placeholder', async () => {
+      await waitFor(() =>
+        expect(screen.queryByText('No Subscriptions')).toBeVisible(),
+      );
+    });
+  });
 });
 
 const wrapper: FC<PropsWithChildren> = ({ children }) => {
-  return (
-    <MantineProvider>
-      <SubscriptionsProvider>{children}</SubscriptionsProvider>
-    </MantineProvider>
-  );
+  return <MantineProvider>{children}</MantineProvider>;
 };

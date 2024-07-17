@@ -12,6 +12,7 @@ import type { CategoryModel } from '../../categories/models/category.model.ts';
 import { findCategories } from '../../categories/models/category.table.ts';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
 import { findSubscriptions } from '../models/subscription.table.ts';
+import { useSubscriptionsMock } from './use-subscriptions.mock.ts';
 
 export function useSubscriptions(): UseSubscriptions {
   return useContext(subscriptionsContext);
@@ -71,9 +72,5 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
   );
 });
 
-const subscriptionsContext = createContext<UseSubscriptions>({
-  subscriptions: [],
-  categories: [],
-  selectedCategory: null,
-  selectCategory() {},
-});
+const subscriptionsContext =
+  createContext<UseSubscriptions>(useSubscriptionsMock);

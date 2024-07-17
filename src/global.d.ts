@@ -1,6 +1,6 @@
 import 'vitest';
-import type { ArrayMatchers } from './array/utils/array-matchers.ts';
-import type { DateMatchers } from './date/utils/date-matchers.ts';
+import type { ArrayMatchers } from './array/utils/array.matchers.ts';
+import type { DateMatchers } from './date/utils/date.matchers.ts';
 import type { db } from './db/globals/db.ts';
 
 declare global {

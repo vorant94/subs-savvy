@@ -11,6 +11,7 @@ import {
 } from 'react';
 import { useDefaultLayout } from '../../ui/hooks/use-default-layout.tsx';
 import type { SubscriptionModel } from '../models/subscription.model.ts';
+import { useSubscriptionUpsertMock } from './use-subscription-upsert.mock.ts';
 
 export function useSubscriptionUpsert() {
   return useContext(subscriptionUpsertContext);
@@ -98,13 +99,9 @@ export const SubscriptionUpsertProvider = memo(
   },
 );
 
-const subscriptionUpsertContext = createContext<UseSubscriptionUpsert>({
-  state: {
-    subscription: null,
-    mode: null,
-  },
-  dispatch: () => {},
-});
+const subscriptionUpsertContext = createContext<UseSubscriptionUpsert>(
+  useSubscriptionUpsertMock,
+);
 
 const stateDefaults: SubscriptionUpsertState = {
   mode: null,
