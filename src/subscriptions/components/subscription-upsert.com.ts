@@ -3,6 +3,7 @@ import { DatePickerInputCom } from '../../ui/components/date-picker-input.com';
 import { InputCom } from '../../ui/components/input.com';
 import { SelectCom } from '../../ui/components/select.com';
 import { createDatePickerInputAriaLabels } from '../../ui/utils/create-date-picker-input-aria-labels';
+import type { UpsertSubscriptionModel } from '../models/subscription.model.ts';
 import {
   subscriptionCyclePeriodToLabel,
   type SubscriptionCyclePeriod,
@@ -65,5 +66,26 @@ export class SubscriptionUpsertCom {
       this.page.getByLabel('period'),
       subscriptionCyclePeriodToLabel,
     );
+  }
+
+  async fill(subscription: UpsertSubscriptionModel): Promise<void> {
+    await this.nameControl.fill(subscription.name);
+
+    if (subscription.description) {
+      await this.descriptionControl.fill(subscription.description);
+    }
+
+    await this.iconControl.fill(subscription.icon);
+    await this.priceControl.fill(subscription.price);
+    await this.startedAtControl.fill(subscription.startedAt);
+
+    if (subscription.endedAt) {
+      await this.endedAtControl.fill(subscription.endedAt);
+    }
+
+    await this.eachControl.fill(subscription.cycle.each);
+    await this.periodControl.fill(subscription.cycle.period);
+
+    // TODO: add filling category select here
   }
 }

@@ -39,6 +39,8 @@ describe('SubscriptionList', () => {
       });
     });
 
+    it.todo('should render list items');
+
     it('should hide no subscription placeholder', async () => {
       await waitFor(() =>
         expect(screen.queryByText('No Subscriptions')).not.toBeInTheDocument(),

@@ -38,7 +38,7 @@ test.describe('subscriptions', () => {
     await pom.goto();
 
     await pom.addSubscriptionButton.click();
-    await pom.fillSubscriptionUpsert(subscriptionToCreate);
+    await pom.subscriptionUpsert.fill(subscriptionToCreate);
     await pom.subscriptionUpsert.insertButton.click();
 
     await expect(pom.subscriptionListItem(subscriptionToCreate)).toBeVisible();
@@ -58,7 +58,7 @@ test.describe('subscriptions', () => {
     await populateDb(page, [subscriptionToUpdate]);
 
     await pom.subscriptionListItem(subscriptionToUpdate).click();
-    await pom.fillSubscriptionUpsert(updatedSubscription);
+    await pom.subscriptionUpsert.fill(updatedSubscription);
     await pom.subscriptionUpsert.updateButton.click();
 
     await expect(
