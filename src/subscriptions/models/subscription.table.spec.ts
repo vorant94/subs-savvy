@@ -12,6 +12,7 @@ import {
   deleteSubscription,
   findSubscriptions,
   insertSubscription,
+  insertSubscriptions,
   updateSubscription,
 } from './subscription.table.ts';
 
@@ -30,6 +31,14 @@ describe('subscription.table', () => {
       ] satisfies ReadonlyArray<SubscriptionModel>;
 
       expect(await findSubscriptions()).toEqualIgnoreOrder(subscriptions);
+    });
+
+    it('should throw if there are subscriptions with non-existing categories', async () => {
+      await db.categories.delete(categoryMock.id);
+
+      expect(async () => await findSubscriptions()).rejects.toThrowError(
+        /Category with id 1 not found!/,
+      );
     });
 
     it('should update subscription', async () => {
@@ -61,7 +70,7 @@ describe('subscription.table', () => {
 
       await expect(
         async () => await updateSubscription(subscriptionToUpdate),
-      ).rejects.toThrowError(/No category with id 7/);
+      ).rejects.toThrowError(/Category with id 7 not found!/);
     });
 
     it('should delete subscription', async () => {
@@ -95,6 +104,19 @@ describe('subscription.table', () => {
       expect(await db.subscriptions.get(id)).toEqual(expected);
     });
 
+    it('should insert subscriptions', async () => {
+      const subscriptionsToInsert = [
+        monthlySubscription,
+        yearlySubscription,
+      ].map(({ id: _, ...subscriptionToInsert }) => subscriptionToInsert);
+
+      await insertSubscriptions(subscriptionsToInsert);
+
+      expect((await db.subscriptions.toArray()).length).toEqual(
+        subscriptionsToInsert.length,
+      );
+    });
+
     it(`should throw on insert if subscription category doesn't exist`, async () => {
       const { id: _, ...subscriptionToInsert } = {
         ...monthlySubscription,
@@ -106,7 +128,7 @@ describe('subscription.table', () => {
 
       await expect(
         async () => await insertSubscription(subscriptionToInsert),
-      ).rejects.toThrowError(/No category with id 7/);
+      ).rejects.toThrowError(/Category with id 7 not found!/);
     });
   });
 });

@@ -52,11 +52,20 @@ export async function deleteCategory(id: number): Promise<void> {
   });
 }
 
-async function _getCategory(id: number): Promise<CategoryModel> {
+/**
+ * @internal should not be used outside category.table, the exception is only another table module like subscription.table
+ */
+export async function _getCategory(id: number): Promise<CategoryModel> {
   const raw = await db.categories.get(id);
   if (!raw) {
-    throw new Error(`Category not found!`);
+    throw new CategoryNotFound(id);
   }
 
   return categorySchema.parse(raw);
+}
+
+export class CategoryNotFound extends Error {
+  constructor(categoryId: number) {
+    super(`Category with id ${categoryId} not found!`);
+  }
 }

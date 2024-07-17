@@ -1,4 +1,5 @@
 import type { CategoryModel } from '../../categories/models/category.model.ts';
+import { _getCategory } from '../../categories/models/category.table.ts';
 import { db } from '../../db/globals/db.ts';
 import {
   insertSubscriptionSchema,
@@ -17,11 +18,7 @@ export function findSubscriptions(): Promise<ReadonlyArray<SubscriptionModel>> {
       raws.map(async ({ categoryId, ...raw }) => {
         let category: CategoryModel | null = null;
         if (categoryId) {
-          category = (await db.categories.get(categoryId)) ?? null;
-
-          if (!category) {
-            throw new Error(`Category not found!`);
-          }
+          category = await _getCategory(categoryId);
         }
 
         return subscriptionSchema.parse({ ...raw, category });
@@ -53,10 +50,7 @@ export function updateSubscription(
     const { id, category, ...rest } = updateSubscriptionSchema.parse(raw);
 
     if (category) {
-      const rawCategory = await db.categories.get(category.id);
-      if (!rawCategory) {
-        throw new Error(`No category with id ${category.id}`);
-      }
+      await _getCategory(category.id);
     }
 
     await db.subscriptions.update(id, {
@@ -77,16 +71,12 @@ export function deleteSubscription(id: number): Promise<void> {
 async function _getSubscription(id: number): Promise<SubscriptionModel> {
   const raw = await db.subscriptions.get(id);
   if (!raw) {
-    throw new Error(`Subscription not found!`);
+    throw new SubscriptionNotFound(id);
   }
 
   let category: CategoryModel | null = null;
   if (raw.categoryId) {
-    category = (await db.categories.get(raw.categoryId)) ?? null;
-
-    if (!category) {
-      throw new Error(`Category not found!`);
-    }
+    category = await _getCategory(raw.categoryId);
   }
 
   return subscriptionSchema.parse({ ...raw, category });
@@ -98,12 +88,15 @@ async function _insertSubscription(
   const { category, ...rest } = insertSubscriptionSchema.parse(raw);
 
   if (category) {
-    const rawCategory = await db.categories.get(category.id);
-    if (!rawCategory) {
-      throw new Error(`No category with id ${category.id}`);
-    }
+    await _getCategory(category.id);
   }
 
   const id = await db.subscriptions.add({ ...rest, categoryId: category?.id });
   return _getSubscription(id);
+}
+
+export class SubscriptionNotFound extends Error {
+  constructor(subscriptionId: number) {
+    super(`Subscription with id ${subscriptionId} not found!`);
+  }
 }
