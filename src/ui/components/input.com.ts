@@ -1,9 +1,9 @@
-import type { Locator } from '@playwright/test';
+import type { Locator } from "@playwright/test";
 
 export class InputCom {
-  constructor(private readonly locator: Locator) {}
+	constructor(private readonly locator: Locator) {}
 
-  async fill(value: string | number): Promise<void> {
-    await this.locator.fill(`${value}`);
-  }
+	async fill(value: string | number): Promise<void> {
+		await this.locator.fill(`${value}`);
+	}
 }

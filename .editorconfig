@@ -3,23 +3,8 @@ root = true
 
 [*]
 charset = utf-8
-indent_style = space
-indent_size = 2
+indent_style = tab
+tab_width = 2
 insert_final_newline = true
 trim_trailing_whitespace = true
-
-[*.ts]
-quote_type = single
-
-[*.tsx]
-quote_type = single
-
-[*.mjs]
-quote_type = single
-
-[*.cjs]
-quote_type = single
-
-[*.md]
-max_line_length = off
-trim_trailing_whitespace = false
+max_line_length = 80

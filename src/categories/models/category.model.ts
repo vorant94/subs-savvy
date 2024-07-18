@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const categorySchema = z.object({
-  id: z.number(),
-  name: z.string().min(1),
-  color: z.string(),
+	id: z.number(),
+	name: z.string().min(1),
+	color: z.string(),
 });
 export type CategoryModel = z.infer<typeof categorySchema>;
 

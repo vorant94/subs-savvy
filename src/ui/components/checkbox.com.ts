@@ -1,9 +1,9 @@
-import type { Locator } from '@playwright/test';
+import type { Locator } from "@playwright/test";
 
 export class CheckboxCom {
-  constructor(private readonly locator: Locator) {}
+	constructor(private readonly locator: Locator) {}
 
-  async fill(value: boolean): Promise<void> {
-    value ? await this.locator.check() : await this.locator.uncheck();
-  }
+	async fill(value: boolean): Promise<void> {
+		value ? await this.locator.check() : await this.locator.uncheck();
+	}
 }

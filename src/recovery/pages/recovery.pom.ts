@@ -1,16 +1,14 @@
-import type { Locator, Page } from '@playwright/test';
+import type { Locator, Page } from "@playwright/test";
 
 export class RecoveryPom {
-  recoveryNavLink: Locator;
+	recoveryNavLink: Locator;
 
-  constructor(private readonly page: Page) {
-    this.recoveryNavLink = this.page.getByRole('link', {
-      name: 'recovery',
-    });
-  }
+	constructor(private readonly page: Page) {
+		this.recoveryNavLink = this.page.getByRole("link", { name: "recovery" });
+	}
 
-  async goto() {
-    await this.page.goto('/');
-    await this.recoveryNavLink.click();
-  }
+	async goto() {
+		await this.page.goto("/");
+		await this.recoveryNavLink.click();
+	}
 }

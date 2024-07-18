@@ -1,47 +1,47 @@
 {
-  "compilerOptions": {
-    /* Base */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "ES2022",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
+	"compilerOptions": {
+		/* Base */
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "ES2022",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
 
-    /* Strictness */
-    "strict": true,
-    "verbatimModuleSyntax": true,
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": false,
+		/* Strictness */
+		"strict": true,
+		"verbatimModuleSyntax": true,
+		"forceConsistentCasingInFileNames": true,
+		"useDefineForClassFields": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": false,
 
-    /* Linting */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
+		/* Linting */
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitReturns": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
 
-    /* Bundler/Compiler */
-    "moduleResolution": "Bundler",
-    "module": "ESNext",
-    "noEmit": true,
+		/* Bundler/Compiler */
+		"moduleResolution": "Bundler",
+		"module": "ESNext",
+		"noEmit": true,
 
-    /* Runtime/Framework */
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx",
-    "allowImportingTsExtensions": true,
+		/* Runtime/Framework */
+		"lib": ["ES2023", "DOM", "DOM.Iterable"],
+		"jsx": "react-jsx",
+		"allowImportingTsExtensions": true,
 
-    /* Misc */
-    "types": [
-      "vite/client",
-      "vite-plugin-svgr/client",
-      "@total-typescript/ts-reset"
-    ]
-  },
-  "include": ["src", "e2e"]
+		/* Misc */
+		"types": [
+			"vite/client",
+			"vite-plugin-svgr/client",
+			"@total-typescript/ts-reset"
+		]
+	},
+	"include": ["src", "e2e"]
 }

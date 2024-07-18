@@ -1,15 +1,15 @@
-import type { SubscriptionModel } from '../models/subscription.model.ts';
+import type { SubscriptionModel } from "../models/subscription.model.ts";
 
-export const compareSubscriptionsDesc = createCompareSubscriptions('desc');
+export const compareSubscriptionsDesc = createCompareSubscriptions("desc");
 
-export const compareSubscriptionsAsc = createCompareSubscriptions('asc');
+export const compareSubscriptionsAsc = createCompareSubscriptions("asc");
 
 function createCompareSubscriptions(
-  askOrDesc: AscOrDesc,
+	askOrDesc: AscOrDesc,
 ): (a: SubscriptionModel, b: SubscriptionModel) => number {
-  return (a: SubscriptionModel, b: SubscriptionModel) => {
-    return askOrDesc === 'asc' ? a.price - b.price : b.price - a.price;
-  };
+	return (a: SubscriptionModel, b: SubscriptionModel) => {
+		return askOrDesc === "asc" ? a.price - b.price : b.price - a.price;
+	};
 }
 
-type AscOrDesc = 'desc' | 'asc';
+type AscOrDesc = "desc" | "asc";
