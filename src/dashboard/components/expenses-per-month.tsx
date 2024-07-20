@@ -84,16 +84,18 @@ function aggregateSubscriptionsByMonth(
 				continue;
 			}
 
-			if (!subscriptionsByMonth[month]) {
-				subscriptionsByMonth[month] = {
-					totalExpenses: 0,
+			const subByMonth = subscriptionsByMonth[month];
+			if (!subByMonth) {
+				subscriptionsByMonth.push({
+					totalExpenses: priceThisMonth,
 					month: monthToMonthName[month],
-					subscriptions: [],
-				};
+					subscriptions: [subscription],
+				});
+				continue;
 			}
 
-			subscriptionsByMonth[month].totalExpenses += priceThisMonth;
-			subscriptionsByMonth[month].subscriptions.push(subscription);
+			subByMonth.totalExpenses += priceThisMonth;
+			subByMonth.subscriptions.push(subscription);
 		}
 	}
 

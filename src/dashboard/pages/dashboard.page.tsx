@@ -10,7 +10,6 @@ import {
 import { cn } from "../../ui/utils/cn.ts";
 import { ExpensesByCategory } from "../components/expenses-by-category.tsx";
 import { ExpensesPerMonth } from "../components/expenses-per-month.tsx";
-import { UpcomingPayments } from "../components/upcoming-payments.tsx";
 
 export const DashboardPage = memo(() => {
 	const upsert = useSubscriptionUpsert();
@@ -32,7 +31,7 @@ export const DashboardPage = memo(() => {
 			>
 				<ExpensesPerMonth />
 
-				<UpcomingPayments />
+				{/*<UpcomingPayments />*/}
 
 				<ExpensesByCategory />
 			</div>
