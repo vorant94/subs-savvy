@@ -1,5 +1,4 @@
 import { Card, Title } from "@mantine/core";
-import dayjs from "dayjs";
 import { memo, useMemo } from "react";
 import {
 	CartesianGrid,
@@ -7,6 +6,7 @@ import {
 	Pie,
 	PieChart,
 	ResponsiveContainer,
+	Tooltip,
 } from "recharts";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
@@ -15,6 +15,11 @@ import type { SubscriptionModel } from "../../subscriptions/models/subscription.
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
+import { startOfYear } from "../globals/start-of-year.ts";
+import {
+	ChartTooltipContent,
+	type ChartTooltipContentPayload,
+} from "./chart-tooltip-content.tsx";
 
 export const ExpensesByCategory = memo(() => {
 	const { subscriptions } = useSubscriptions();
@@ -45,7 +50,6 @@ export const ExpensesByCategory = memo(() => {
 			>
 				<PieChart>
 					<CartesianGrid strokeDasharray="3 3" />
-
 					<Pie
 						data={aggregatedSubscriptions}
 						dataKey="totalExpenses"
@@ -58,19 +62,17 @@ export const ExpensesByCategory = memo(() => {
 							/>
 						))}
 					</Pie>
+					<Tooltip content={<ChartTooltipContent />} />
 				</PieChart>
 			</ResponsiveContainer>
 		</Card>
 	);
 });
 
-interface SubscriptionsAggregatedByCategory {
+interface SubscriptionsAggregatedByCategory extends ChartTooltipContentPayload {
 	category: CategoryModel;
-	totalExpenses: number;
-	subscriptions: Array<SubscriptionModel>;
 }
 
-const startOfYear = dayjs(new Date()).startOf("year").toDate();
 const noCategoryPlaceholder = {
 	id: -1,
 	name: "No Category",
@@ -100,13 +102,18 @@ function aggregateSubscriptionsByCategory(
 			subscriptionsByCategory.push({
 				category: subscription.category ?? noCategoryPlaceholder,
 				totalExpenses: priceThisYear,
-				subscriptions: [subscription],
+				subscriptions: [
+					{ ...subscription, price: roundToDecimal(priceThisYear) },
+				],
 			});
 			continue;
 		}
 
 		subByCategory.totalExpenses += priceThisYear;
-		subByCategory.subscriptions.push(subscription);
+		subByCategory.subscriptions.push({
+			...subscription,
+			price: roundToDecimal(priceThisYear),
+		});
 	}
 
 	for (const subsByCategory of subscriptionsByCategory) {

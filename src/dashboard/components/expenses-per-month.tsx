@@ -1,6 +1,6 @@
-import { Card, Divider, Text, Title } from "@mantine/core";
+import { Card, Title } from "@mantine/core";
 import dayjs from "dayjs";
-import { Fragment, memo, useMemo } from "react";
+import { memo, useMemo } from "react";
 import {
 	Bar,
 	BarChart,
@@ -9,7 +9,6 @@ import {
 	Tooltip,
 	XAxis,
 } from "recharts";
-import type { TooltipProps } from "recharts/types/component/Tooltip";
 import type { MonthName } from "../../date/types/month-name.ts";
 import { monthToMonthName, months } from "../../date/types/month.ts";
 import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
@@ -18,6 +17,11 @@ import type { SubscriptionModel } from "../../subscriptions/models/subscription.
 import { calculateSubscriptionPriceForMonth } from "../../subscriptions/utils/calculate-subscription-price-for-month.ts";
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
+import { startOfYear } from "../globals/start-of-year.ts";
+import {
+	ChartTooltipContent,
+	type ChartTooltipContentPayload,
+} from "./chart-tooltip-content.tsx";
 
 export const ExpensesPerMonth = memo(() => {
 	const { subscriptions } = useSubscriptions();
@@ -54,20 +58,16 @@ export const ExpensesPerMonth = memo(() => {
 						fill="#8884d8"
 					/>
 					<XAxis dataKey="month" />
-					<Tooltip content={<TooltipContent />} />
+					<Tooltip content={<ChartTooltipContent />} />
 				</BarChart>
 			</ResponsiveContainer>
 		</Card>
 	);
 });
 
-interface SubscriptionsAggregatedByMonth {
+interface SubscriptionsAggregatedByMonth extends ChartTooltipContentPayload {
 	month: MonthName;
-	totalExpenses: number;
-	subscriptions: Array<SubscriptionModel>;
 }
-
-const startOfYear = dayjs(new Date()).startOf("year").toDate();
 
 function aggregateSubscriptionsByMonth(
 	subscriptions: ReadonlyArray<SubscriptionModel>,
@@ -89,13 +89,18 @@ function aggregateSubscriptionsByMonth(
 				subscriptionsByMonth.push({
 					totalExpenses: priceThisMonth,
 					month: monthToMonthName[month],
-					subscriptions: [subscription],
+					subscriptions: [
+						{ ...subscription, price: roundToDecimal(priceThisMonth) },
+					],
 				});
 				continue;
 			}
 
 			subByMonth.totalExpenses += priceThisMonth;
-			subByMonth.subscriptions.push(subscription);
+			subByMonth.subscriptions.push({
+				...subscription,
+				price: roundToDecimal(priceThisMonth),
+			});
 		}
 	}
 
@@ -106,54 +111,3 @@ function aggregateSubscriptionsByMonth(
 
 	return subscriptionsByMonth;
 }
-
-const TooltipContent = memo(({ payload }: TooltipProps<number, string>) => {
-	const value = payload?.[0]?.value;
-	const subscriptions = (
-		payload?.[0]?.payload as SubscriptionsAggregatedByMonth
-	)?.subscriptions;
-
-	if ((!value && value !== 0) || !subscriptions) {
-		return <></>;
-	}
-
-	return (
-		<Card
-			shadow="xs"
-			padding="xs"
-			radius="md"
-			withBorder
-			className={cn("flex flex-col gap-2")}
-		>
-			<div className={cn("grid grid-cols-2 gap-1")}>
-				<Text size="sm">Total:</Text>
-				<Text
-					className={cn("justify-self-end")}
-					size="sm"
-				>
-					{value}
-				</Text>
-			</div>
-			<Divider />
-			<div className={cn("grid grid-cols-2 gap-1")}>
-				{subscriptions.map((subscription) => (
-					<Fragment key={subscription.id}>
-						<Text
-							size="xs"
-							c="dimmed"
-						>
-							{subscription.name}
-						</Text>
-						<Text
-							className={cn("justify-self-end")}
-							size="xs"
-							c="dimmed"
-						>
-							{subscription.price}
-						</Text>
-					</Fragment>
-				))}
-			</div>
-		</Card>
-	);
-});

@@ -28,15 +28,19 @@ export function calculateSubscriptionPriceForYear(
 			return subscription.price;
 		}
 		case "monthly": {
-			if (startedAtDayJs.isSame(now, "year")) {
-				return (
-					(subscription.price * (12 - startedAtDayJs.get("month"))) /
-					subscription.cycle.each
-				);
-			}
-
 			if (subscription.endedAt) {
 				const endedAtDayJs = dayjs(subscription.endedAt);
+
+				if (
+					endedAtDayJs.isSame(now, "year") &&
+					startedAtDayJs.isSame(now, "year")
+				) {
+					return (
+						(subscription.price *
+							(endedAtDayJs.get("month") - startedAtDayJs.get("month"))) /
+						subscription.cycle.each
+					);
+				}
 
 				if (endedAtDayJs.isSame(now, "year")) {
 					return (
@@ -44,6 +48,13 @@ export function calculateSubscriptionPriceForYear(
 						subscription.cycle.each
 					);
 				}
+			}
+
+			if (startedAtDayJs.isSame(now, "year")) {
+				return (
+					(subscription.price * (12 - startedAtDayJs.get("month"))) /
+					subscription.cycle.each
+				);
 			}
 
 			if (isSubscriptionExpired(subscription, now, "year")) {

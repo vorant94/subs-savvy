@@ -99,6 +99,20 @@ describe("calculateSubscriptionPriceForYear", () => {
 			).toEqual(subscription.price * 12);
 		});
 
+		it("startedAtYear = year = endedAtYear", () => {
+			const subscription = {
+				...monthlySubscription,
+				startedAt: dayjs(monthlySubscription.startedAt)
+					.set("month", 2)
+					.toDate(),
+				endedAt: dayjs(monthlySubscription.startedAt).set("month", 4).toDate(),
+			} satisfies SubscriptionModel;
+
+			expect(
+				calculateSubscriptionPriceForYear(subscription, startOfYear),
+			).toEqual(subscription.price * 2);
+		});
+
 		it("each = 2 && startedAtYear < year", () => {
 			const subscription = {
 				...twoMonthlySubscription,
