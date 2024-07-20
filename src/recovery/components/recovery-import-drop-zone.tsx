@@ -42,7 +42,6 @@ export const RecoveryImportDropZone = memo(
 				throw new Error("type of result should be string");
 			}
 
-			// TODO validate dbVersion
 			onRecoveryParsed(recoverySchema.parse(JSON.parse(result)));
 		};
 

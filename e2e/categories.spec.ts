@@ -81,7 +81,7 @@ test.describe("categories", () => {
 
 async function populateDb(
 	page: Page,
-	categories: Array<CategoryModel>,
+	categories: ReadonlyArray<CategoryModel>,
 ): Promise<void> {
 	await page.evaluate(async (categories) => {
 		await window.db.transaction("rw", window.db.categories, async () => {

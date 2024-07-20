@@ -26,6 +26,7 @@ export class SubscriptionUpsertCom {
 	endedAtControl: DatePickerInputCom;
 	eachControl: InputCom;
 	periodControl: SelectCom<SubscriptionCyclePeriod>;
+	categoryControl: SelectCom;
 
 	constructor(private readonly page: Page) {
 		this.insertButton = this.page.getByRole("button", { name: "insert" });
@@ -60,6 +61,7 @@ export class SubscriptionUpsertCom {
 			this.page.getByLabel("period"),
 			subscriptionCyclePeriodToLabel,
 		);
+		this.categoryControl = new SelectCom(this.page.getByLabel("category"));
 	}
 
 	async fill(subscription: UpsertSubscriptionModel): Promise<void> {
@@ -69,7 +71,7 @@ export class SubscriptionUpsertCom {
 			await this.descriptionControl.fill(subscription.description);
 		}
 
-		await this.iconControl.fill(subscription.icon);
+		await this.iconControl.fillWithValue(subscription.icon);
 		await this.priceControl.fill(subscription.price);
 		await this.startedAtControl.fill(subscription.startedAt);
 
@@ -78,8 +80,10 @@ export class SubscriptionUpsertCom {
 		}
 
 		await this.eachControl.fill(subscription.cycle.each);
-		await this.periodControl.fill(subscription.cycle.period);
+		await this.periodControl.fillWithValue(subscription.cycle.period);
 
-		// TODO: add filling category select here
+		if (subscription.category) {
+			await this.categoryControl.fillWithLabel(subscription.category.name);
+		}
 	}
 }

@@ -3,14 +3,24 @@ import type { Locator } from "@playwright/test";
 export class SelectCom<T extends string = string> {
 	constructor(
 		private readonly locator: Locator,
-		private readonly mapValueToLabel: Record<T, string>,
+		private readonly mapValueToLabel?: Record<T, string>,
 	) {}
 
-	async fill(value: T): Promise<void> {
+	async fillWithValue(value: T): Promise<void> {
 		await this.locator.nth(0).click();
+
+		if (!this.mapValueToLabel || !this.mapValueToLabel[value]) {
+			throw new Error(`No label is associated with value ${value}`);
+		}
+
 		await this.locator
 			.nth(1)
 			.getByRole("option", { name: this.mapValueToLabel[value] })
 			.click();
+	}
+
+	async fillWithLabel(label: string): Promise<void> {
+		await this.locator.nth(0).click();
+		await this.locator.nth(1).getByRole("option", { name: label }).click();
 	}
 }

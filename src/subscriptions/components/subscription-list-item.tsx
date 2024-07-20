@@ -6,7 +6,6 @@ import type { SubscriptionModel } from "../models/subscription.model.ts";
 import { subscriptionIconToSvg } from "../types/subscription-icon-to-svg.tsx";
 import { isSubscriptionExpired } from "../utils/is-subscription-expired.ts";
 
-// TODO gray out expired subscription
 export const SubscriptionListItem = memo(
 	({ subscription }: SubscriptionListItemProps) => {
 		const { dispatch: upsertDispatch } = useSubscriptionUpsert();

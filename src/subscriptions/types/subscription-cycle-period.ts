@@ -4,7 +4,6 @@ import type { ManipulateType } from "dayjs";
 export const subscriptionCyclePeriods = ["monthly", "yearly"] as const;
 export type SubscriptionCyclePeriod = (typeof subscriptionCyclePeriods)[number];
 
-// TODO add weekly
 export const subscriptionCyclePeriodToLabel = {
 	monthly: "Month",
 	yearly: "Year",
