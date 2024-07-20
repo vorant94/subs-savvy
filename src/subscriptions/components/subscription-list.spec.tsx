@@ -1,16 +1,12 @@
 import { MantineProvider } from "@mantine/core";
-import { type RenderResult, render, waitFor } from "@testing-library/react";
-import type { FC, PropsWithChildren } from "react";
 import {
-	type MockInstance,
-	afterEach,
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
+	type RenderResult,
+	fireEvent,
+	render,
+	waitFor,
+} from "@testing-library/react";
+import type { FC, PropsWithChildren } from "react";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { useSubscriptions } from "../hooks/use-subscriptions";
 import { useSubscriptionsMock } from "../hooks/use-subscriptions.mock.ts";
 import {
@@ -26,19 +22,15 @@ vi.mock(import("./subscription-list-item.tsx"));
 
 describe("SubscriptionList", () => {
 	let screen: RenderResult;
-	let listItemSpy: MockInstance;
 
 	beforeAll(() => {
-		vi.mocked(SubscriptionListItem.type).mockReturnValue(<div />);
-		listItemSpy = vi.spyOn(SubscriptionListItem, "type");
+		vi.mocked(SubscriptionListItem.type).mockImplementation(
+			({ subscription }) => <div data-testid={subscription.name} />,
+		);
 	});
 
 	beforeEach(() => {
 		screen = render(<SubscriptionList />, { wrapper });
-	});
-
-	afterEach(() => {
-		vi.clearAllMocks();
 	});
 
 	describe("with data", () => {
@@ -58,7 +50,7 @@ describe("SubscriptionList", () => {
 			await Promise.all(
 				subscriptions.map((subscription) =>
 					waitFor(() =>
-						expect(listItemSpy).toHaveBeenCalledWith({ subscription }, {}),
+						expect(screen.getByTestId(subscription.name)).toBeVisible(),
 					),
 				),
 			);
@@ -66,6 +58,30 @@ describe("SubscriptionList", () => {
 			await waitFor(() =>
 				expect(screen.queryByText("No Subscriptions")).not.toBeInTheDocument(),
 			);
+		});
+
+		it("should filter out subscription by name", async () => {
+			const filteredSubscription = {
+				...yearlySubscription,
+			} satisfies SubscriptionModel;
+			const filteredOutSubscription = {
+				...monthlySubscription,
+			} satisfies SubscriptionModel;
+
+			fireEvent.change(screen.getByLabelText("Name prefix"), {
+				target: { value: "te" },
+			});
+
+			await Promise.all([
+				waitFor(() =>
+					expect(screen.getByTestId(filteredSubscription.name)).toBeVisible(),
+				),
+				waitFor(() =>
+					expect(
+						screen.queryByTestId(filteredOutSubscription.name),
+					).not.toBeInTheDocument(),
+				),
+			]);
 		});
 	});
 
@@ -75,8 +91,6 @@ describe("SubscriptionList", () => {
 		});
 
 		it("should show no subscription placeholder instead of list items", async () => {
-			expect(listItemSpy).not.toHaveBeenCalled();
-
 			await waitFor(() =>
 				expect(screen.queryByText("No Subscriptions")).toBeVisible(),
 			);

@@ -1,5 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 import { CategorySelectCom } from "../../categories/components/category-select.com.ts";
+import { InputCom } from "../../ui/components/input.com.ts";
 import { SubscriptionUpsertCom } from "../components/subscription-upsert.com";
 import type {
 	SubscriptionModel,
@@ -9,6 +10,8 @@ import type {
 export class SubscriptionsPom {
 	addSubscriptionButton: Locator;
 	noSubscriptionsPlaceholder: Locator;
+	namePrefixControl: InputCom;
+	clearNamePrefixButton: Locator;
 
 	subscriptionUpsert: SubscriptionUpsertCom;
 
@@ -21,6 +24,8 @@ export class SubscriptionsPom {
 			name: "add sub",
 		});
 		this.noSubscriptionsPlaceholder = this.page.getByText("No Subscriptions");
+		this.namePrefixControl = new InputCom(this.page.getByLabel("name prefix"));
+		this.clearNamePrefixButton = this.page.getByLabel("clear name prefix");
 
 		this.subscriptionUpsert = new SubscriptionUpsertCom(this.page);
 

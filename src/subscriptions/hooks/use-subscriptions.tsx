@@ -1,15 +1,18 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import {
+	type PropsWithChildren,
 	createContext,
 	memo,
 	useCallback,
 	useContext,
 	useMemo,
 	useState,
-	type PropsWithChildren,
 } from "react";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
-import { findCategories } from "../../categories/models/category.table.ts";
+import {
+	CategoryNotFound,
+	findCategories,
+} from "../../categories/models/category.table.ts";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
 import { findSubscriptions } from "../models/subscription.table.ts";
 import { useSubscriptionsMock } from "./use-subscriptions.mock.ts";
@@ -38,10 +41,15 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
 	const selectCategory: (categoryId: string | null) => void = useCallback(
 		(categoryId) => {
 			if (categoryId) {
-				setSelectedCategory(
-					categories.find((category) => `${category.id}` === categoryId) ??
-						null,
+				const categoryToSelect = categories.find(
+					(category) => `${category.id}` === categoryId,
 				);
+
+				if (!categoryToSelect) {
+					throw new CategoryNotFound(+categoryId);
+				}
+
+				setSelectedCategory(categoryToSelect);
 			} else {
 				setSelectedCategory(null);
 			}

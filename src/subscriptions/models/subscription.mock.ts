@@ -18,7 +18,7 @@ export const monthlySubscription = {
 export const yearlySubscription = {
 	id: 2,
 	name: "Telegram",
-	price: 13.33,
+	price: 20.2,
 	startedAt: dayjs(new Date()).set("month", 2).toDate(),
 	icon: "telegram",
 	cycle: {

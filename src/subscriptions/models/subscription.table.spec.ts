@@ -23,13 +23,13 @@ describe("with data", () => {
 
 	afterEach(async () => await cleanUpDb());
 
-	it("should find subscriptions", async () => {
+	it("should find subscriptions sorted by price", async () => {
 		const subscriptions = [
-			monthlySubscription,
 			yearlySubscription,
+			monthlySubscription,
 		] satisfies ReadonlyArray<SubscriptionModel>;
 
-		expect(await findSubscriptions()).toEqualIgnoreOrder(subscriptions);
+		expect(await findSubscriptions()).toEqual(subscriptions);
 	});
 
 	it("should throw if there are subscriptions with non-existing categories", async () => {

@@ -7,7 +7,19 @@
 				"noUnusedVariables": "error",
 				"noUnusedPrivateClassMembers": "error",
 				"useArrayLiterals": "error",
-				"useHookAtTopLevel": "error"
+				"useHookAtTopLevel": "error",
+				"useExhaustiveDependencies": {
+					"level": "error",
+					"options": {
+						"hooks": [
+							{
+								"name": "useLiveQuery",
+								"closureIndex": 0,
+								"dependenciesIndex": 1
+							}
+						]
+					}
+				}
 			},
 			"nursery": {
 				"useSortedClasses": {
@@ -92,6 +104,16 @@
 				"rules": {
 					"style": {
 						"noDefaultExport": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["*.spec.ts", "*.spec.tsx"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noNamespaceImport": "off"
 					}
 				}
 			}

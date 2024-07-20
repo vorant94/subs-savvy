@@ -283,7 +283,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toEqual(13.33);
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth = month && startedAtYear < year", () => {
@@ -300,7 +300,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toEqual(13.33);
+		).toEqual(subscription.price);
 	});
 
 	it("month < startedAtMonth && startedAtYear = year", () => {
@@ -427,7 +427,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toEqual(13.33);
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth = month < endedAtMonth && year < startedAtYear < endedAtYear", () => {

@@ -1,8 +1,8 @@
 import {
+	type RenderHookResult,
 	act,
 	renderHook,
 	waitFor,
-	type RenderHookResult,
 } from "@testing-library/react";
 import type { FC, PropsWithChildren } from "react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -14,10 +14,11 @@ import {
 	yearlySubscription,
 } from "../models/subscription.mock.ts";
 import { findSubscriptions } from "../models/subscription.table.ts";
+import { useSubscriptionsMock } from "./use-subscriptions.mock.ts";
 import {
 	SubscriptionsProvider,
-	useSubscriptions,
 	type UseSubscriptions,
+	useSubscriptions,
 } from "./use-subscriptions.tsx";
 
 vi.mock(import("../../categories/models/category.table.ts"));
@@ -32,6 +33,7 @@ describe("useSubscriptions", () => {
 			monthlySubscription,
 			yearlySubscription,
 		]);
+
 		vi.mocked(findCategories).mockResolvedValue([categoryMock]);
 	});
 
@@ -46,8 +48,16 @@ describe("useSubscriptions", () => {
 	it("should fetch subscriptions and categories", async () => {
 		await Promise.all([
 			waitFor(() => expect(hook.current.selectedCategory).toBeFalsy()),
-			waitFor(() => expect(hook.current.categories.length).toEqual(1)),
-			waitFor(() => expect(hook.current.subscriptions.length).toEqual(2)),
+			waitFor(() =>
+				expect(hook.current.categories).toEqual(
+					useSubscriptionsMock.categories,
+				),
+			),
+			waitFor(() =>
+				expect(hook.current.subscriptions).toEqual(
+					useSubscriptionsMock.subscriptions,
+				),
+			),
 		]);
 	});
 
@@ -72,6 +82,14 @@ describe("useSubscriptions", () => {
 			waitFor(() => expect(hook.current.selectedCategory).toBeFalsy()),
 			waitFor(() => expect(hook.current.subscriptions.length).toEqual(2)),
 		]);
+	});
+
+	it("should throw when trying to select category with wrong id", async () => {
+		// not real validation, but just to ensure that component is stable and is ready for upcoming `act` to be called
+		await waitFor(() => expect(hook.current.categories.length).toEqual(1));
+
+		// don't know how to check error type here, it isn't bubbling up to ErrorBoundary#onError for some reason
+		expect(() => act(() => hook.current.selectCategory("7"))).toThrowError();
 	});
 });
 

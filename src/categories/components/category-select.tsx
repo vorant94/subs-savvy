@@ -57,7 +57,7 @@ export const CategorySelect = memo(() => {
 										size="sm"
 										onMouseDown={(event) => event.preventDefault()}
 										onClick={() => selectCategory(null)}
-										aria-label="Clear value"
+										aria-label="Clear selected category"
 									/>
 								) : (
 									<Combobox.Chevron />

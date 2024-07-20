@@ -1,5 +1,7 @@
 import { type Page, expect, test } from "@playwright/test";
 import dayjs from "dayjs";
+import { categoryMock } from "../src/categories/models/category.mock.ts";
+import type { CategoryModel } from "../src/categories/models/category.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
@@ -10,8 +12,6 @@ import type {
 	UpdateSubscriptionModel,
 } from "../src/subscriptions/models/subscription.model.ts";
 import { SubscriptionsPom } from "../src/subscriptions/pages/subscriptions.pom.ts";
-import type { CategoryModel } from "../src/categories/models/category.model.ts";
-import { categoryMock } from "../src/categories/models/category.mock.ts";
 
 test.describe("subscriptions", () => {
 	test("should find subscriptions", async ({ page }) => {
@@ -24,6 +24,29 @@ test.describe("subscriptions", () => {
 		await pom.goto();
 		await populateDb(page, subscriptions);
 
+		for (const subscription of subscriptions) {
+			await expect(pom.subscriptionListItem(subscription)).toBeVisible();
+		}
+	});
+
+	test("should filter subscriptions on name prefix", async ({ page }) => {
+		const pom = new SubscriptionsPom(page);
+		const subscriptions = [
+			monthlySubscription,
+			yearlySubscription,
+		] satisfies ReadonlyArray<SubscriptionModel>;
+
+		await pom.goto();
+		await populateDb(page, subscriptions);
+
+		await pom.namePrefixControl.fill("te");
+
+		await expect(
+			pom.subscriptionListItem(monthlySubscription),
+		).not.toBeVisible();
+		await expect(pom.subscriptionListItem(yearlySubscription)).toBeVisible();
+
+		await pom.clearNamePrefixButton.click();
 		for (const subscription of subscriptions) {
 			await expect(pom.subscriptionListItem(subscription)).toBeVisible();
 		}

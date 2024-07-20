@@ -7,7 +7,9 @@ export class CategoryFormCom {
 	colorControl: InputCom;
 
 	constructor(private readonly page: Page) {
-		this.nameControl = new InputCom(this.page.getByLabel("name"));
+		this.nameControl = new InputCom(
+			this.page.getByLabel("Name", { exact: true }),
+		);
 		this.colorControl = new InputCom(this.page.getByLabel("color"));
 	}
 

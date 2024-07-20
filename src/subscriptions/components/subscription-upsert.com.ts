@@ -33,7 +33,9 @@ export class SubscriptionUpsertCom {
 		this.updateButton = this.page.getByRole("button", { name: "update" });
 		this.deleteButton = this.page.getByRole("button", { name: "delete" });
 
-		this.nameControl = new InputCom(this.page.getByLabel("name"));
+		this.nameControl = new InputCom(
+			this.page.getByLabel("Name", { exact: true }),
+		);
 		this.descriptionControl = new InputCom(this.page.getByLabel("description"));
 		this.iconControl = new SelectCom(
 			this.page.getByLabel("icon"),
