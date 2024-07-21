@@ -15,6 +15,7 @@ import {
 } from "../models/subscription.mock.ts";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
 import { SubscriptionList } from "./subscription-list";
+import { SubscriptionListItemMock } from "./subscription-list-item.mock.tsx";
 import { SubscriptionListItem } from "./subscription-list-item.tsx";
 
 vi.mock(import("../hooks/use-subscriptions.tsx"));
@@ -25,7 +26,7 @@ describe("SubscriptionList", () => {
 
 	beforeAll(() => {
 		vi.mocked(SubscriptionListItem.type).mockImplementation(
-			({ subscription }) => <div data-testid={subscription.name} />,
+			SubscriptionListItemMock,
 		);
 	});
 
@@ -50,7 +51,7 @@ describe("SubscriptionList", () => {
 			await Promise.all(
 				subscriptions.map((subscription) =>
 					waitFor(() =>
-						expect(screen.getByTestId(subscription.name)).toBeVisible(),
+						expect(screen.getByTestId(subscription.id)).toBeVisible(),
 					),
 				),
 			);
@@ -74,11 +75,11 @@ describe("SubscriptionList", () => {
 
 			await Promise.all([
 				waitFor(() =>
-					expect(screen.getByTestId(filteredSubscription.name)).toBeVisible(),
+					expect(screen.getByTestId(filteredSubscription.id)).toBeVisible(),
 				),
 				waitFor(() =>
 					expect(
-						screen.queryByTestId(filteredOutSubscription.name),
+						screen.queryByTestId(filteredOutSubscription.id),
 					).not.toBeInTheDocument(),
 				),
 			]);
