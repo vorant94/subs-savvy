@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { describe, expect, it } from "vitest";
+import { startOfYear } from "../../date/globals/start-of-year.ts";
 import {
 	monthlySubscription,
 	twoMonthlySubscription,
@@ -8,8 +9,6 @@ import {
 } from "../models/subscription.mock.ts";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
 import { calculateSubscriptionPriceForMonth } from "./calculate-subscription-price-for-month.ts";
-
-const startOfYear = dayjs(new Date()).startOf("year").toDate();
 
 describe("monthly", () => {
 	it("startedAtMonth < month && startedAtYear < year", () => {

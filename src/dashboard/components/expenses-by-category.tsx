@@ -9,13 +9,13 @@ import {
 	Tooltip,
 } from "recharts";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
+import { startOfYear } from "../../date/globals/start-of-year.ts";
 import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import type { SubscriptionModel } from "../../subscriptions/models/subscription.model.ts";
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
-import { startOfYear } from "../globals/start-of-year.ts";
 import {
 	ChartTooltipContent,
 	type ChartTooltipContentPayload,

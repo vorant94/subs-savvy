@@ -9,6 +9,7 @@ import {
 	Tooltip,
 	XAxis,
 } from "recharts";
+import { startOfYear } from "../../date/globals/start-of-year.ts";
 import type { MonthName } from "../../date/types/month-name.ts";
 import { monthToMonthName, months } from "../../date/types/month.ts";
 import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
@@ -17,7 +18,6 @@ import type { SubscriptionModel } from "../../subscriptions/models/subscription.
 import { calculateSubscriptionPriceForMonth } from "../../subscriptions/utils/calculate-subscription-price-for-month.ts";
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
-import { startOfYear } from "../globals/start-of-year.ts";
 import {
 	ChartTooltipContent,
 	type ChartTooltipContentPayload,
