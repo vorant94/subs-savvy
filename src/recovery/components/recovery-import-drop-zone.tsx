@@ -55,9 +55,13 @@ export const RecoveryImportDropZone = memo(
 				})}
 			>
 				<input {...getInputProps()} />
-				<div className={cn("grid auto-cols-auto grid-flow-col gap-x-4")}>
+				<div
+					className={cn(
+						"grid grid-flow-row auto-rows-auto gap-x-4 lg:auto-cols-auto lg:grid-flow-col",
+					)}
+				>
 					<FontAwesomeIcon
-						className={cn("row-span-2 text-gray-400")}
+						className={cn("justify-self-center text-gray-400 lg:row-span-2")}
 						size="4x"
 						icon={faFileCode}
 					/>

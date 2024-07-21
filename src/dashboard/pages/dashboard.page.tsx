@@ -10,6 +10,7 @@ import {
 import { cn } from "../../ui/utils/cn.ts";
 import { ExpensesByCategory } from "../components/expenses-by-category.tsx";
 import { ExpensesPerMonth } from "../components/expenses-per-month.tsx";
+import { UpcomingPayments } from "../components/upcoming-payments.tsx";
 
 export const DashboardPage = memo(() => {
 	const upsert = useSubscriptionUpsert();
@@ -26,12 +27,12 @@ export const DashboardPage = memo(() => {
 		>
 			<div
 				className={cn(
-					"grid flex-1 grid-flow-row auto-rows-[50%] grid-cols-1 gap-4 lg:grid-cols-2",
+					"grid flex-1 auto-rows-[calc(50%-8px)] grid-cols-1 gap-4 lg:grid-cols-2",
 				)}
 			>
 				<ExpensesPerMonth />
 
-				{/*<UpcomingPayments />*/}
+				<UpcomingPayments />
 
 				<ExpensesByCategory />
 			</div>

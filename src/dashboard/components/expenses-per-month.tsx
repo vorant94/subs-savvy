@@ -47,8 +47,7 @@ export const ExpensesPerMonth = memo(() => {
 			</Title>
 
 			<ResponsiveContainer
-				width="100%"
-				height="100%"
+				className={cn("flex flex-1 basis-0 flex-col overflow-y-auto")}
 			>
 				<BarChart data={aggregatedSubscriptions}>
 					<CartesianGrid strokeDasharray="3 3" />

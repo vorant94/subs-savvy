@@ -29,7 +29,7 @@ export const UpcomingPayments = memo(() => {
 				Upcoming Payments
 			</Title>
 
-			<div className={cn("flex flex-col overflow-y-auto")}>
+			<div className={cn("flex flex-1 basis-0 flex-col overflow-y-auto")}>
 				{subscriptionsWithNextPaymentAt.map((subscription) => (
 					<div key={subscription.id}>
 						{subscription.name} - {subscription.nextPaymentAt.toISOString()}
