@@ -94,7 +94,8 @@
 			"blob-report",
 			"playwright/.cache/",
 			"coverage",
-			".vercel"
+			".vercel",
+			".husky/_/*"
 		]
 	},
 	"overrides": [
