@@ -88,8 +88,8 @@ jobs:
       group: deploy
       cancel-in-progress: false
     needs:
-      - lint
       - format
+      - lint
       - test
       - e2e
       - build
