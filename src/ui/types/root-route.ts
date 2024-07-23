@@ -4,4 +4,4 @@ export const rootRoute = {
 	recovery: "recovery",
 } as const;
 
-export type Route = (typeof rootRoute)[keyof typeof rootRoute];
+export type RootRoute = (typeof rootRoute)[keyof typeof rootRoute];
