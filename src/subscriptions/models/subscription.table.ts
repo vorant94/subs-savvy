@@ -2,12 +2,12 @@ import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { _getCategory } from "../../categories/models/category.table.ts";
 import { db } from "../../db/globals/db.ts";
 import {
-	insertSubscriptionSchema,
-	subscriptionSchema,
-	updateSubscriptionSchema,
 	type InsertSubscriptionModel,
 	type SubscriptionModel,
 	type UpdateSubscriptionModel,
+	insertSubscriptionSchema,
+	subscriptionSchema,
+	updateSubscriptionSchema,
 } from "./subscription.model.ts";
 
 export function findSubscriptions(): Promise<ReadonlyArray<SubscriptionModel>> {

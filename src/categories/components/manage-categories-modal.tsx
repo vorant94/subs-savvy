@@ -1,12 +1,12 @@
 import { Button, Modal } from "@mantine/core";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
+	type Reducer,
 	memo,
 	useCallback,
 	useEffect,
 	useReducer,
 	useState,
-	type Reducer,
 } from "react";
 import { cn } from "../../ui/utils/cn.ts";
 import type {

@@ -1,9 +1,9 @@
 import {
+	type ComboboxData,
 	NumberInput,
 	Select,
 	Table,
 	TextInput,
-	type ComboboxData,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { usePrevious } from "@mantine/hooks";
@@ -11,9 +11,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { forwardRef, memo, useEffect, useMemo } from "react";
 import {
 	Controller,
+	type SubmitHandler,
 	useFieldArray,
 	useForm,
-	type SubmitHandler,
 } from "react-hook-form";
 import { findCategories } from "../../categories/models/category.table.ts";
 import { cn } from "../../ui/utils/cn.ts";

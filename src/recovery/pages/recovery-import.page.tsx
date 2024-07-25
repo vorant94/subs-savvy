@@ -2,8 +2,8 @@ import { Button } from "@mantine/core";
 import { memo, useCallback, useState } from "react";
 import { SubscriptionsInsertTable } from "../../subscriptions/components/subscriptions-insert-table.tsx";
 import {
-	insertSubscriptionSchema,
 	type InsertSubscriptionModel,
+	insertSubscriptionSchema,
 } from "../../subscriptions/models/subscription.model.ts";
 import { cn } from "../../ui/utils/cn.ts";
 import {

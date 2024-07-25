@@ -1,7 +1,7 @@
 import { useMediaQuery } from "@mantine/hooks";
 import {
-	breakpointToMediaQuery,
 	type Breakpoint,
+	breakpointToMediaQuery,
 } from "../types/breakpoint.ts";
 
 export function useBreakpoint(breakpoint: Breakpoint): boolean | undefined {

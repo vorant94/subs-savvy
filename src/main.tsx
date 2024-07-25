@@ -8,9 +8,13 @@ import {
 } from "react-router-dom";
 import { db } from "./db/globals/db.ts";
 import "./index.css";
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+import { appEn } from "./app.i18n.ts";
 import { App } from "./app.tsx";
 import { devOnlyRoute } from "./dev-only/types/dev-only-route.ts";
 import { recoveryRoute } from "./recovery/types/recovery-route.ts";
+import { addSubscriptionButtonEn } from "./subscriptions/components/add-subscription-button.i18n.ts";
 import { rootRoute } from "./ui/types/root-route.ts";
 
 window.addEventListener("unhandledrejection", ({ reason }) => {
@@ -113,6 +117,19 @@ const router = createBrowserRouter([
 		],
 	},
 ]);
+
+i18next.use(initReactI18next).init({
+	fallbackLng: "en",
+	interpolation: { escapeValue: false },
+	resources: {
+		en: {
+			translation: {
+				...addSubscriptionButtonEn,
+				...appEn,
+			},
+		},
+	},
+});
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {

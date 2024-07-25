@@ -1,12 +1,12 @@
-import { act, renderHook, type RenderHookResult } from "@testing-library/react";
+import { type RenderHookResult, act, renderHook } from "@testing-library/react";
 import type { FC, PropsWithChildren } from "react";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import type { NavigateFunction } from "react-router/dist/lib/hooks";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
 	DefaultLayoutProvider,
-	useDefaultLayout,
 	type UseDefaultLayout,
+	useDefaultLayout,
 } from "./use-default-layout.tsx";
 
 describe("useDefaultLayout", () => {

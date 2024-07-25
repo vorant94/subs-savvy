@@ -3,16 +3,16 @@ import { ColorInput, NumberInput, TextInput } from "@mantine/core";
 import { forwardRef, memo } from "react";
 import {
 	Controller,
-	useForm,
 	type DefaultValues,
 	type SubmitHandler,
+	useForm,
 } from "react-hook-form";
 import { cn } from "../../ui/utils/cn.ts";
 import {
-	insertCategorySchema,
-	updateCategorySchema,
 	type CategoryModel,
 	type UpsertCategoryModel,
+	insertCategorySchema,
+	updateCategorySchema,
 } from "../models/category.model.ts";
 
 export const CategoryForm = memo(

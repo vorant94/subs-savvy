@@ -6,6 +6,7 @@ import {
 	NavLink as MantineNavLink,
 } from "@mantine/core";
 import { type PropsWithChildren, type ReactElement, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { useBreakpoint } from "../hooks/use-breakpoint.ts";
 import { useDefaultLayout } from "../hooks/use-default-layout.tsx";
@@ -121,13 +122,14 @@ export interface DefaultLayoutHeaderProps {
 const DefaultLayoutNavLink = memo(
 	({ path, label, icon }: DefaultLayoutNavLinkProps) => {
 		const { pathname } = useLocation();
+		const { t } = useTranslation();
 
 		return (
 			<li>
 				<MantineNavLink
 					component={Link}
 					to={path}
-					label={label}
+					label={t(label)}
 					leftSection={icon}
 					active={pathname.startsWith(path)}
 				/>

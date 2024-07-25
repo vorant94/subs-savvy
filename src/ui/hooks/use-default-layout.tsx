@@ -1,10 +1,10 @@
 import { useDisclosure, usePrevious } from "@mantine/hooks";
 import {
+	type PropsWithChildren,
 	createContext,
 	memo,
 	useContext,
 	useEffect,
-	type PropsWithChildren,
 } from "react";
 import { useLocation } from "react-router-dom";
 import type { Disclosure } from "../types/disclosure.ts";

@@ -1,9 +1,9 @@
 import {
+	type PropsWithChildren,
+	type ReactNode,
 	createContext,
 	memo,
 	useContext,
-	type PropsWithChildren,
-	type ReactNode,
 } from "react";
 
 export function useNavLinks(): UseNavLinks {
