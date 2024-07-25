@@ -9,6 +9,7 @@ import {
 import { db } from "./db/globals/db.ts";
 import "./index.css";
 import { App } from "./app.tsx";
+import { devOnlyRoute } from "./dev-only/types/dev-only-route.ts";
 import { recoveryRoute } from "./recovery/types/recovery-route.ts";
 import { rootRoute } from "./ui/types/root-route.ts";
 
@@ -86,6 +87,25 @@ const router = createBrowserRouter([
 							import("./recovery/pages/recovery-export.page.tsx").then((m) => ({
 								// biome-ignore lint/style/useNamingConvention: 3-rd party type
 								Component: m.RecoveryExportPage,
+							})),
+					},
+				],
+			},
+			{
+				path: `/${rootRoute.devOnly}`,
+				children: [
+					{
+						path: `/${rootRoute.devOnly}`,
+						element: (
+							<Navigate to={`/${rootRoute.devOnly}/${devOnlyRoute.iconList}`} />
+						),
+					},
+					{
+						path: `/${rootRoute.devOnly}/${devOnlyRoute.iconList}`,
+						lazy: () =>
+							import("./dev-only/pages/icon-list.page.tsx").then((m) => ({
+								// biome-ignore lint/style/useNamingConvention: 3-rd party type
+								Component: m.IconListPage,
 							})),
 					},
 				],
