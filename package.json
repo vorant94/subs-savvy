@@ -77,6 +77,7 @@
 		"vitest": "^2.0.1"
 	},
 	"engines": {
+		"//": "node 22 isn't supported by vercel, although the app is client-only and is built inside GitHub Actions...",
 		"node": ">=20"
 	},
 	"os": ["darwin", "linux"]

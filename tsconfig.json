@@ -3,7 +3,7 @@
 		/* Base */
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"target": "ES2022",
+		"target": "ESNext",
 		"allowJs": true,
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
@@ -32,7 +32,7 @@
 		"noEmit": true,
 
 		/* Runtime/Framework */
-		"lib": ["ES2023", "DOM", "DOM.Iterable"],
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
 		"jsx": "react-jsx",
 		"allowImportingTsExtensions": true,
 
