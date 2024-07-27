@@ -80,6 +80,8 @@ jobs:
       - e2e
       - build
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
           name: build-output
@@ -90,4 +92,4 @@ jobs:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages deploy dist --project-name=subs-savvy
-
+          wranglerVersion: "3.67.1"
