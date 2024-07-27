@@ -80,7 +80,7 @@ jobs:
       - e2e
       - build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # is needed only for proper deployment source description in cloudflare dashboard
 
       - uses: actions/download-artifact@v4
         with:
@@ -91,5 +91,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=subs-savvy
+          command: pages deploy
           wranglerVersion: "3.67.1"
