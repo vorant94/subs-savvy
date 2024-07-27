@@ -70,15 +70,14 @@
 		"postcss-simple-vars": "^7.0.1",
 		"tailwindcss": "^3.4.3",
 		"typescript": "^5.2.2",
-		"vercel": "^34.3.1",
 		"vite": "^5.2.0",
 		"vite-bundle-visualizer": "^1.2.1",
 		"vite-plugin-svgr": "^4.2.0",
-		"vitest": "^2.0.1"
+		"vitest": "^2.0.1",
+		"wrangler": "^3.67.1"
 	},
 	"engines": {
-		"//": "node 22 isn't supported by vercel, although the app is client-only and is built inside GitHub Actions...",
-		"node": ">=20"
+		"node": ">=22"
 	},
 	"os": ["darwin", "linux"]
 }
