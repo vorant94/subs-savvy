@@ -8,42 +8,46 @@ import type {
 } from "../models/subscription.model";
 
 export class SubscriptionsPom {
-	addSubscriptionButton: Locator;
-	noSubscriptionsPlaceholder: Locator;
-	namePrefixControl: InputCom;
-	clearNamePrefixButton: Locator;
+	readonly addSubscriptionButton: Locator;
+	readonly noSubscriptionsPlaceholder: Locator;
+	readonly namePrefixControl: InputCom;
+	readonly clearNamePrefixButton: Locator;
 
-	subscriptionUpsert: SubscriptionUpsertCom;
+	readonly subscriptionUpsert: SubscriptionUpsertCom;
 
-	categorySelect: CategorySelectCom;
+	readonly categorySelect: CategorySelectCom;
 
-	subscriptionsNavLink: Locator;
+	readonly subscriptionsNavLink: Locator;
 
-	constructor(private readonly page: Page) {
-		this.addSubscriptionButton = this.page.getByRole("button", {
+	readonly #page: Page;
+
+	constructor(page: Page) {
+		this.#page = page;
+
+		this.addSubscriptionButton = this.#page.getByRole("button", {
 			name: "add sub",
 		});
-		this.noSubscriptionsPlaceholder = this.page.getByText("No Subscriptions");
-		this.namePrefixControl = new InputCom(this.page.getByLabel("name prefix"));
-		this.clearNamePrefixButton = this.page.getByLabel("clear name prefix");
+		this.noSubscriptionsPlaceholder = this.#page.getByText("No Subscriptions");
+		this.namePrefixControl = new InputCom(this.#page.getByLabel("name prefix"));
+		this.clearNamePrefixButton = this.#page.getByLabel("clear name prefix");
 
-		this.subscriptionUpsert = new SubscriptionUpsertCom(this.page);
+		this.subscriptionUpsert = new SubscriptionUpsertCom(this.#page);
 
-		this.categorySelect = new CategorySelectCom(this.page);
+		this.categorySelect = new CategorySelectCom(this.#page);
 
-		this.subscriptionsNavLink = this.page.getByRole("link", {
+		this.subscriptionsNavLink = this.#page.getByRole("link", {
 			name: "subscriptions",
 		});
 	}
 
 	async goto() {
-		await this.page.goto("/");
+		await this.#page.goto("/");
 		await this.subscriptionsNavLink.click();
 	}
 
 	subscriptionListItem({
 		name,
 	}: SubscriptionModel | UpsertSubscriptionModel): Locator {
-		return this.page.getByLabel(name);
+		return this.#page.getByLabel(name);
 	}
 }

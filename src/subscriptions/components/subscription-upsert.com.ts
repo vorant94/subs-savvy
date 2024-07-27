@@ -14,56 +14,54 @@ import {
 } from "../types/subscription-icon";
 
 export class SubscriptionUpsertCom {
-	insertButton: Locator;
-	updateButton: Locator;
-	deleteButton: Locator;
+	readonly insertButton: Locator;
+	readonly updateButton: Locator;
+	readonly deleteButton: Locator;
 
-	nameControl: InputCom;
-	descriptionControl: InputCom;
-	iconControl: SelectCom<SubscriptionIcon>;
-	priceControl: InputCom;
-	startedAtControl: DatePickerInputCom;
-	endedAtControl: DatePickerInputCom;
-	eachControl: InputCom;
-	periodControl: SelectCom<SubscriptionCyclePeriod>;
-	categoryControl: SelectCom;
+	readonly nameControl: InputCom;
+	readonly descriptionControl: InputCom;
+	readonly iconControl: SelectCom<SubscriptionIcon>;
+	readonly priceControl: InputCom;
+	readonly startedAtControl: DatePickerInputCom;
+	readonly endedAtControl: DatePickerInputCom;
+	readonly eachControl: InputCom;
+	readonly periodControl: SelectCom<SubscriptionCyclePeriod>;
+	readonly categoryControl: SelectCom;
 
-	constructor(private readonly page: Page) {
-		this.insertButton = this.page.getByRole("button", { name: "insert" });
-		this.updateButton = this.page.getByRole("button", { name: "update" });
-		this.deleteButton = this.page.getByRole("button", { name: "delete" });
+	constructor(page: Page) {
+		this.insertButton = page.getByRole("button", { name: "insert" });
+		this.updateButton = page.getByRole("button", { name: "update" });
+		this.deleteButton = page.getByRole("button", { name: "delete" });
 
-		this.nameControl = new InputCom(
-			this.page.getByLabel("Name", { exact: true }),
-		);
-		this.descriptionControl = new InputCom(this.page.getByLabel("description"));
+		this.nameControl = new InputCom(page.getByLabel("Name", { exact: true }));
+		this.descriptionControl = new InputCom(page.getByLabel("description"));
 		this.iconControl = new SelectCom(
-			this.page.getByLabel("icon"),
+			page.getByLabel("icon"),
 			subscriptionIconToLabel,
 		);
-		this.priceControl = new InputCom(this.page.getByLabel("price"));
+		this.priceControl = new InputCom(page.getByLabel("price"));
 		this.startedAtControl = new DatePickerInputCom(
-			this.page.getByLabel("started at"),
+			page.getByLabel("started at"),
 			DatePickerInputCom.mapAriaLabelsToLocators(
-				this.page,
+				page,
 				createDatePickerInputAriaLabels("started at"),
 			),
-			this.page,
+			page,
 		);
 		this.endedAtControl = new DatePickerInputCom(
-			this.page.getByLabel("ended at"),
+			page.getByLabel("ended at"),
 			DatePickerInputCom.mapAriaLabelsToLocators(
-				this.page,
+				page,
 				createDatePickerInputAriaLabels("ended at"),
 			),
-			this.page,
+			page,
 		);
-		this.eachControl = new InputCom(this.page.getByLabel("each"));
+		this.eachControl = new InputCom(page.getByLabel("each"));
 		this.periodControl = new SelectCom(
-			this.page.getByLabel("period"),
+			page.getByLabel("period"),
 			subscriptionCyclePeriodToLabel,
 		);
-		this.categoryControl = new SelectCom(this.page.getByLabel("category"));
+		this.categoryControl = new SelectCom(page.getByLabel("category"));
 	}
 
 	async fill(subscription: UpsertSubscriptionModel): Promise<void> {

@@ -3,29 +3,34 @@ import dayjs from "dayjs";
 import type { DatePickerInputAriaLabels } from "../utils/create-date-picker-input-aria-labels.ts";
 
 export class DatePickerInputCom {
-	constructor(
-		private readonly locator: Locator,
-		private readonly locators: DatePickerInputLocators,
-		// page is still needed to select the actual day in the end of DatePickerInputCom#fill
-		private readonly page: Page,
-	) {}
+	readonly #locator: Locator;
+	readonly #locators: DatePickerInputLocators;
+	// page is still needed to select the actual day in the end of DatePickerInputCom#fill
+	readonly #page: Page;
+
+	constructor(locator: Locator, locators: DatePickerInputLocators, page: Page) {
+		this.#locator = locator;
+		this.#locators = locators;
+		this.#page = page;
+	}
 
 	async fill(value: Date): Promise<void> {
-		await this.locator.click();
+		await this.#locator.click();
 
-		const currentDateString = await this.locators.monthLevelControl.innerText();
+		const currentDateString =
+			await this.#locators.monthLevelControl.innerText();
 		const currentDate = dayjs(currentDateString, "MMMM YYYY").toDate();
 		const diffInMonths = Math.floor(
 			dayjs(value).diff(currentDate, "month", true),
 		);
 		for (let i = 0; i < Math.abs(diffInMonths); i++) {
 			diffInMonths < 0
-				? await this.locators.previousMonth.click()
-				: await this.locators.nextMonth.click();
+				? await this.#locators.previousMonth.click()
+				: await this.#locators.nextMonth.click();
 		}
 
 		const valueDateString = dayjs(value).format("D MMMM YYYY");
-		await this.page.getByLabel(valueDateString, { exact: true }).click();
+		await this.#page.getByLabel(valueDateString, { exact: true }).click();
 	}
 
 	static mapAriaLabelsToLocators(

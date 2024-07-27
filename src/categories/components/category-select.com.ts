@@ -6,31 +6,35 @@ import type {
 import { CategoryFormCom } from "./category-form.com.ts";
 
 export class CategorySelectCom {
-	manageButton: Locator;
-	addButton: Locator;
-	insertButton: Locator;
-	updateButton: Locator;
+	readonly manageButton: Locator;
+	readonly addButton: Locator;
+	readonly insertButton: Locator;
+	readonly updateButton: Locator;
 
-	form: CategoryFormCom;
+	readonly form: CategoryFormCom;
 
-	constructor(private readonly page: Page) {
-		this.manageButton = page.getByRole("button", { name: "manage" });
-		this.addButton = page.getByRole("button", { name: "add category" });
-		this.insertButton = this.page.getByRole("button", { name: "insert" });
-		this.updateButton = this.page.getByRole("button", { name: "update" });
+	readonly #page: Page;
 
-		this.form = new CategoryFormCom(this.page);
+	constructor(page: Page) {
+		this.#page = page;
+
+		this.manageButton = this.#page.getByRole("button", { name: "manage" });
+		this.addButton = this.#page.getByRole("button", { name: "add category" });
+		this.insertButton = this.#page.getByRole("button", { name: "insert" });
+		this.updateButton = this.#page.getByRole("button", { name: "update" });
+
+		this.form = new CategoryFormCom(this.#page);
 	}
 
 	category({ name }: CategoryModel | UpsertCategoryModel): Locator {
-		return this.page.getByRole("paragraph").filter({ hasText: name });
+		return this.#page.getByRole("paragraph").filter({ hasText: name });
 	}
 
 	editButton({ name }: CategoryModel | UpsertCategoryModel): Locator {
-		return this.page.getByRole("button", { name: `edit ${name} category` });
+		return this.#page.getByRole("button", { name: `edit ${name} category` });
 	}
 
 	deleteButton({ name }: CategoryModel | UpsertCategoryModel): Locator {
-		return this.page.getByRole("button", { name: `delete ${name} category` });
+		return this.#page.getByRole("button", { name: `delete ${name} category` });
 	}
 }
