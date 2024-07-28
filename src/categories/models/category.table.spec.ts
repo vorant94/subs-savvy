@@ -25,7 +25,7 @@ describe("with data", () => {
 	it("should find categories", async () => {
 		const categories = [categoryMock] satisfies ReadonlyArray<CategoryModel>;
 
-		expect(await findCategories()).toEqualIgnoreOrder(categories);
+		expect(await findCategories()).toEqual(categories);
 	});
 
 	it("should update category", async () => {
