@@ -8,25 +8,26 @@ import {
 	InputBase,
 	useCombobox,
 } from "@mantine/core";
-import { useDisclosure, usePrevious } from "@mantine/hooks";
-import { memo, useEffect } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { memo, useCallback } from "react";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import { ManageCategoriesModal } from "./manage-categories-modal.tsx";
 
 export const CategorySelect = memo(() => {
 	const { categories, selectCategory, selectedCategory } = useSubscriptions();
-	const prevSelectedCategory = usePrevious(selectedCategory);
 
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
 
-	useEffect(() => {
-		if (selectedCategory?.id !== prevSelectedCategory?.id) {
+	const handleSelectCategory = useCallback(
+		(categoryId: string | null) => {
+			selectCategory(categoryId);
 			combobox.closeDropdown();
-		}
-	}, [selectedCategory, prevSelectedCategory, combobox]);
+		},
+		[selectCategory, combobox],
+	);
 
 	const [isManageCategoriesOpen, manageCategories] = useDisclosure(false);
 
@@ -35,7 +36,7 @@ export const CategorySelect = memo(() => {
 			<div className={cn("flex items-center gap-2")}>
 				<Combobox
 					store={combobox}
-					onOptionSubmit={selectCategory}
+					onOptionSubmit={handleSelectCategory}
 				>
 					<Combobox.Target>
 						<InputBase

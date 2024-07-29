@@ -71,7 +71,7 @@ export const ManageCategoriesModal = memo(
 			[state, switchToViewMode],
 		);
 
-		const deleteCategoryCb: CategoryListProps["onDelete"] = useCallback(
+		const handleDeleteCategory: CategoryListProps["onDelete"] = useCallback(
 			async (id) => {
 				await deleteCategory(id);
 			},
@@ -101,7 +101,7 @@ export const ManageCategoriesModal = memo(
 						<CategoryList
 							categories={categories}
 							onUpdate={switchToUpdateMode}
-							onDelete={deleteCategoryCb}
+							onDelete={handleDeleteCategory}
 						/>
 					) : (
 						<CategoryForm
