@@ -61,7 +61,9 @@ export class SubscriptionUpsertCom {
 			page.getByLabel("period"),
 			subscriptionCyclePeriodToLabel,
 		);
-		this.categoryControl = new SelectCom(page.getByLabel("category"));
+		this.categoryControl = new SelectCom(
+			page.getByLabel("Category", { exact: true }),
+		);
 	}
 
 	async fill(subscription: UpsertSubscriptionModel): Promise<void> {

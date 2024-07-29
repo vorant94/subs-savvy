@@ -10,17 +10,17 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { memo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { cn } from "../../ui/utils/cn.ts";
+import { categorySelectI18n } from "./category-select.i18n.ts";
 import { ManageCategoriesModal } from "./manage-categories-modal.tsx";
 
 export const CategorySelect = memo(() => {
-	const { categories, selectCategory, selectedCategory } = useSubscriptions();
-
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
-
+	const { categories, selectCategory, selectedCategory } = useSubscriptions();
 	const handleSelectCategory = useCallback(
 		(categoryId: string | null) => {
 			selectCategory(categoryId);
@@ -31,6 +31,8 @@ export const CategorySelect = memo(() => {
 
 	const [isManageCategoriesOpen, manageCategories] = useDisclosure(false);
 
+	const { t } = useTranslation();
+
 	return (
 		<>
 			<div className={cn("flex items-center gap-2")}>
@@ -40,6 +42,7 @@ export const CategorySelect = memo(() => {
 				>
 					<Combobox.Target>
 						<InputBase
+							aria-label={t(categorySelectI18n["select-category"])}
 							className={cn("w-48")}
 							component="button"
 							type="button"
@@ -68,7 +71,9 @@ export const CategorySelect = memo(() => {
 							onClick={() => combobox.toggleDropdown()}
 						>
 							{selectedCategory?.name ?? (
-								<Input.Placeholder>Select category</Input.Placeholder>
+								<Input.Placeholder>
+									{t(categorySelectI18n["select-category"])}
+								</Input.Placeholder>
 							)}
 						</InputBase>
 					</Combobox.Target>

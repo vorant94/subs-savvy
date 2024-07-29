@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import "fake-indexeddb/auto";
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
 import { afterEach, expect, vi } from "vitest";
 import { dateMatchers } from "./date/utils/date.matchers.ts";
 
@@ -38,3 +40,14 @@ window.ResizeObserver = ResizeObserverStub;
 
 // custom matchers
 expect.extend(dateMatchers);
+
+// i18next
+i18next.use(initReactI18next).init({
+	fallbackLng: "en",
+	interpolation: { escapeValue: false },
+	resources: {
+		en: {
+			translation: {},
+		},
+	},
+});
