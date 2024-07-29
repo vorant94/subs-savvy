@@ -33,7 +33,7 @@ export const DefaultLayout = memo(
 						breakpoint: "sm",
 						collapsed: { mobile: !isNavOpened },
 					}}
-					padding="md"
+					padding="xl"
 				>
 					<AppShell.Header className={cn("flex items-center gap-2 px-4")}>
 						<Burger
@@ -65,7 +65,7 @@ export const DefaultLayout = memo(
 						</ol>
 					</AppShell.Navbar>
 
-					<AppShell.Main className={cn("flex flex-col")}>
+					<AppShell.Main className={cn("flex flex-col bg-gray-100")}>
 						{children}
 					</AppShell.Main>
 				</AppShell>

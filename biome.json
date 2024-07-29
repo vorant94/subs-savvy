@@ -95,7 +95,8 @@
 			"playwright/.cache/",
 			"coverage",
 			".vercel",
-			".husky/_/*"
+			".husky/_/*",
+			".wrangler"
 		]
 	},
 	"overrides": [

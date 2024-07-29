@@ -1,13 +1,10 @@
-import { Card, Title } from "@mantine/core";
-import { memo, useMemo } from "react";
-import {
-	CartesianGrid,
-	Cell,
-	Pie,
-	PieChart,
-	ResponsiveContainer,
-	Tooltip,
-} from "recharts";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Card, Divider, Text } from "@mantine/core";
+import { memo, useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
+import type { PolarViewBox } from "recharts/types/util/types";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { startOfYear } from "../../date/globals/start-of-year.ts";
 import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
@@ -16,55 +13,98 @@ import type { SubscriptionModel } from "../../subscriptions/models/subscription.
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
-import {
-	ChartTooltipContent,
-	type ChartTooltipContentPayload,
-} from "./chart-tooltip-content.tsx";
+import type { ChartTooltipContentPayload } from "./chart-tooltip-content.tsx";
+import { expensesByCategoryI18n } from "./expenses-by-category.i18n.tsx";
 
 export const ExpensesByCategory = memo(() => {
 	const { subscriptions } = useSubscriptions();
-
 	const aggregatedSubscriptions = useMemo(
 		() => aggregateSubscriptionsByCategory(subscriptions),
 		[subscriptions],
 	);
 
-	return (
-		<Card
-			className={cn("flex h-full flex-col gap-2")}
-			shadow="xs"
-			padding="xs"
-			radius="md"
-			withBorder
-		>
-			<Title
-				className={cn("self-center")}
-				order={5}
-			>
-				Expenses by Category
-			</Title>
+	const [activeIndex, setActiveIndex] = useState<number>(-1);
+	const updateActiveIndex = useCallback((_: unknown, index: number) => {
+		setActiveIndex(index);
+	}, []);
+	const resetActiveIndex = useCallback(() => {
+		setActiveIndex(-1);
+	}, []);
 
-			<ResponsiveContainer
-				className={cn("flex flex-1 basis-0 flex-col overflow-y-auto")}
+	const { t } = useTranslation();
+
+	return (
+		<div className={cn("flex flex-col gap-4")}>
+			<Text
+				className={cn("font-medium")}
+				size="sm"
+				c="dimmed"
 			>
-				<PieChart>
-					<CartesianGrid strokeDasharray="3 3" />
-					<Pie
-						data={aggregatedSubscriptions}
-						dataKey="totalExpenses"
-						label
+				{t(expensesByCategoryI18n["expenses-by-category"])}
+			</Text>
+
+			<Card
+				padding="lg"
+				radius="md"
+			>
+				<div className={cn("flex h-[177px] flex-row items-center gap-8")}>
+					<PieChart
+						width={177}
+						height={177}
 					>
-						{aggregatedSubscriptions.map((subByCategory) => (
-							<Cell
-								key={subByCategory.category.id}
-								fill={subByCategory.category.color}
+						<Pie
+							innerRadius={66}
+							outerRadius={88}
+							data={aggregatedSubscriptions}
+							dataKey="totalExpenses"
+							onMouseEnter={updateActiveIndex}
+							onMouseLeave={resetActiveIndex}
+							activeIndex={activeIndex}
+						>
+							{aggregatedSubscriptions.map((subByCategory) => (
+								<Cell
+									key={subByCategory.category.id}
+									fill={subByCategory.category.color}
+								/>
+							))}
+							<Label
+								content={(props) => (
+									<LabelContent
+										aggregatedSubscriptions={aggregatedSubscriptions}
+										activeIndex={activeIndex}
+										{...props}
+									/>
+								)}
 							/>
+						</Pie>
+					</PieChart>
+
+					<Divider orientation="vertical" />
+
+					<ul className={cn("flex max-h-full flex-col gap-4 overflow-y-auto")}>
+						{aggregatedSubscriptions.map(({ category, totalExpenses }) => (
+							<li
+								className={cn("flex items-center gap-2")}
+								key={category.id}
+							>
+								<FontAwesomeIcon
+									size="xs"
+									color={category.color}
+									icon={faCircle}
+								/>
+								<Text
+									size="xs"
+									className={cn("flex-1")}
+								>
+									{category.id === -1 ? t(category.name) : category.name}
+								</Text>
+								<Text size="xs">{totalExpenses}</Text>
+							</li>
 						))}
-					</Pie>
-					<Tooltip content={<ChartTooltipContent />} />
-				</PieChart>
-			</ResponsiveContainer>
-		</Card>
+					</ul>
+				</div>
+			</Card>
+		</div>
 	);
 });
 
@@ -74,7 +114,7 @@ interface SubscriptionsAggregatedByCategory extends ChartTooltipContentPayload {
 
 const noCategoryPlaceholder = {
 	id: -1,
-	name: "No Category",
+	name: expensesByCategoryI18n["no-category"],
 	color: "#777777",
 } satisfies CategoryModel;
 
@@ -121,4 +161,56 @@ function aggregateSubscriptionsByCategory(
 	}
 
 	return subscriptionsByCategory;
+}
+
+const LabelContent = ({
+	viewBox,
+	aggregatedSubscriptions,
+	activeIndex,
+}: LabelContentPros) => {
+	const { cx, cy } = viewBox as PolarViewBox;
+
+	const total = useMemo(
+		() =>
+			aggregatedSubscriptions.reduce(
+				(prev, curr) => prev + curr.totalExpenses,
+				0,
+			),
+		[aggregatedSubscriptions],
+	);
+
+	const { t } = useTranslation();
+
+	return (
+		<>
+			<text
+				x={cx}
+				y={(cy ?? 0) - 10}
+				textAnchor="middle"
+				dominantBaseline="central"
+			>
+				<tspan alignmentBaseline="middle">
+					{aggregatedSubscriptions[activeIndex]?.category.id === -1
+						? t(aggregatedSubscriptions[activeIndex].category.name)
+						: aggregatedSubscriptions[activeIndex]?.category.name ??
+							t(expensesByCategoryI18n.total)}
+				</tspan>
+			</text>
+			<text
+				x={cx}
+				y={(cy ?? 0) + 10}
+				textAnchor="middle"
+				dominantBaseline="central"
+			>
+				<tspan>
+					{aggregatedSubscriptions[activeIndex]?.totalExpenses ?? total}
+				</tspan>
+			</text>
+		</>
+	);
+};
+
+interface LabelContentPros extends LabelProps {
+	activeIndex: number;
+	aggregatedSubscriptions: Array<SubscriptionsAggregatedByCategory>;
 }

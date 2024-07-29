@@ -34,7 +34,9 @@ export const DashboardPage = memo(() => {
 
 				<UpcomingPayments />
 
-				<ExpensesByCategory />
+				<div className={cn("flex")}>
+					<ExpensesByCategory />
+				</div>
 			</div>
 		</DefaultLayout>
 	);
