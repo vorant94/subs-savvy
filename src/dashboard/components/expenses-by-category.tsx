@@ -96,7 +96,9 @@ export const ExpensesByCategory = memo(() => {
 									size="xs"
 									className={cn("flex-1")}
 								>
-									{category.id === -1 ? t(category.name) : category.name}
+									{category.id === -1
+										? t(noCategoryPlaceholder.name)
+										: category.name}
 								</Text>
 								<Text size="xs">{totalExpenses}</Text>
 							</li>
@@ -191,7 +193,7 @@ const LabelContent = ({
 			>
 				<tspan alignmentBaseline="middle">
 					{aggregatedSubscriptions[activeIndex]?.category.id === -1
-						? t(aggregatedSubscriptions[activeIndex].category.name)
+						? t(noCategoryPlaceholder.name)
 						: aggregatedSubscriptions[activeIndex]?.category.name ??
 							t(expensesByCategoryI18n.total)}
 				</tspan>
