@@ -17,8 +17,6 @@ export default mergeConfig(
 					"**/*.spec.tsx",
 					"**/*.mock.ts",
 					"**/*.mock.tsx",
-					"**/*.i18n.ts",
-					"**/*.i18n.tsx",
 					"**/types/*",
 					"**/globals/*",
 					"**/models/*.model.ts",

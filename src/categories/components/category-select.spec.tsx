@@ -14,7 +14,6 @@ import { useSubscriptionsMock } from "../../subscriptions/hooks/use-subscription
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { categoryMock } from "../models/category.mock.ts";
 import type { CategoryModel } from "../models/category.model.ts";
-import { categorySelectI18n } from "./category-select.i18n.ts";
 import { CategorySelect } from "./category-select.tsx";
 
 vi.mock(import("../../subscriptions/hooks/use-subscriptions.tsx"));
@@ -39,9 +38,7 @@ describe("CategorySelect", () => {
 	it("should call selectCategory and close combobox on category selected", () => {
 		const categoryToSelect = { ...categoryMock } satisfies CategoryModel;
 
-		fireEvent.click(
-			screen.getByLabelText(categorySelectI18n["select-category"]),
-		);
+		fireEvent.click(screen.getByLabelText("select-category"));
 		fireEvent.click(
 			screen.getByRole("option", { name: categoryToSelect.name }),
 		);

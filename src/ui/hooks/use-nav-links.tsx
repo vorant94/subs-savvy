@@ -5,7 +5,7 @@ import {
 	memo,
 	useContext,
 } from "react";
-import type { UseNavLinksI18n } from "./use-nav-links.i18n.ts";
+import type { Translation } from "../../i18n/types/translation.ts";
 
 export function useNavLinks(): UseNavLinks {
 	return useContext(navLinksContext);
@@ -17,7 +17,7 @@ export interface UseNavLinks {
 }
 
 export interface NavLink {
-	label: keyof UseNavLinksI18n;
+	label: keyof Translation;
 	path: string;
 	icon: ReactNode;
 }

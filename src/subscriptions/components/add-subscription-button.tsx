@@ -5,7 +5,6 @@ import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../ui/hooks/use-breakpoint.ts";
 import { useSubscriptionUpsert } from "../hooks/use-subscription-upsert.tsx";
-import { addSubscriptionButtonI18n } from "./add-subscription-button.i18n.ts";
 
 export const AddSubscriptionButton = memo(() => {
 	const upsert = useSubscriptionUpsert();
@@ -18,15 +17,13 @@ export const AddSubscriptionButton = memo(() => {
 	);
 
 	return isMd ? (
-		<Button onClick={openSubscriptionInsert}>
-			{t(addSubscriptionButtonI18n["add-sub"])}
-		</Button>
+		<Button onClick={openSubscriptionInsert}>{t("add-sub")}</Button>
 	) : (
 		<ActionIcon
 			onClick={openSubscriptionInsert}
 			size="xl"
 			radius="xl"
-			aria-label={t(addSubscriptionButtonI18n["add-sub"])}
+			aria-label={t("add-sub")}
 		>
 			<FontAwesomeIcon icon={faPlus} />
 		</ActionIcon>

@@ -6,7 +6,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 import { Outlet } from "react-router-dom";
-import { appI18n } from "./app.i18n.ts";
 import { SubscriptionUpsertProvider } from "./subscriptions/hooks/use-subscription-upsert.tsx";
 import { SubscriptionsProvider } from "./subscriptions/hooks/use-subscriptions.tsx";
 import { DefaultLayoutProvider } from "./ui/hooks/use-default-layout.tsx";
@@ -32,12 +31,12 @@ export const App = memo(() => {
 
 const topNavLinks = [
 	{
-		label: appI18n.dashboard,
+		label: "dashboard",
 		path: `/${rootRoute.dashboard}`,
 		icon: <FontAwesomeIcon icon={faChartSimple} />,
 	},
 	{
-		label: appI18n.subscriptions,
+		label: "subscriptions",
 		path: `/${rootRoute.subscriptions}`,
 		icon: <FontAwesomeIcon icon={faCreditCard} />,
 	},
@@ -45,7 +44,7 @@ const topNavLinks = [
 
 const bottomNavLinks = [
 	{
-		label: appI18n.recovery,
+		label: "recovery",
 		path: `/${rootRoute.recovery}`,
 		icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
 	},

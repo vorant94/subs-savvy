@@ -14,7 +14,6 @@ import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/cal
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
 import type { ChartTooltipContentPayload } from "./chart-tooltip-content.tsx";
-import { expensesByCategoryI18n } from "./expenses-by-category.i18n.tsx";
 
 export const ExpensesByCategory = memo(() => {
 	const { subscriptions } = useSubscriptions();
@@ -40,7 +39,7 @@ export const ExpensesByCategory = memo(() => {
 				size="sm"
 				c="dimmed"
 			>
-				{t(expensesByCategoryI18n["expenses-by-category"])}
+				{t("expenses-by-category")}
 			</Text>
 
 			<Card
@@ -116,9 +115,9 @@ interface SubscriptionsAggregatedByCategory extends ChartTooltipContentPayload {
 
 const noCategoryPlaceholder = {
 	id: -1,
-	name: expensesByCategoryI18n["no-category"],
+	name: "no-category",
 	color: "#777777",
-} satisfies CategoryModel;
+} as const satisfies CategoryModel;
 
 function aggregateSubscriptionsByCategory(
 	subscriptions: ReadonlyArray<SubscriptionModel>,
@@ -194,8 +193,7 @@ const LabelContent = ({
 				<tspan alignmentBaseline="middle">
 					{aggregatedSubscriptions[activeIndex]?.category.id === -1
 						? t(noCategoryPlaceholder.name)
-						: aggregatedSubscriptions[activeIndex]?.category.name ??
-							t(expensesByCategoryI18n.total)}
+						: aggregatedSubscriptions[activeIndex]?.category.name ?? t("total")}
 				</tspan>
 			</text>
 			<text

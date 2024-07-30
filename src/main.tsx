@@ -9,14 +9,11 @@ import {
 import { db } from "./db/globals/db.ts";
 import "./index.css";
 import i18next from "i18next";
+import I18NextHttpBackend from "i18next-http-backend";
 import { initReactI18next } from "react-i18next";
-import { appEn } from "./app.i18n.ts";
 import { App } from "./app.tsx";
-import { categorySelectEn } from "./categories/components/category-select.i18n.ts";
-import { expensesByCategoryEn } from "./dashboard/components/expenses-by-category.i18n.tsx";
 import { devOnlyRoute } from "./dev-only/types/dev-only-route.ts";
 import { recoveryRoute } from "./recovery/types/recovery-route.ts";
-import { addSubscriptionButtonEn } from "./subscriptions/components/add-subscription-button.i18n.ts";
 import { rootRoute } from "./ui/types/root-route.ts";
 
 window.addEventListener("unhandledrejection", ({ reason }) => {
@@ -120,20 +117,13 @@ const router = createBrowserRouter([
 	},
 ]);
 
-i18next.use(initReactI18next).init({
-	fallbackLng: "en",
-	interpolation: { escapeValue: false },
-	resources: {
-		en: {
-			translation: {
-				...addSubscriptionButtonEn,
-				...appEn,
-				...expensesByCategoryEn,
-				...categorySelectEn,
-			},
-		},
-	},
-});
+i18next
+	.use(I18NextHttpBackend)
+	.use(initReactI18next)
+	.init({
+		fallbackLng: "en",
+		interpolation: { escapeValue: false },
+	});
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {

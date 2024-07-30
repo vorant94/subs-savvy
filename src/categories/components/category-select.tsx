@@ -13,7 +13,6 @@ import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { cn } from "../../ui/utils/cn.ts";
-import { categorySelectI18n } from "./category-select.i18n.ts";
 import { ManageCategoriesModal } from "./manage-categories-modal.tsx";
 
 export const CategorySelect = memo(() => {
@@ -42,7 +41,7 @@ export const CategorySelect = memo(() => {
 				>
 					<Combobox.Target>
 						<InputBase
-							aria-label={t(categorySelectI18n["select-category"])}
+							aria-label={t("select-category")}
 							className={cn("w-48")}
 							component="button"
 							type="button"
@@ -71,9 +70,7 @@ export const CategorySelect = memo(() => {
 							onClick={() => combobox.toggleDropdown()}
 						>
 							{selectedCategory?.name ?? (
-								<Input.Placeholder>
-									{t(categorySelectI18n["select-category"])}
-								</Input.Placeholder>
+								<Input.Placeholder>{t("select-category")}</Input.Placeholder>
 							)}
 						</InputBase>
 					</Combobox.Target>
