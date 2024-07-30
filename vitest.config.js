@@ -13,9 +13,12 @@ export default mergeConfig(
 				reporter: ["text", "html"],
 				exclude: [
 					"**/*.d.ts",
-					"**/*.spec.*",
+					"**/*.spec.ts",
+					"**/*.spec.tsx",
 					"**/*.mock.ts",
 					"**/*.mock.tsx",
+					"**/*.i18n.ts",
+					"**/*.i18n.tsx",
 					"**/types/*",
 					"**/globals/*",
 					"**/models/*.model.ts",
@@ -30,6 +33,7 @@ export default mergeConfig(
 					"ui/hooks/use-breakpoint.ts", // a simple wrapper with mapped arguments
 					"ui/utils/cn.ts", // a simple wrapper to unify two external libs
 					"main.tsx", // main setup file
+					"dev-only/*", // internal dev-only modules
 				],
 			},
 		},
