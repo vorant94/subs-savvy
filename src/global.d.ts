@@ -21,5 +21,5 @@ declare module "i18next" {
 	}
 
 	interface CustomResources
-		extends Record<TypeOptions["defaultNS"], typeof Translation> {}
+		extends Record<TypeOptions["defaultNS"], Translation> {}
 }

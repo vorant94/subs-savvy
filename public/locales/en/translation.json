@@ -6,5 +6,21 @@
 	"total": "Total",
 	"expenses-by-category": "Expenses by Category",
 	"select-category": "Select Category",
-	"add-sub": "add sub"
+	"add-sub": "add sub",
+	"expenses-in": "Expenses in",
+	"jan": "January",
+	"feb": "February",
+	"mar": "March",
+	"apr": "April",
+	"may": "May",
+	"jun": "June",
+	"jul": "July",
+	"aug": "August",
+	"sep": "September",
+	"oct": "October",
+	"nov": "November",
+	"dec": "December",
+	"previous-month": "Previous month",
+	"next-month": "Next month",
+	"subs-amount": "{{amount}} subs"
 }

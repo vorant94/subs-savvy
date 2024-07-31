@@ -5,22 +5,23 @@ import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
 import type { PolarViewBox } from "recharts/types/util/types";
-import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { startOfYear } from "../../date/globals/start-of-year.ts";
-import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
-import type { SubscriptionModel } from "../../subscriptions/models/subscription.model.ts";
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
-import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 import { cn } from "../../ui/utils/cn.ts";
-import type { ChartTooltipContentPayload } from "./chart-tooltip-content.tsx";
+import {
+	type SubscriptionsAggregatedByCategory,
+	aggregateSubscriptionsByCategory,
+	noCategoryPlaceholder,
+} from "../utils/aggregate-subscriptions-by-category.ts";
 
 export const ExpensesByCategory = memo(() => {
 	const { subscriptions } = useSubscriptions();
-	const aggregatedSubscriptions = useMemo(
-		() => aggregateSubscriptionsByCategory(subscriptions),
-		[subscriptions],
-	);
+	const aggregatedSubscriptions = useMemo(() => {
+		return aggregateSubscriptionsByCategory(subscriptions, (subscription) =>
+			calculateSubscriptionPriceForYear(subscription, startOfYear),
+		);
+	}, [subscriptions]);
 
 	const [activeIndex, setActiveIndex] = useState<number>(-1);
 	const updateActiveIndex = useCallback((_: unknown, index: number) => {
@@ -33,7 +34,7 @@ export const ExpensesByCategory = memo(() => {
 	const { t } = useTranslation();
 
 	return (
-		<div className={cn("flex flex-col gap-4")}>
+		<div className={cn("flex shrink-0 flex-col gap-4")}>
 			<Text
 				className={cn("font-medium")}
 				size="sm"
@@ -48,12 +49,12 @@ export const ExpensesByCategory = memo(() => {
 			>
 				<div className={cn("flex h-[177px] flex-row items-center gap-8")}>
 					<PieChart
-						width={177}
-						height={177}
+						width={180}
+						height={180}
 					>
 						<Pie
-							innerRadius={66}
-							outerRadius={88}
+							innerRadius={70}
+							outerRadius={90}
 							data={aggregatedSubscriptions}
 							dataKey="totalExpenses"
 							onMouseEnter={updateActiveIndex}
@@ -109,61 +110,6 @@ export const ExpensesByCategory = memo(() => {
 	);
 });
 
-interface SubscriptionsAggregatedByCategory extends ChartTooltipContentPayload {
-	category: CategoryModel;
-}
-
-const noCategoryPlaceholder = {
-	id: -1,
-	name: "no-category",
-	color: "#777777",
-} as const satisfies CategoryModel;
-
-function aggregateSubscriptionsByCategory(
-	subscriptions: ReadonlyArray<SubscriptionModel>,
-): Array<SubscriptionsAggregatedByCategory> {
-	const subscriptionsByCategory: Array<SubscriptionsAggregatedByCategory> = [];
-
-	for (const subscription of subscriptions) {
-		const priceThisYear = calculateSubscriptionPriceForYear(
-			subscription,
-			startOfYear,
-		);
-		if (priceThisYear === 0) {
-			continue;
-		}
-
-		const subByCategory = subscriptionsByCategory.find((agg) =>
-			subscription?.category
-				? agg.category.id === subscription.category.id
-				: agg.category.id === noCategoryPlaceholder.id,
-		);
-		if (!subByCategory) {
-			subscriptionsByCategory.push({
-				category: subscription.category ?? noCategoryPlaceholder,
-				totalExpenses: priceThisYear,
-				subscriptions: [
-					{ ...subscription, price: roundToDecimal(priceThisYear) },
-				],
-			});
-			continue;
-		}
-
-		subByCategory.totalExpenses += priceThisYear;
-		subByCategory.subscriptions.push({
-			...subscription,
-			price: roundToDecimal(priceThisYear),
-		});
-	}
-
-	for (const subsByCategory of subscriptionsByCategory) {
-		subsByCategory.subscriptions.sort(compareSubscriptionsDesc);
-		subsByCategory.totalExpenses = roundToDecimal(subsByCategory.totalExpenses);
-	}
-
-	return subscriptionsByCategory;
-}
-
 const LabelContent = ({
 	viewBox,
 	aggregatedSubscriptions,
@@ -171,10 +117,10 @@ const LabelContent = ({
 }: LabelContentPros) => {
 	const { cx, cy } = viewBox as PolarViewBox;
 
-	const total = useMemo(
+	const totalExpenses = useMemo(
 		() =>
 			aggregatedSubscriptions.reduce(
-				(prev, curr) => prev + curr.totalExpenses,
+				(prev, { totalExpenses }) => prev + totalExpenses,
 				0,
 			),
 		[aggregatedSubscriptions],
@@ -203,7 +149,7 @@ const LabelContent = ({
 				dominantBaseline="central"
 			>
 				<tspan>
-					{aggregatedSubscriptions[activeIndex]?.totalExpenses ?? total}
+					{aggregatedSubscriptions[activeIndex]?.totalExpenses ?? totalExpenses}
 				</tspan>
 			</text>
 		</>
