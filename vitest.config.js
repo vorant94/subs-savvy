@@ -31,6 +31,7 @@ export default mergeConfig(
 					"ui/hooks/use-breakpoint.ts", // a simple wrapper with mapped arguments
 					"ui/utils/cn.ts", // a simple wrapper to unify two external libs
 					"main.tsx", // main setup file
+					"router.tsx", // part of main file, standalone only because this one is big on its own
 					"dev-only/*", // internal dev-only modules
 				],
 			},
