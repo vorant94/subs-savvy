@@ -1,7 +1,7 @@
 import { faFileCode } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Text } from "@mantine/core";
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { type FileWithPath, useDropzone } from "react-dropzone";
 import { cn } from "../../ui/utils/cn.ts";
 import {
@@ -11,9 +11,11 @@ import {
 
 export const RecoveryImportDropZone = memo(
 	({ onRecoveryParsed }: RecoveryImportDropZoneProps) => {
+		const [reader] = useState(() => new FileReader());
+
 		const readFile = useCallback(
 			([file]: Array<FileWithPath>) => file && reader.readAsText(file),
-			[],
+			[reader],
 		);
 
 		const { getRootProps, getInputProps } = useDropzone({
@@ -25,25 +27,27 @@ export const RecoveryImportDropZone = memo(
 		});
 
 		useEffect(() => {
-			reader.addEventListener("load", processFile);
+			const controller = new AbortController();
 
-			return () => {
-				reader.removeEventListener("load", processFile);
-			};
+			reader.addEventListener(
+				"load",
+				({ currentTarget }: ProgressEvent<FileReader>) => {
+					if (!currentTarget) {
+						throw new Error("currentTarget is missing");
+					}
+
+					const { result } = currentTarget as FileReader;
+					if (typeof result !== "string") {
+						throw new Error("type of result should be string");
+					}
+
+					onRecoveryParsed(recoverySchema.parse(JSON.parse(result)));
+				},
+				{ signal: controller.signal },
+			);
+
+			return () => controller.abort();
 		});
-
-		const processFile = ({ currentTarget }: ProgressEvent<FileReader>) => {
-			if (!currentTarget) {
-				throw new Error("currentTarget is missing");
-			}
-
-			const { result } = currentTarget as FileReader;
-			if (typeof result !== "string") {
-				throw new Error("type of result should be string");
-			}
-
-			onRecoveryParsed(recoverySchema.parse(JSON.parse(result)));
-		};
 
 		return (
 			<button
@@ -81,5 +85,3 @@ export const RecoveryImportDropZone = memo(
 export interface RecoveryImportDropZoneProps {
 	onRecoveryParsed(recovery: RecoveryModel): void;
 }
-
-const reader = new FileReader();
