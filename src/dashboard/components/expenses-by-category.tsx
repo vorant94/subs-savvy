@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
 import type { PolarViewBox } from "recharts/types/util/types";
 import { startOfYear } from "../../date/globals/start-of-year.ts";
+import { useCurrencyFormatter } from "../../i18n/hooks/use-currency-formatter.ts";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
 import { cn } from "../../ui/utils/cn.ts";
@@ -32,6 +33,8 @@ export const ExpensesByCategory = memo(() => {
 	}, []);
 
 	const { t } = useTranslation();
+
+	const currencyFormatter = useCurrencyFormatter();
 
 	return (
 		<div className={cn("flex shrink-0 flex-col gap-4")}>
@@ -100,7 +103,7 @@ export const ExpensesByCategory = memo(() => {
 										? t(noCategoryPlaceholder.name)
 										: category.name}
 								</Text>
-								<Text size="xs">{totalExpenses}</Text>
+								<Text size="xs">{currencyFormatter.format(totalExpenses)}</Text>
 							</li>
 						))}
 					</ul>
@@ -129,6 +132,8 @@ const LabelContent = ({
 
 	const { t } = useTranslation();
 
+	const currencyFormatter = useCurrencyFormatter();
+
 	return (
 		<>
 			<text
@@ -150,7 +155,10 @@ const LabelContent = ({
 				dominantBaseline="central"
 			>
 				<tspan>
-					{aggregatedSubscriptions[activeIndex]?.totalExpenses ?? totalExpenses}
+					{currencyFormatter.format(
+						aggregatedSubscriptions[activeIndex]?.totalExpenses ??
+							totalExpenses,
+					)}
 				</tspan>
 			</text>
 		</>

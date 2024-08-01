@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 import { Bar, BarChart, Legend, XAxis, YAxis } from "recharts";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { startOfMonth } from "../../date/globals/start-of-month.ts";
-import { type Month, monthToMonthName } from "../../date/types/month.ts";
-import { percentageFormatter } from "../../i18n/globals/percentage.formatter.ts";
+import { useCurrencyFormatter } from "../../i18n/hooks/use-currency-formatter.ts";
+import { usePercentageFormatter } from "../../i18n/hooks/use-percentage-formatter.ts";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { calculateSubscriptionPriceForMonth } from "../../subscriptions/utils/calculate-subscription-price-for-month.ts";
 import { cn } from "../../ui/utils/cn.ts";
@@ -24,10 +24,8 @@ import {
 
 export const ExpensesPerMonth = memo(() => {
 	const [monthDate, setMonthDate] = useState(startOfMonth);
-	const monthName = useMemo(
-		() => monthToMonthName[dayjs(monthDate).month() as Month],
-		[monthDate],
-	);
+	// TODO translate via dayjs locale once we have more than english
+	const monthName = useMemo(() => dayjs(monthDate).format("MMMM"), [monthDate]);
 	const goPreviousMonth = useCallback(
 		() => setMonthDate(dayjs(monthDate).subtract(1, "month").toDate()),
 		[monthDate],
@@ -83,6 +81,8 @@ export const ExpensesPerMonth = memo(() => {
 
 	const { t } = useTranslation();
 
+	const currencyFormatter = useCurrencyFormatter();
+
 	return (
 		<Card
 			className={cn("flex shrink-0 flex-col gap-6")}
@@ -105,7 +105,7 @@ export const ExpensesPerMonth = memo(() => {
 				>
 					<FontAwesomeIcon icon={faChevronLeft} />
 				</ActionIcon>
-				<Title order={5}>{t(monthName)}</Title>
+				<Title order={5}>{monthName}</Title>
 				<ActionIcon
 					variant="transparent"
 					aria-label={t("next-month")}
@@ -117,7 +117,7 @@ export const ExpensesPerMonth = memo(() => {
 
 			<div className={cn("flex items-center gap-8")}>
 				<div className={cn("flex flex-col gap-4")}>
-					<Title order={2}>{totalExpenses}</Title>
+					<Title order={2}>{currencyFormatter.format(totalExpenses)}</Title>
 					<Text
 						size="xs"
 						c="dimmed"
@@ -182,6 +182,8 @@ type SubscriptionsAggregatedByCategoryPerMonth = Record<
 const LegendContent = memo(
 	({ aggregatedSubscriptions, totalExpenses }: LegendContentPros) => {
 		const { t } = useTranslation();
+
+		const percentageFormatter = usePercentageFormatter();
 
 		return (
 			<ul className={cn("mt-2 flex items-center gap-6")}>
