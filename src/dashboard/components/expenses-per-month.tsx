@@ -1,6 +1,7 @@
 import {
 	faChevronLeft,
 	faChevronRight,
+	faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Card, Divider, Text, Title } from "@mantine/core";
@@ -11,6 +12,7 @@ import { Bar, BarChart, Legend, XAxis, YAxis } from "recharts";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { startOfMonth } from "../../date/globals/start-of-month.ts";
 import { type Month, monthToMonthName } from "../../date/types/month.ts";
+import { percentageFormatter } from "../../i18n/globals/percentage.formatter.ts";
 import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { calculateSubscriptionPriceForMonth } from "../../subscriptions/utils/calculate-subscription-price-for-month.ts";
 import { cn } from "../../ui/utils/cn.ts";
@@ -50,6 +52,19 @@ export const ExpensesPerMonth = memo(() => {
 			{},
 		);
 	}, [aggregatedByCategory]);
+
+	const calculateRadius: (index: number) => [number, number, number, number] =
+		useCallback(
+			(index) => {
+				return [
+					index === 0 ? 4 : 0,
+					index === aggregatedByCategory.length - 1 ? 4 : 0,
+					index === aggregatedByCategory.length - 1 ? 4 : 0,
+					index === 0 ? 4 : 0,
+				];
+			},
+			[aggregatedByCategory],
+		);
 
 	const totalExpenses = useMemo(
 		() =>
@@ -129,8 +144,9 @@ export const ExpensesPerMonth = memo(() => {
 						hide
 						type="number"
 					/>
-					{aggregatedByCategory.map(({ category }) => (
+					{aggregatedByCategory.map(({ category }, index) => (
 						<Bar
+							radius={calculateRadius(index)}
 							name={
 								category.id === -1
 									? t(noCategoryPlaceholder.name)
@@ -145,6 +161,12 @@ export const ExpensesPerMonth = memo(() => {
 					<Legend
 						iconType="circle"
 						align="left"
+						content={
+							<LegendContent
+								aggregatedSubscriptions={aggregatedByCategory}
+								totalExpenses={totalExpenses}
+							/>
+						}
 					/>
 				</BarChart>
 			</div>
@@ -156,3 +178,51 @@ type SubscriptionsAggregatedByCategoryPerMonth = Record<
 	CategoryModel["id"],
 	SubscriptionsAggregatedByCategory
 >;
+
+const LegendContent = memo(
+	({ aggregatedSubscriptions, totalExpenses }: LegendContentPros) => {
+		const { t } = useTranslation();
+
+		return (
+			<ul className={cn("mt-2 flex items-center gap-6")}>
+				{aggregatedSubscriptions.map((c) => (
+					<li
+						key={c.category.id}
+						className={cn("flex items-center")}
+					>
+						<FontAwesomeIcon
+							size="xs"
+							color={c.category.color}
+							icon={faCircle}
+							className={cn("mr-2")}
+						/>
+						<Text size="xs">
+							{c.category.id === -1
+								? t(noCategoryPlaceholder.name)
+								: c.category.name}
+						</Text>
+						&nbsp;
+						<Text
+							c="dimmed"
+							size="xs"
+						>
+							•
+						</Text>
+						&nbsp;
+						<Text
+							size="xs"
+							c="dimmed"
+						>
+							{percentageFormatter.format(c.totalExpenses / totalExpenses)}
+						</Text>
+					</li>
+				))}
+			</ul>
+		);
+	},
+);
+
+interface LegendContentPros {
+	aggregatedSubscriptions: Array<SubscriptionsAggregatedByCategory>;
+	totalExpenses: number;
+}

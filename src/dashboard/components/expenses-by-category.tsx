@@ -110,6 +110,7 @@ export const ExpensesByCategory = memo(() => {
 	);
 });
 
+// TODO rewrite with foreignObject
 const LabelContent = ({
 	viewBox,
 	aggregatedSubscriptions,
