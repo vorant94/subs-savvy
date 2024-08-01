@@ -1,35 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	type SupportedLanguage,
 	supportedLanguages,
 } from "../types/supported-language.ts";
 
 export function useLanguage(): SupportedLanguage {
-	const [language, setLanguage] = useState<SupportedLanguage>("en-US");
-
 	// TODO connect to user settings language once it is available
 
-	useEffect(() => {
-		if (supportedLanguages.includes(navigator.language)) {
-			setLanguage(navigator.language as SupportedLanguage);
-		}
-	}, []);
-
+	const [languageFromBrowser, setLanguageFromBrowser] = useState<
+		string | null
+	>();
+	useEffect(() => setLanguageFromBrowser(navigator.language), []);
 	useEffect(() => {
 		const controller = new AbortController();
 
 		window.addEventListener(
 			"languagechange",
-			() => {
-				if (supportedLanguages.includes(navigator.language)) {
-					setLanguage(navigator.language as SupportedLanguage);
-				}
-			},
+			() => setLanguageFromBrowser(navigator.language),
 			{ signal: controller.signal },
 		);
 
 		return () => controller.abort();
 	});
 
-	return language;
+	return useMemo(
+		() =>
+			languageFromBrowser && supportedLanguages.includes(languageFromBrowser)
+				? (languageFromBrowser as SupportedLanguage)
+				: defaultLanguage,
+		[languageFromBrowser],
+	);
 }
+
+const defaultLanguage: SupportedLanguage = "en-US" as const;

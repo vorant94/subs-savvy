@@ -1,5 +1,4 @@
 import type { CategoryModel } from "../../categories/models/category.model.ts";
-import { roundToDecimal } from "../../math/utils/round-to-decimal.ts";
 import type { SubscriptionModel } from "../../subscriptions/models/subscription.model.ts";
 import { compareSubscriptionsDesc } from "../../subscriptions/utils/compare-subscriptions.ts";
 
@@ -10,8 +9,8 @@ export function aggregateSubscriptionsByCategory(
 	const subscriptionsByCategory: Array<SubscriptionsAggregatedByCategory> = [];
 
 	for (const subscription of subscriptions) {
-		const priceThisYear = calculateSubscriptionPrice(subscription);
-		if (priceThisYear === 0) {
+		const price = calculateSubscriptionPrice(subscription);
+		if (price === 0) {
 			continue;
 		}
 
@@ -23,24 +22,18 @@ export function aggregateSubscriptionsByCategory(
 		if (!subByCategory) {
 			subscriptionsByCategory.push({
 				category: subscription.category ?? noCategoryPlaceholder,
-				totalExpenses: priceThisYear,
-				subscriptions: [
-					{ ...subscription, price: roundToDecimal(priceThisYear) },
-				],
+				totalExpenses: price,
+				subscriptions: [subscription],
 			});
 			continue;
 		}
 
-		subByCategory.totalExpenses += priceThisYear;
-		subByCategory.subscriptions.push({
-			...subscription,
-			price: roundToDecimal(priceThisYear),
-		});
+		subByCategory.totalExpenses += price;
+		subByCategory.subscriptions.push(subscription);
 	}
 
 	for (const subsByCategory of subscriptionsByCategory) {
 		subsByCategory.subscriptions.sort(compareSubscriptionsDesc);
-		subsByCategory.totalExpenses = roundToDecimal(subsByCategory.totalExpenses);
 	}
 
 	return subscriptionsByCategory.toSorted((a, b) =>
