@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Button } from "@mantine/core";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useBreakpoint } from "../../ui/hooks/use-breakpoint.ts";
+import { useBreakpoint } from "../../ui/hooks/use-breakpoint.tsx";
 import { useSubscriptionUpsert } from "../hooks/use-subscription-upsert.tsx";
 
 export const AddSubscriptionButton = memo(() => {

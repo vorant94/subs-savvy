@@ -28,7 +28,6 @@ export default mergeConfig(
 					"**/utils/*.matchers.ts",
 					"db/utils/populate-db.ts", // utility function for tests only
 					"db/utils/clean-up-db.ts", // utility function for tests only
-					"ui/hooks/use-breakpoint.ts", // a simple wrapper with mapped arguments
 					"ui/utils/cn.ts", // a simple wrapper to unify two external libs
 					"main.tsx", // main setup file
 					"router.tsx", // part of main file, standalone only because this one is big on its own

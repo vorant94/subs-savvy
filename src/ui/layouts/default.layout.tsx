@@ -8,7 +8,7 @@ import {
 import { type PropsWithChildren, type ReactElement, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import { useBreakpoint } from "../hooks/use-breakpoint.ts";
+import { useBreakpoint } from "../hooks/use-breakpoint.tsx";
 import { useDefaultLayout } from "../hooks/use-default-layout.tsx";
 import { type NavLink, useNavLinks } from "../hooks/use-nav-links.tsx";
 import { cn } from "../utils/cn.ts";
@@ -104,7 +104,7 @@ export const DefaultLayoutHeader = memo(
 				{actions ? (
 					isMd ? (
 						<div>{actions}</div>
-					) : typeof isMd !== "undefined" && !isDrawerOpened && !isNavOpened ? (
+					) : !isDrawerOpened && !isNavOpened ? (
 						<Affix position={{ bottom: 20, right: 20 }}>
 							<div>{actions}</div>
 						</Affix>

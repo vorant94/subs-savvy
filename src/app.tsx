@@ -8,6 +8,7 @@ import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import { SubscriptionUpsertProvider } from "./subscriptions/hooks/use-subscription-upsert.tsx";
 import { SubscriptionsProvider } from "./subscriptions/hooks/use-subscriptions.tsx";
+import { BreakpointsProvider } from "./ui/hooks/use-breakpoint.tsx";
 import { DefaultLayoutProvider } from "./ui/hooks/use-default-layout.tsx";
 import { type NavLink, NavLinksProvider } from "./ui/hooks/use-nav-links.tsx";
 import { rootRoute } from "./ui/types/root-route.ts";
@@ -18,13 +19,15 @@ export const App = memo(() => {
 			topNavLinks={topNavLinks}
 			bottomNavLinks={bottomNavLinks}
 		>
-			<DefaultLayoutProvider>
-				<SubscriptionUpsertProvider>
-					<SubscriptionsProvider>
-						<Outlet />
-					</SubscriptionsProvider>
-				</SubscriptionUpsertProvider>
-			</DefaultLayoutProvider>
+			<BreakpointsProvider>
+				<DefaultLayoutProvider>
+					<SubscriptionUpsertProvider>
+						<SubscriptionsProvider>
+							<Outlet />
+						</SubscriptionsProvider>
+					</SubscriptionUpsertProvider>
+				</DefaultLayoutProvider>
+			</BreakpointsProvider>
 		</NavLinksProvider>
 	);
 });
