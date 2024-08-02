@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 import type {
 	CategoryModel,
 	InsertCategoryModel,
@@ -35,38 +36,50 @@ export interface CategoryUpsertActions {
 	upsert(raw: UpsertCategoryModel): Promise<void>;
 }
 
-const useStore = create<Store>((set, get) => ({
-	mode: null,
-	category: null,
-	open(category) {
-		return set(() =>
-			category
-				? {
-						category,
-						mode: "update",
-					}
-				: {
-						category: null,
-						mode: "insert",
-					},
-		);
-	},
-	close() {
-		return set(() => ({
+const useStore = create<Store>()(
+	devtools(
+		(set, get) => ({
 			mode: null,
 			category: null,
-		}));
-	},
-	async upsert(raw) {
-		const store = get();
+			open(category) {
+				return set(
+					category
+						? {
+								category,
+								mode: "update",
+							}
+						: {
+								category: null,
+								mode: "insert",
+							},
+					undefined,
+					{ type: "open", category },
+				);
+			},
+			close() {
+				return set(
+					{
+						mode: null,
+						category: null,
+					},
+					undefined,
+					{ type: "close" },
+				);
+			},
+			async upsert(raw) {
+				const store = get();
 
-		store.mode === "update"
-			? await updateCategory(raw as UpdateCategoryModel)
-			: await insertCategory(raw as InsertCategoryModel);
+				store.mode === "update"
+					? await updateCategory(raw as UpdateCategoryModel)
+					: await insertCategory(raw as InsertCategoryModel);
 
-		store.close();
-	},
-}));
+				store.close();
+				set({}, undefined, { type: "upsert", raw });
+			},
+		}),
+		{ name: "CategoryUpsert", enabled: import.meta.env.DEV },
+	),
+);
 
 type Store = CategoryUpsertState & CategoryUpsertActions;
 

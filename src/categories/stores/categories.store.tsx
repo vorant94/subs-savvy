@@ -1,6 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 import type { CategoryModel } from "../models/category.model.ts";
 import { CategoryNotFound, findCategories } from "../models/category.table.ts";
 
@@ -26,31 +27,41 @@ export const CategoriesProvider = memo(({ children }: PropsWithChildren) => {
 	return <>{children}</>;
 });
 
-const useStore = create<Store>((set) => ({
-	categories: [],
-	setCategories: (categories) => set({ categories }),
-	selectedCategory: null,
-	selectCategory: (categoryId) =>
-		set(({ categories }) => {
-			if (categoryId) {
-				const categoryToSelect = categories.find(
-					(category) => `${category.id}` === categoryId,
-				);
+const useStore = create<Store>()(
+	devtools(
+		(set) => ({
+			categories: [],
+			setCategories: (categories) =>
+				set({ categories }, undefined, { type: "setCategories", categories }),
+			selectedCategory: null,
+			selectCategory: (categoryId) =>
+				set(
+					({ categories }) => {
+						if (categoryId) {
+							const categoryToSelect = categories.find(
+								(category) => `${category.id}` === categoryId,
+							);
 
-				if (!categoryToSelect) {
-					throw new CategoryNotFound(+categoryId);
-				}
+							if (!categoryToSelect) {
+								throw new CategoryNotFound(+categoryId);
+							}
 
-				return {
-					selectedCategory: categoryToSelect,
-				};
-			}
+							return {
+								selectedCategory: categoryToSelect,
+							};
+						}
 
-			return {
-				selectedCategory: null,
-			};
+						return {
+							selectedCategory: null,
+						};
+					},
+					undefined,
+					{ type: "selectCategory", categoryId },
+				),
 		}),
-}));
+		{ name: "Categories", enabled: import.meta.env.DEV },
+	),
+);
 
 interface Store {
 	categories: ReadonlyArray<CategoryModel>;

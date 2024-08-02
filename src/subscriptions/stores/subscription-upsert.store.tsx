@@ -1,6 +1,7 @@
 import { usePrevious } from "@mantine/hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 import { useDefaultLayout } from "../../ui/hooks/use-default-layout.tsx";
 import type {
 	InsertSubscriptionModel,
@@ -79,48 +80,61 @@ export const SubscriptionUpsertProvider = memo(
 	},
 );
 
-const useStore = create<Store>((set, get) => ({
-	mode: null,
-	subscription: null,
-	open(subscription) {
-		return set(() =>
-			subscription
-				? {
-						subscription,
-						mode: "update",
-					}
-				: {
-						subscription: null,
-						mode: "insert",
-					},
-		);
-	},
-	close() {
-		return set(() => ({
+const useStore = create<Store>()(
+	devtools(
+		(set, get) => ({
 			mode: null,
 			subscription: null,
-		}));
-	},
-	async upsert(raw) {
-		const store = get();
+			open(subscription) {
+				return set(
+					subscription
+						? {
+								subscription,
+								mode: "update",
+							}
+						: {
+								subscription: null,
+								mode: "insert",
+							},
+					undefined,
+					{ type: "open", subscription },
+				);
+			},
+			close() {
+				return set(
+					{
+						mode: null,
+						subscription: null,
+					},
+					undefined,
+					{ type: "close" },
+				);
+			},
+			async upsert(raw) {
+				const store = get();
 
-		store.mode === "update"
-			? await updateSubscription(raw as UpdateSubscriptionModel)
-			: await insertSubscription(raw as InsertSubscriptionModel);
+				store.mode === "update"
+					? await updateSubscription(raw as UpdateSubscriptionModel)
+					: await insertSubscription(raw as InsertSubscriptionModel);
 
-		store.close();
-	},
-	async delete() {
-		const store = get();
-		if (store.mode !== "update") {
-			throw new Error("Nothing to delete in insert mode!");
-		}
+				store.close();
+				set({}, undefined, { type: "upsert", raw });
+			},
+			async delete() {
+				const store = get();
+				if (store.mode !== "update") {
+					throw new Error("Nothing to delete in insert mode!");
+				}
 
-		await deleteSubscription(store.subscription.id);
+				await deleteSubscription(store.subscription.id);
 
-		store.close();
-	},
-}));
+				store.close();
+				set({}, undefined, { type: "delete" });
+			},
+		}),
+		{ name: "SubscriptionUpsert", enabled: import.meta.env.DEV },
+	),
+);
 
 type Store = SubscriptionUpsertState & SubscriptionUpsertActions;
 
