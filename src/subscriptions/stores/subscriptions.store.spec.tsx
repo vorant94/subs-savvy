@@ -10,23 +10,27 @@ import { categoryMock } from "../../categories/models/category.mock.ts";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { findCategories } from "../../categories/models/category.table.ts";
 import {
+	CategoriesProvider,
+	useCategories,
+	useSelectedCategory,
+} from "../../categories/stores/categories.store.tsx";
+import {
 	monthlySubscription,
 	yearlySubscription,
 } from "../models/subscription.mock.ts";
+import type { SubscriptionModel } from "../models/subscription.model.ts";
 import { findSubscriptions } from "../models/subscription.table.ts";
-import { useSubscriptionsMock } from "./use-subscriptions.mock.ts";
 import {
 	SubscriptionsProvider,
-	type UseSubscriptions,
 	useSubscriptions,
-} from "./use-subscriptions.tsx";
+} from "./subscriptions.store.tsx";
 
 vi.mock(import("../../categories/models/category.table.ts"));
 vi.mock(import("../models/subscription.table.ts"));
 
-describe("useSubscriptions", () => {
-	let screen: RenderHookResult<UseSubscriptions, void>;
-	let hook: RenderHookResult<UseSubscriptions, void>["result"];
+describe("subscriptions.store", () => {
+	let screen: RenderHookResult<HooksCombined, void>;
+	let hook: RenderHookResult<HooksCombined, void>["result"];
 
 	beforeAll(() => {
 		vi.mocked(findSubscriptions).mockResolvedValue([
@@ -38,25 +42,34 @@ describe("useSubscriptions", () => {
 	});
 
 	beforeEach(() => {
-		screen = renderHook<UseSubscriptions, void>(() => useSubscriptions(), {
-			wrapper,
-		});
+		screen = renderHook<HooksCombined, void>(
+			() => {
+				const subscriptions = useSubscriptions();
+				const categories = useCategories();
+				const [selectedCategory, selectCategory] = useSelectedCategory();
+
+				return {
+					subscriptions,
+					categories,
+					selectedCategory,
+					selectCategory,
+				};
+			},
+			{
+				wrapper,
+			},
+		);
 
 		hook = screen.result;
 	});
 
-	it("should fetch subscriptions and categories", async () => {
+	it("should fetch subscriptions", async () => {
 		await Promise.all([
-			waitFor(() => expect(hook.current.selectedCategory).toBeFalsy()),
 			waitFor(() =>
-				expect(hook.current.categories).toEqual(
-					useSubscriptionsMock.categories,
-				),
-			),
-			waitFor(() =>
-				expect(hook.current.subscriptions).toEqual(
-					useSubscriptionsMock.subscriptions,
-				),
+				expect(hook.current.subscriptions).toEqual([
+					monthlySubscription,
+					yearlySubscription,
+				]),
 			),
 		]);
 	});
@@ -83,16 +96,19 @@ describe("useSubscriptions", () => {
 			waitFor(() => expect(hook.current.subscriptions.length).toEqual(2)),
 		]);
 	});
-
-	it("should throw when trying to select category with wrong id", async () => {
-		// not real validation, but just to ensure that component is stable and is ready for upcoming `act` to be called
-		await waitFor(() => expect(hook.current.categories.length).toEqual(1));
-
-		// don't know how to check error type here, it isn't bubbling up to ErrorBoundary#onError for some reason
-		expect(() => act(() => hook.current.selectCategory("7"))).toThrowError();
-	});
 });
 
 const wrapper: FC<PropsWithChildren> = ({ children }) => {
-	return <SubscriptionsProvider>{children}</SubscriptionsProvider>;
+	return (
+		<CategoriesProvider>
+			<SubscriptionsProvider>{children}</SubscriptionsProvider>
+		</CategoriesProvider>
+	);
 };
+
+interface HooksCombined {
+	subscriptions: ReadonlyArray<SubscriptionModel>;
+	categories: ReadonlyArray<CategoryModel>;
+	selectedCategory: CategoryModel | null;
+	selectCategory(categoryId: string | null): void;
+}

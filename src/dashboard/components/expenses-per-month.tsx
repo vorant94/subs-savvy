@@ -13,7 +13,7 @@ import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { startOfMonth } from "../../date/globals/start-of-month.ts";
 import { useCurrencyFormatter } from "../../i18n/hooks/use-currency-formatter.ts";
 import { usePercentageFormatter } from "../../i18n/hooks/use-percentage-formatter.ts";
-import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
+import { useSubscriptions } from "../../subscriptions/stores/subscriptions.store.tsx";
 import { calculateSubscriptionPriceForMonth } from "../../subscriptions/utils/calculate-subscription-price-for-month.ts";
 import { cn } from "../../ui/utils/cn.ts";
 import {
@@ -35,7 +35,7 @@ export const ExpensesPerMonth = memo(() => {
 		[monthDate],
 	);
 
-	const { subscriptions } = useSubscriptions();
+	const subscriptions = useSubscriptions();
 	const aggregatedByCategory = useMemo(() => {
 		return aggregateSubscriptionsByCategory(subscriptions, (subscription) =>
 			calculateSubscriptionPriceForMonth(subscription, monthDate),

@@ -1,34 +1,24 @@
 import { MantineProvider } from "@mantine/core";
 import { type RenderResult, fireEvent, render } from "@testing-library/react";
 import type { FC, PropsWithChildren } from "react";
-import {
-	type MockInstance,
-	beforeAll,
-	beforeEach,
-	describe,
-	expect,
-	it,
-	vi,
-} from "vitest";
-import { useSubscriptionsMock } from "../../subscriptions/hooks/use-subscriptions.mock.ts";
-import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { categoryMock } from "../models/category.mock.ts";
 import type { CategoryModel } from "../models/category.model.ts";
+import {
+	useCategories,
+	useSelectedCategory,
+} from "../stores/categories.store.tsx";
 import { CategorySelect } from "./category-select.tsx";
 
-vi.mock(import("../../subscriptions/hooks/use-subscriptions.tsx"));
+vi.mock(import("../stores/categories.store.tsx"));
 
 describe("CategorySelect", () => {
 	let screen: RenderResult;
-	let selectCategorySpy: MockInstance;
+	const selectCategorySpy = vi.fn();
 
 	beforeAll(() => {
-		selectCategorySpy = vi.spyOn(useSubscriptionsMock, "selectCategory");
-
-		vi.mocked(useSubscriptions).mockReturnValue({
-			...useSubscriptionsMock,
-			categories: [categoryMock],
-		});
+		vi.mocked(useCategories).mockReturnValue([categoryMock]);
+		vi.mocked(useSelectedCategory).mockReturnValue([null, selectCategorySpy]);
 	});
 
 	beforeEach(() => {

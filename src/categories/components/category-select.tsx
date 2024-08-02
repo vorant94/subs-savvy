@@ -11,15 +11,20 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
 import { cn } from "../../ui/utils/cn.ts";
+import {
+	useCategories,
+	useSelectedCategory,
+} from "../stores/categories.store.tsx";
 import { ManageCategoriesModal } from "./manage-categories-modal.tsx";
 
 export const CategorySelect = memo(() => {
+	const categories = useCategories();
+
 	const combobox = useCombobox({
 		onDropdownClose: () => combobox.resetSelectedOption(),
 	});
-	const { categories, selectCategory, selectedCategory } = useSubscriptions();
+	const [selectedCategory, selectCategory] = useSelectedCategory();
 	const handleSelectCategory = useCallback(
 		(categoryId: string | null) => {
 			selectCategory(categoryId);

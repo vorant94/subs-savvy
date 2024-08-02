@@ -7,18 +7,17 @@ import {
 } from "@testing-library/react";
 import type { FC, PropsWithChildren } from "react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { useSubscriptions } from "../hooks/use-subscriptions";
-import { useSubscriptionsMock } from "../hooks/use-subscriptions.mock.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
 } from "../models/subscription.mock.ts";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
+import { useSubscriptions } from "../stores/subscriptions.store.tsx";
 import { SubscriptionList } from "./subscription-list";
 import { SubscriptionListItemMock } from "./subscription-list-item.mock.tsx";
 import { SubscriptionListItem } from "./subscription-list-item.tsx";
 
-vi.mock(import("../hooks/use-subscriptions.tsx"));
+vi.mock(import("../stores/subscriptions.store.tsx"));
 vi.mock(import("./subscription-list-item.tsx"));
 
 describe("SubscriptionList", () => {
@@ -36,10 +35,10 @@ describe("SubscriptionList", () => {
 
 	describe("with data", () => {
 		beforeAll(() => {
-			vi.mocked(useSubscriptions).mockReturnValue({
-				...useSubscriptionsMock,
-				subscriptions: [monthlySubscription, yearlySubscription],
-			});
+			vi.mocked(useSubscriptions).mockReturnValue([
+				monthlySubscription,
+				yearlySubscription,
+			]);
 		});
 
 		it("should render list items instead of no subscription placeholder", async () => {
@@ -88,7 +87,7 @@ describe("SubscriptionList", () => {
 
 	describe("without data", () => {
 		beforeAll(() => {
-			vi.mocked(useSubscriptions).mockReturnValue({ ...useSubscriptionsMock });
+			vi.mocked(useSubscriptions).mockReturnValue([]);
 		});
 
 		it("should show no subscription placeholder instead of list items", async () => {

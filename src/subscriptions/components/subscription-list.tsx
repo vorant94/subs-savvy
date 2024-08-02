@@ -1,7 +1,7 @@
 import { CloseButton, TextInput } from "@mantine/core";
 import { memo, useCallback, useMemo, useState } from "react";
 import { cn } from "../../ui/utils/cn.ts";
-import { useSubscriptions } from "../hooks/use-subscriptions.tsx";
+import { useSubscriptions } from "../stores/subscriptions.store.tsx";
 import { SubscriptionListItem } from "./subscription-list-item.tsx";
 
 export const SubscriptionList = memo(() => {
@@ -11,7 +11,7 @@ export const SubscriptionList = memo(() => {
 		[],
 	);
 
-	const { subscriptions } = useSubscriptions();
+	const subscriptions = useSubscriptions();
 	const filteredSubscriptions = useMemo(
 		() =>
 			subscriptions.filter((subscription) =>

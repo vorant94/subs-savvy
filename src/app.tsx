@@ -6,8 +6,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 import { Outlet } from "react-router-dom";
+import { CategoriesProvider } from "./categories/stores/categories.store.tsx";
 import { SubscriptionUpsertProvider } from "./subscriptions/hooks/use-subscription-upsert.tsx";
-import { SubscriptionsProvider } from "./subscriptions/hooks/use-subscriptions.tsx";
+import { SubscriptionsProvider } from "./subscriptions/stores/subscriptions.store.tsx";
 import { BreakpointsProvider } from "./ui/hooks/use-breakpoint.tsx";
 import { DefaultLayoutProvider } from "./ui/hooks/use-default-layout.tsx";
 import { type NavLink, NavLinksProvider } from "./ui/hooks/use-nav-links.tsx";
@@ -22,9 +23,11 @@ export const App = memo(() => {
 			<BreakpointsProvider>
 				<DefaultLayoutProvider>
 					<SubscriptionUpsertProvider>
-						<SubscriptionsProvider>
-							<Outlet />
-						</SubscriptionsProvider>
+						<CategoriesProvider>
+							<SubscriptionsProvider>
+								<Outlet />
+							</SubscriptionsProvider>
+						</CategoriesProvider>
 					</SubscriptionUpsertProvider>
 				</DefaultLayoutProvider>
 			</BreakpointsProvider>

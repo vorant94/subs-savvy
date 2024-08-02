@@ -7,7 +7,7 @@ import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
 import type { PolarViewBox } from "recharts/types/util/types";
 import { startOfYear } from "../../date/globals/start-of-year.ts";
 import { useCurrencyFormatter } from "../../i18n/hooks/use-currency-formatter.ts";
-import { useSubscriptions } from "../../subscriptions/hooks/use-subscriptions.tsx";
+import { useSubscriptions } from "../../subscriptions/stores/subscriptions.store.tsx";
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
 import { cn } from "../../ui/utils/cn.ts";
 import {
@@ -17,7 +17,7 @@ import {
 } from "../utils/aggregate-subscriptions-by-category.ts";
 
 export const ExpensesByCategory = memo(() => {
-	const { subscriptions } = useSubscriptions();
+	const subscriptions = useSubscriptions();
 	const aggregatedSubscriptions = useMemo(() => {
 		return aggregateSubscriptionsByCategory(subscriptions, (subscription) =>
 			calculateSubscriptionPriceForYear(subscription, startOfYear),
