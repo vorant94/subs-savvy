@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import { CategoriesProvider } from "./categories/stores/categories.store.tsx";
-import { SubscriptionUpsertProvider } from "./subscriptions/hooks/use-subscription-upsert.tsx";
+import { SubscriptionUpsertProvider } from "./subscriptions/stores/subscription-upsert.store.tsx";
 import { SubscriptionsProvider } from "./subscriptions/stores/subscriptions.store.tsx";
 import { BreakpointsProvider } from "./ui/hooks/use-breakpoint.tsx";
 import { DefaultLayoutProvider } from "./ui/hooks/use-default-layout.tsx";

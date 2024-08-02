@@ -4,17 +4,14 @@ import { ActionIcon, Button } from "@mantine/core";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../ui/hooks/use-breakpoint.tsx";
-import { useSubscriptionUpsert } from "../hooks/use-subscription-upsert.tsx";
+import { useSubscriptionUpsertActions } from "../stores/subscription-upsert.store.tsx";
 
 export const AddSubscriptionButton = memo(() => {
-	const upsert = useSubscriptionUpsert();
+	const { open } = useSubscriptionUpsertActions();
 	const isMd = useBreakpoint("md");
 	const { t } = useTranslation();
 
-	const openSubscriptionInsert = useCallback(
-		() => upsert.dispatch({ type: "open" }),
-		[upsert],
-	);
+	const openSubscriptionInsert = useCallback(() => open(), [open]);
 
 	return isMd ? (
 		<Button onClick={openSubscriptionInsert}>{t("add-sub")}</Button>

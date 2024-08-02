@@ -9,35 +9,26 @@ import {
 	Textarea,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
-import { useLiveQuery } from "dexie-react-hooks";
-import { memo, useCallback, useMemo } from "react";
-import {
-	Controller,
-	type DefaultValues,
-	type SubmitHandler,
-	useForm,
-} from "react-hook-form";
-import { findCategories } from "../../categories/models/category.table.ts";
+import { memo, useMemo } from "react";
+import { Controller, type DefaultValues, useForm } from "react-hook-form";
+import { useCategories } from "../../categories/stores/categories.store.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import { createDatePickerInputAriaLabels } from "../../ui/utils/create-date-picker-input-aria-labels.ts";
-import { useSubscriptionUpsert } from "../hooks/use-subscription-upsert.tsx";
 import {
-	type InsertSubscriptionModel,
-	type UpdateSubscriptionModel,
 	type UpsertSubscriptionModel,
 	insertSubscriptionSchema,
 	updateSubscriptionSchema,
 } from "../models/subscription.model.ts";
 import {
-	deleteSubscription,
-	insertSubscription,
-	updateSubscription,
-} from "../models/subscription.table.ts";
+	useSubscriptionUpsertActions,
+	useSubscriptionUpsertState,
+} from "../stores/subscription-upsert.store.tsx";
 import { subscriptionCyclePeriodsComboboxData } from "../types/subscription-cycle-period.ts";
 import { subscriptionIconsComboboxData } from "../types/subscription-icon.ts";
 
 export const SubscriptionUpsert = memo(() => {
-	const { state, dispatch } = useSubscriptionUpsert();
+	const state = useSubscriptionUpsertState();
+	const actions = useSubscriptionUpsertActions();
 
 	const {
 		register,
@@ -52,29 +43,8 @@ export const SubscriptionUpsert = memo(() => {
 		),
 		defaultValues: state.mode === "update" ? state.subscription : defaultValues,
 	});
-	const upsertSubscription: SubmitHandler<UpsertSubscriptionModel> = async (
-		raw,
-	) => {
-		state.mode === "update"
-			? await updateSubscription(raw as UpdateSubscriptionModel)
-			: await insertSubscription(raw as InsertSubscriptionModel);
 
-		dispatch({ type: "close" });
-	};
-	const deleteSubscriptionCb = useCallback(async () => {
-		if (state.mode !== "update") {
-			throw new Error("Nothing to delete in insert mode!");
-		}
-
-		await deleteSubscription(state.subscription.id);
-
-		dispatch({ type: "close" });
-	}, [dispatch, state]);
-	const closeUpsert = useCallback(() => {
-		dispatch({ type: "close" });
-	}, [dispatch]);
-
-	const categories = useLiveQuery(() => findCategories(), [], []);
+	const categories = useCategories();
 	const categoriesData: ComboboxData = useMemo(() => {
 		return categories.map((category) => ({
 			label: category.name,
@@ -84,7 +54,7 @@ export const SubscriptionUpsert = memo(() => {
 
 	return (
 		<form
-			onSubmit={handleSubmit(upsertSubscription)}
+			onSubmit={handleSubmit(actions.upsert)}
 			className={cn("flex flex-col gap-2 self-stretch")}
 		>
 			<Controller
@@ -248,7 +218,7 @@ export const SubscriptionUpsert = memo(() => {
 				<Button
 					type="button"
 					variant="outline"
-					onClick={closeUpsert}
+					onClick={actions.close}
 				>
 					Close
 				</Button>
@@ -257,7 +227,7 @@ export const SubscriptionUpsert = memo(() => {
 						type="button"
 						color="red"
 						variant="outline"
-						onClick={deleteSubscriptionCb}
+						onClick={actions.delete}
 					>
 						Delete
 					</Button>

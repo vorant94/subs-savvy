@@ -1,18 +1,18 @@
 import { Avatar, Card, Indicator, Text, Title } from "@mantine/core";
 import { memo, useCallback, useMemo } from "react";
 import { cn } from "../../ui/utils/cn.ts";
-import { useSubscriptionUpsert } from "../hooks/use-subscription-upsert.tsx";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
+import { useSubscriptionUpsertActions } from "../stores/subscription-upsert.store.tsx";
 import { subscriptionIconToSvg } from "../types/subscription-icon-to-svg.tsx";
 import { isSubscriptionExpired } from "../utils/is-subscription-expired.ts";
 
 export const SubscriptionListItem = memo(
 	({ subscription }: SubscriptionListItemProps) => {
-		const { dispatch: upsertDispatch } = useSubscriptionUpsert();
+		const { open } = useSubscriptionUpsertActions();
 
 		const openSubscriptionUpdate = useCallback(
-			() => upsertDispatch({ type: "open", subscription }),
-			[subscription, upsertDispatch],
+			() => open(subscription),
+			[open, subscription],
 		);
 
 		const isExpired = useMemo(

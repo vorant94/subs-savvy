@@ -2,7 +2,7 @@ import { memo } from "react";
 import { CategorySelect } from "../../categories/components/category-select.tsx";
 import { AddSubscriptionButton } from "../../subscriptions/components/add-subscription-button.tsx";
 import { SubscriptionUpsert } from "../../subscriptions/components/subscription-upsert.tsx";
-import { useSubscriptionUpsert } from "../../subscriptions/hooks/use-subscription-upsert";
+import { useSubscriptionUpsertMode } from "../../subscriptions/stores/subscription-upsert.store.tsx";
 import {
 	DefaultLayout,
 	DefaultLayoutHeader,
@@ -12,7 +12,7 @@ import { ExpensesByCategory } from "../components/expenses-by-category.tsx";
 import { ExpensesPerMonth } from "../components/expenses-per-month.tsx";
 
 export const DashboardPage = memo(() => {
-	const upsert = useSubscriptionUpsert();
+	const subscriptionUpsertMode = useSubscriptionUpsertMode();
 
 	return (
 		<DefaultLayout
@@ -22,7 +22,7 @@ export const DashboardPage = memo(() => {
 				</DefaultLayoutHeader>
 			}
 			drawerContent={<SubscriptionUpsert />}
-			drawerTitle={`${upsert.state.mode === "update" ? "Update" : "Insert"} Subscription`}
+			drawerTitle={`${subscriptionUpsertMode === "update" ? "Update" : "Insert"} Subscription`}
 		>
 			<div className={cn("flex flex-col items-start gap-8")}>
 				<ExpensesPerMonth />

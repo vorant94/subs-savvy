@@ -7,10 +7,10 @@ import {
 import { AddSubscriptionButton } from "../components/add-subscription-button.tsx";
 import { SubscriptionList } from "../components/subscription-list.tsx";
 import { SubscriptionUpsert } from "../components/subscription-upsert.tsx";
-import { useSubscriptionUpsert } from "../hooks/use-subscription-upsert.tsx";
+import { useSubscriptionUpsertMode } from "../stores/subscription-upsert.store.tsx";
 
 export const SubscriptionsPage = memo(() => {
-	const upsert = useSubscriptionUpsert();
+	const subscriptionUpsertMode = useSubscriptionUpsertMode();
 
 	return (
 		<DefaultLayout
@@ -20,7 +20,7 @@ export const SubscriptionsPage = memo(() => {
 				</DefaultLayoutHeader>
 			}
 			drawerContent={<SubscriptionUpsert />}
-			drawerTitle={`${upsert.state.mode === "update" ? "Update" : "Insert"} Subscription`}
+			drawerTitle={`${subscriptionUpsertMode === "update" ? "Update" : "Insert"} Subscription`}
 		>
 			<SubscriptionList />
 		</DefaultLayout>

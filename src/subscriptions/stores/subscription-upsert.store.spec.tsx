@@ -9,9 +9,9 @@ import {
 } from "../../ui/hooks/use-default-layout.tsx";
 import {
 	SubscriptionUpsertProvider,
-	type UseSubscriptionUpsert,
-	useSubscriptionUpsert,
-} from "./use-subscription-upsert.tsx";
+	useSubscriptionUpsertActions,
+	useSubscriptionUpsertMode,
+} from "./subscription-upsert.store.tsx";
 
 describe("useSubscriptionUpsert", () => {
 	let renderResult: RenderHookResult<HooksCombined, void>;
@@ -20,7 +20,8 @@ describe("useSubscriptionUpsert", () => {
 	beforeEach(() => {
 		renderResult = renderHook<HooksCombined, void>(
 			() => ({
-				upsert: useSubscriptionUpsert(),
+				mode: useSubscriptionUpsertMode(),
+				actions: useSubscriptionUpsertActions(),
 				defaultLayout: useDefaultLayout(),
 			}),
 			{
@@ -32,24 +33,24 @@ describe("useSubscriptionUpsert", () => {
 	});
 
 	it("should open/close drawer on upsert open/close", () => {
-		act(() => hooks.current.upsert.dispatch({ type: "open" }));
+		act(() => hooks.current.actions.open());
 		expect(hooks.current.defaultLayout.isDrawerOpened).toBeTruthy();
 
-		act(() => hooks.current.upsert.dispatch({ type: "close" }));
+		act(() => hooks.current.actions.close());
 		expect(hooks.current.defaultLayout.isDrawerOpened).toBeFalsy();
 	});
 
 	it("should close upsert on drawer close", () => {
-		act(() => hooks.current.upsert.dispatch({ type: "open" }));
+		act(() => hooks.current.actions.open());
 		expect(hooks.current.defaultLayout.isDrawerOpened).toBeTruthy();
 
 		act(() => hooks.current.defaultLayout.drawer.close());
-		expect(hooks.current.upsert.state.mode).toBeFalsy();
+		expect(hooks.current.mode).toBeFalsy();
 	});
 
 	it(`shouldn't open upsert on drawer open`, () => {
 		act(() => hooks.current.defaultLayout.drawer.open());
-		expect(hooks.current.upsert.state.mode).toBeFalsy();
+		expect(hooks.current.mode).toBeFalsy();
 	});
 });
 
@@ -64,6 +65,7 @@ const wrapper: FC<PropsWithChildren> = ({ children }) => {
 };
 
 interface HooksCombined {
-	upsert: UseSubscriptionUpsert;
+	mode: ReturnType<typeof useSubscriptionUpsertMode>;
+	actions: ReturnType<typeof useSubscriptionUpsertActions>;
 	defaultLayout: UseDefaultLayout;
 }
