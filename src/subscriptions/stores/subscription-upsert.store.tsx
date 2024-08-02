@@ -14,25 +14,33 @@ import {
 	updateSubscription,
 } from "../models/subscription.table.ts";
 
-export function useSubscriptionUpsertMode(): Store["mode"] {
-	return useStore(selectMode);
-}
-
-export function useSubscriptionUpsertState(): UseSubscriptionUpsertState {
+export function useSubscriptionUpsertState(): SubscriptionUpsertState {
 	return useStore(selectState);
 }
 
-export type UseSubscriptionUpsertState =
+export type SubscriptionUpsertState =
 	| {
 			mode: "update";
 			subscription: SubscriptionModel;
 	  }
 	| {
 			mode: "insert" | null;
+			subscription: null;
 	  };
 
-export function useSubscriptionUpsertActions(): Store["actions"] {
+export function useSubscriptionUpsertMode(): SubscriptionUpsertState["mode"] {
+	return useStore(selectMode);
+}
+
+export function useSubscriptionUpsertActions(): SubscriptionUpsertActions {
 	return useStore(selectActions);
+}
+
+export interface SubscriptionUpsertActions {
+	open(subscription?: SubscriptionModel | null): void;
+	close(): void;
+	upsert(raw: UpsertSubscriptionModel): Promise<void>;
+	delete(): Promise<void>;
 }
 
 export const SubscriptionUpsertProvider = memo(
@@ -40,7 +48,7 @@ export const SubscriptionUpsertProvider = memo(
 		const { drawer, isDrawerOpened } = useDefaultLayout();
 		const prevIsDrawerOpened = usePrevious(isDrawerOpened);
 
-		const { mode, actions } = useStore();
+		const { mode, close } = useStore();
 		const prevMode = usePrevious(mode);
 		useEffect(() => {
 			if (mode !== prevMode) {
@@ -54,7 +62,7 @@ export const SubscriptionUpsertProvider = memo(
 
 			if (isDrawerOpened !== prevIsDrawerOpened) {
 				if (!isDrawerOpened && mode) {
-					actions.close();
+					close();
 				}
 			}
 		}, [
@@ -62,7 +70,7 @@ export const SubscriptionUpsertProvider = memo(
 			drawer.open,
 			isDrawerOpened,
 			mode,
-			actions.close,
+			close,
 			prevMode,
 			prevIsDrawerOpened,
 		]);
@@ -74,67 +82,61 @@ export const SubscriptionUpsertProvider = memo(
 const useStore = create<Store>((set, get) => ({
 	mode: null,
 	subscription: null,
-	actions: {
-		open(subscription) {
-			return set(() => ({
-				subscription,
-				mode: subscription ? "update" : "insert",
-			}));
-		},
-		close() {
-			return set(() => ({
-				mode: null,
-				subscription: null,
-			}));
-		},
-		async upsert(raw) {
-			get().mode === "update"
-				? await updateSubscription(raw as UpdateSubscriptionModel)
-				: await insertSubscription(raw as InsertSubscriptionModel);
+	open(subscription) {
+		return set(() =>
+			subscription
+				? {
+						subscription,
+						mode: "update",
+					}
+				: {
+						subscription: null,
+						mode: "insert",
+					},
+		);
+	},
+	close() {
+		return set(() => ({
+			mode: null,
+			subscription: null,
+		}));
+	},
+	async upsert(raw) {
+		const store = get();
 
-			get().actions.close();
-		},
-		async delete() {
-			if (get().mode !== "update") {
-				throw new Error("Nothing to delete in insert mode!");
-			}
+		store.mode === "update"
+			? await updateSubscription(raw as UpdateSubscriptionModel)
+			: await insertSubscription(raw as InsertSubscriptionModel);
 
-			await deleteSubscription((get().subscription as SubscriptionModel).id);
+		store.close();
+	},
+	async delete() {
+		const store = get();
+		if (store.mode !== "update") {
+			throw new Error("Nothing to delete in insert mode!");
+		}
 
-			get().actions.close();
-		},
+		await deleteSubscription(store.subscription.id);
+
+		store.close();
 	},
 }));
 
-interface Store {
-	mode: "update" | "insert" | null;
-	subscription: SubscriptionModel | null;
-	actions: {
-		open(subscription?: SubscriptionModel | null): void;
-		close(): void;
-		upsert(raw: UpsertSubscriptionModel): Promise<void>;
-		delete(): Promise<void>;
-	};
-}
+type Store = SubscriptionUpsertState & SubscriptionUpsertActions;
 
-function selectMode({ mode }: Store): Store["mode"] {
+function selectMode({ mode }: Store): SubscriptionUpsertState["mode"] {
 	return mode;
 }
 
-function selectState({
-	subscription,
-	mode,
-}: Store): UseSubscriptionUpsertState {
-	return mode === "update"
-		? {
-				subscription: subscription as SubscriptionModel,
-				mode,
-			}
-		: {
-				mode,
-			};
+function selectState({ subscription, mode }: Store): SubscriptionUpsertState {
+	return { subscription, mode } as SubscriptionUpsertState;
 }
 
-function selectActions({ actions }: Store): Store["actions"] {
-	return actions;
+function selectActions({
+	open,
+	close,
+	upsert,
+	delete: deleteSubscription,
+}: Store): SubscriptionUpsertActions {
+	return { open, close, upsert, delete: deleteSubscription };
 }

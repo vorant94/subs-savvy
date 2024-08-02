@@ -7,78 +7,77 @@ import type {
 } from "../models/category.model.ts";
 import { insertCategory, updateCategory } from "../models/category.table.ts";
 
-export function useCategoryUpsertMode(): Store["mode"] {
-	return useStore(selectMode);
-}
-
-export function useCategoryUpsertState(): UseCategoryUpsertState {
+export function useCategoryUpsertState(): CategoryUpsertState {
 	return useStore(selectState);
 }
 
-export type UseCategoryUpsertState =
+export type CategoryUpsertState =
 	| {
 			mode: "update";
 			category: CategoryModel;
 	  }
 	| {
 			mode: "insert" | null;
+			category: null;
 	  };
 
-export function useCategoryUpsertActions(): Store["actions"] {
+export function useCategoryUpsertMode(): CategoryUpsertState["mode"] {
+	return useStore(selectMode);
+}
+
+export function useCategoryUpsertActions(): CategoryUpsertActions {
 	return useStore(selectActions);
+}
+
+export interface CategoryUpsertActions {
+	open(category?: CategoryModel | null): void;
+	close(): void;
+	upsert(raw: UpsertCategoryModel): Promise<void>;
 }
 
 const useStore = create<Store>((set, get) => ({
 	mode: null,
 	category: null,
-	actions: {
-		open(category) {
-			return set(() => ({
-				category,
-				mode: category ? "update" : "insert",
-			}));
-		},
-		close() {
-			return set(() => ({
-				mode: null,
-				category: null,
-			}));
-		},
-		async upsert(raw) {
-			get().mode === "update"
-				? await updateCategory(raw as UpdateCategoryModel)
-				: await insertCategory(raw as InsertCategoryModel);
+	open(category) {
+		return set(() =>
+			category
+				? {
+						category,
+						mode: "update",
+					}
+				: {
+						category: null,
+						mode: "insert",
+					},
+		);
+	},
+	close() {
+		return set(() => ({
+			mode: null,
+			category: null,
+		}));
+	},
+	async upsert(raw) {
+		const store = get();
 
-			get().actions.close();
-		},
+		store.mode === "update"
+			? await updateCategory(raw as UpdateCategoryModel)
+			: await insertCategory(raw as InsertCategoryModel);
+
+		store.close();
 	},
 }));
 
-interface Store {
-	mode: "update" | "insert" | null;
-	category: CategoryModel | null;
-	actions: {
-		open(category?: CategoryModel | null): void;
-		close(): void;
-		upsert(raw: UpsertCategoryModel): Promise<void>;
-	};
+type Store = CategoryUpsertState & CategoryUpsertActions;
+
+function selectState({ category, mode }: Store): CategoryUpsertState {
+	return { category, mode } as CategoryUpsertState;
 }
 
-function selectMode({ mode }: Store): Store["mode"] {
+function selectMode({ mode }: Store): CategoryUpsertState["mode"] {
 	return mode;
 }
 
-function selectState({ category, mode }: Store): UseCategoryUpsertState {
-	return mode === "update"
-		? {
-				category: category as CategoryModel,
-				mode,
-			}
-		: {
-				mode,
-			};
-}
-
-function selectActions({ actions }: Store): Store["actions"] {
-	return actions;
+function selectActions({ open, close, upsert }: Store): CategoryUpsertActions {
+	return { open, close, upsert };
 }
