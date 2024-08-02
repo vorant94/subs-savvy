@@ -1,53 +1,63 @@
 import { faCircle, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Text } from "@mantine/core";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { cn } from "../../ui/utils/cn.ts";
 import type { CategoryModel } from "../models/category.model.ts";
+import { deleteCategory } from "../models/category.table.ts";
+import { useCategories } from "../stores/categories.store.tsx";
+import { useCategoryUpsertActions } from "../stores/category-upsert.store.tsx";
 
-export const CategoryList = memo(
-	({ categories, onUpdate, onDelete }: CategoryListProps) => {
-		return (
-			<div className={cn("flex flex-col divide-y divide-dashed")}>
-				{categories.map((category) => (
-					<div
-						className={cn("flex items-center gap-2 py-1")}
-						key={category.id}
+export const CategoryList = memo(() => {
+	const categories = useCategories();
+
+	const { open } = useCategoryUpsertActions();
+	const openCategoryUpdate = useCallback(
+		(category: CategoryModel) => {
+			open(category);
+		},
+		[open],
+	);
+
+	const handleDeleteCategory = useCallback(
+		(id: number) => deleteCategory(id),
+		[],
+	);
+
+	return (
+		<div className={cn("flex flex-col divide-y divide-dashed")}>
+			{categories.map((category) => (
+				<div
+					className={cn("flex items-center gap-2 py-1")}
+					key={category.id}
+				>
+					<FontAwesomeIcon
+						icon={faCircle}
+						color={category.color}
+					/>
+
+					<Text>{category.name}</Text>
+
+					<div className={cn("flex-1")} />
+
+					<ActionIcon
+						aria-label={`edit ${category.name} category`}
+						variant="subtle"
+						onClick={() => openCategoryUpdate(category)}
 					>
-						<FontAwesomeIcon
-							icon={faCircle}
-							color={category.color}
-						/>
+						<FontAwesomeIcon icon={faPen} />
+					</ActionIcon>
 
-						<Text>{category.name}</Text>
-
-						<div className={cn("flex-1")} />
-
-						<ActionIcon
-							aria-label={`edit ${category.name} category`}
-							variant="subtle"
-							onClick={() => onUpdate(category)}
-						>
-							<FontAwesomeIcon icon={faPen} />
-						</ActionIcon>
-
-						<ActionIcon
-							aria-label={`delete ${category.name} category`}
-							variant="subtle"
-							color="red"
-							onClick={() => onDelete(category.id)}
-						>
-							<FontAwesomeIcon icon={faTrash} />
-						</ActionIcon>
-					</div>
-				))}
-			</div>
-		);
-	},
-);
-
-export interface CategoryListProps {
-	categories: ReadonlyArray<CategoryModel>;
-	onDelete(id: number): Promise<void> | void;
-	onUpdate(category: CategoryModel): Promise<void> | void;
-}
+					<ActionIcon
+						aria-label={`delete ${category.name} category`}
+						variant="subtle"
+						color="red"
+						onClick={() => handleDeleteCategory(category.id)}
+					>
+						<FontAwesomeIcon icon={faTrash} />
+					</ActionIcon>
+				</div>
+			))}
+		</div>
+	);
+});

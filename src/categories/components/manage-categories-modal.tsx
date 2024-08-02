@@ -1,94 +1,53 @@
 import { Button, Modal } from "@mantine/core";
-import { useLiveQuery } from "dexie-react-hooks";
-import {
-	type Reducer,
-	memo,
-	useCallback,
-	useEffect,
-	useReducer,
-	useState,
-} from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { cn } from "../../ui/utils/cn.ts";
-import type {
-	CategoryModel,
-	InsertCategoryModel,
-	UpdateCategoryModel,
-} from "../models/category.model.ts";
 import {
-	deleteCategory,
-	findCategories,
-	insertCategory,
-	updateCategory,
-} from "../models/category.table.ts";
-import { CategoryForm, type CategoryFormProps } from "./category-form.tsx";
-import { CategoryList, type CategoryListProps } from "./category-list.tsx";
+	useCategoryUpsertActions,
+	useCategoryUpsertMode,
+} from "../stores/category-upsert.store.tsx";
+import { CategoryForm } from "./category-form.tsx";
+import { CategoryList } from "./category-list.tsx";
 
 export const ManageCategoriesModal = memo(
 	({ isOpen, close }: ManageCategoriesModalProps) => {
-		const categories = useLiveQuery(() => findCategories(), [], []);
-		const [state, dispatch] = useReducer<
-			Reducer<ManageCategoriesModalState, ManageCategoriesModalAction>
-		>((_, action) => {
-			switch (action.type) {
-				case "upsert": {
-					return action.category
-						? { category: action.category, mode: "update" }
-						: { mode: "insert" };
-				}
-				case "view": {
-					return stateDefaults;
-				}
-			}
-		}, stateDefaults);
+		const [mode, setMode] = useState<"view" | "upsert">("view");
 
-		const switchToInsertMode = useCallback(() => {
-			dispatch({ type: "upsert" });
-		}, []);
-
-		const switchToViewMode = useCallback(() => {
-			dispatch({ type: "view" });
-		}, []);
-
-		const switchToUpdateMode: CategoryListProps["onUpdate"] = useCallback(
-			(category) => {
-				dispatch({ type: "upsert", category });
-			},
-			[],
-		);
-
-		const upsertCategory: CategoryFormProps["onSubmit"] = useCallback(
-			async (raw) => {
-				if (state.mode === "view") {
-					throw new Error("Nothing to upsert in view mode");
-				}
-
-				state.mode === "update"
-					? await updateCategory(raw as UpdateCategoryModel)
-					: await insertCategory(raw as InsertCategoryModel);
-
-				switchToViewMode();
-			},
-			[state, switchToViewMode],
-		);
-
-		const handleDeleteCategory: CategoryListProps["onDelete"] = useCallback(
-			async (id) => {
-				await deleteCategory(id);
-			},
-			[],
-		);
-
-		useEffect(() => {
-			if (!isOpen && state.mode !== "view") {
-				dispatch({ type: "view" });
-			}
-		}, [isOpen, state]);
+		const upsertMode = useCategoryUpsertMode();
+		const upsertActions = useCategoryUpsertActions();
+		const openCategoryInsert = useCallback(() => {
+			setMode("upsert");
+			upsertActions.open();
+		}, [upsertActions.open]);
+		const closeCategoryUpsert = useCallback(() => {
+			setMode("view");
+			upsertActions.close();
+		}, [upsertActions.close]);
 
 		const [formId, setFormId] = useState("");
 		const updateFormId: (ref: HTMLFormElement | null) => void = useCallback(
 			(ref) => setFormId(ref?.getAttribute("id") ?? ""),
 			[],
 		);
+
+		useEffect(() => {
+			if (!isOpen) {
+				if (mode !== "view") {
+					setMode("view");
+				}
+
+				if (upsertMode) {
+					upsertActions.close();
+				}
+			}
+
+			if (!upsertMode && mode !== "view") {
+				setMode("view");
+			}
+
+			if (upsertMode && mode === "view") {
+				setMode("upsert");
+			}
+		}, [isOpen, mode, upsertActions.close, upsertMode]);
 
 		return (
 			<Modal
@@ -97,26 +56,18 @@ export const ManageCategoriesModal = memo(
 				title="Manage Categories"
 			>
 				<div className={cn("flex flex-col gap-2")}>
-					{state.mode === "view" ? (
-						<CategoryList
-							categories={categories}
-							onUpdate={switchToUpdateMode}
-							onDelete={handleDeleteCategory}
-						/>
+					{mode === "view" ? (
+						<CategoryList />
 					) : (
-						<CategoryForm
-							ref={updateFormId}
-							onSubmit={upsertCategory}
-							category={state.mode === "update" ? state.category : null}
-						/>
+						<CategoryForm ref={updateFormId} />
 					)}
 
 					<div className={cn("flex justify-end gap-2")}>
-						{state.mode === "view" ? (
+						{mode === "view" ? (
 							<Button
 								type="button"
 								key="add-category"
-								onClick={switchToInsertMode}
+								onClick={openCategoryInsert}
 							>
 								add category
 							</Button>
@@ -126,15 +77,15 @@ export const ManageCategoriesModal = memo(
 								key="submit-category-form"
 								form={formId}
 							>
-								{state.mode === "update" ? "Update" : "Insert"}
+								{upsertMode === "update" ? "Update" : "Insert"}
 							</Button>
 						)}
-						{state.mode !== "view" ? (
+						{mode !== "view" ? (
 							<Button
 								type="button"
 								key="cancel-category-form"
 								variant="outline"
-								onClick={switchToViewMode}
+								onClick={closeCategoryUpsert}
 							>
 								Cancel
 							</Button>
@@ -150,32 +101,3 @@ export interface ManageCategoriesModalProps {
 	isOpen: boolean;
 	close: () => void;
 }
-
-type ManageCategoriesModalState =
-	| {
-			category: CategoryModel;
-			mode: "update";
-	  }
-	| {
-			mode: "view";
-	  }
-	| {
-			mode: "insert";
-	  };
-
-const stateDefaults: ManageCategoriesModalState = {
-	mode: "view",
-};
-
-interface ManageCategoriesModalUpsertAction {
-	type: "upsert";
-	category?: CategoryModel | null;
-}
-
-interface ManageCategoriesModalViewAction {
-	type: "view";
-}
-
-type ManageCategoriesModalAction =
-	| ManageCategoriesModalUpsertAction
-	| ManageCategoriesModalViewAction;

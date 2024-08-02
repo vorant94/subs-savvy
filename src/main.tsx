@@ -8,6 +8,7 @@ import i18next from "i18next";
 import I18NextFetchBackend from "i18next-fetch-backend";
 import { HMRPlugin } from "i18next-hmr/plugin";
 import { initReactI18next } from "react-i18next";
+import { supportedLanguages } from "./i18n/types/supported-language.ts";
 import { router } from "./router.tsx";
 
 if (import.meta.env.DEV) {
@@ -39,7 +40,8 @@ if (import.meta.env.DEV) {
 }
 
 instance.init({
-	fallbackLng: "en",
+	fallbackLng: "en-US",
+	supportedLngs: supportedLanguages,
 	interpolation: { escapeValue: false },
 });
 
