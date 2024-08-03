@@ -5,7 +5,7 @@ export class RecoveryImportPom {
 	readonly importTab: Locator;
 
 	readonly chooseFileButton: Locator;
-	readonly importButton: Locator;
+	readonly submitButton: Locator;
 
 	readonly #page: Page;
 
@@ -18,7 +18,10 @@ export class RecoveryImportPom {
 		this.chooseFileButton = this.#page.getByLabel(
 			"click or drag & drop to upload file",
 		);
-		this.importButton = this.#page.getByRole("button", { name: "import" });
+		this.submitButton = this.#page.getByRole("button", {
+			name: "Submit",
+			exact: true,
+		});
 	}
 
 	async goto() {

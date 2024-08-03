@@ -1,64 +1,98 @@
-import { Button } from "@mantine/core";
-import { memo, useCallback, useState } from "react";
+import { Button, Stepper } from "@mantine/core";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { CategoriesInsertTable } from "../../categories/components/categories-insert-table.tsx";
 import { SubscriptionsInsertTable } from "../../subscriptions/components/subscriptions-insert-table.tsx";
-import {
-	type InsertSubscriptionModel,
-	insertSubscriptionSchema,
-} from "../../subscriptions/models/subscription.model.ts";
 import { cn } from "../../ui/utils/cn.ts";
+import { RecoveryImportDropZone } from "../components/recovery-import-drop-zone.tsx";
 import {
-	RecoveryImportDropZone,
-	type RecoveryImportDropZoneProps,
-} from "../components/recovery-import-drop-zone.tsx";
+	type RecoveryImportStateStage,
+	useRecoveryImport,
+	useRecoveryImportActions,
+} from "../stores/recovery-import.store.ts";
 
+// TODO improve performance (parsing a lot of sub makes UI lag)
 export const RecoveryImportPage = memo(() => {
-	const [subscriptions, setSubscriptions] = useState<
-		Array<InsertSubscriptionModel>
-	>([]);
+	const { stage, subscriptions, categories } = useRecoveryImport();
+	const {
+		goNextFromUploadRecovery,
+		goNextFromSubmitCategories,
+		goNextFromSubmitSubscriptions,
+	} = useRecoveryImportActions();
 
-	const setSubscriptionFromRecovery: RecoveryImportDropZoneProps["onRecoveryParsed"] =
-		useCallback(({ subscriptions }) => {
-			setSubscriptions(
-				subscriptions.map((subscription) =>
-					insertSubscriptionSchema.parse({ ...subscription, category: null }),
-				),
-			);
-		}, []);
+	const [subscriptionsFormId, setSubscriptionsFormId] = useState("");
+	const updateSubscriptionsFormId: (ref: HTMLFormElement | null) => void =
+		useCallback(
+			(ref) => setSubscriptionsFormId(ref?.getAttribute("id") ?? ""),
+			[],
+		);
 
-	const [formId, setFormId] = useState("");
-	const updateFormId: (ref: HTMLFormElement | null) => void = useCallback(
-		(ref) => setFormId(ref?.getAttribute("id") ?? ""),
-		[],
-	);
+	const [categoriesFormId, setCategoriesFormId] = useState("");
+	const updateCategoriesFormId: (ref: HTMLFormElement | null) => void =
+		useCallback(
+			(ref) => setCategoriesFormId(ref?.getAttribute("id") ?? ""),
+			[],
+		);
 
-	const clearSubscriptions = useCallback(() => {
-		setSubscriptions([]);
-	}, []);
+	const [active, setActive] = useState(0);
+	useEffect(() => setActive(stageToActive[stage]), [stage]);
+
+	const { t } = useTranslation();
 
 	return (
-		<div className={cn("flex flex-col gap-4")}>
-			<RecoveryImportDropZone onRecoveryParsed={setSubscriptionFromRecovery} />
-
-			{subscriptions.length ? (
-				<>
-					<SubscriptionsInsertTable
-						subscriptions={subscriptions}
-						ref={updateFormId}
-						onInsert={clearSubscriptions}
+		<Stepper active={active}>
+			<Stepper.Step label={t("upload-recovery")}>
+				<div className={cn("flex flex-col")}>
+					<RecoveryImportDropZone onRecoveryParsed={goNextFromUploadRecovery} />
+				</div>
+			</Stepper.Step>
+			<Stepper.Step label={t("submit-categories")}>
+				<div className={cn("flex flex-col gap-2")}>
+					<CategoriesInsertTable
+						categories={categories}
+						ref={updateCategoriesFormId}
+						onSubmit={goNextFromSubmitCategories}
 					/>
 
-					<div className={cn("flex items-center")}>
-						<div className={cn("flex-1")} />
+					<Button
+						className={cn("self-end")}
+						form={categoriesFormId}
+						type="submit"
+					>
+						{t("submit")}
+					</Button>
+				</div>
+			</Stepper.Step>
+			<Stepper.Step label={t("submit-subscriptions")}>
+				<div className={cn("flex flex-col gap-2")}>
+					<SubscriptionsInsertTable
+						subscriptions={subscriptions}
+						categories={categories}
+						ref={updateSubscriptionsFormId}
+						onSubmit={goNextFromSubmitSubscriptions}
+					/>
 
-						<Button
-							form={formId}
-							type="submit"
-						>
-							import
-						</Button>
-					</div>
-				</>
-			) : null}
-		</div>
+					<Button
+						className={cn("self-end")}
+						form={subscriptionsFormId}
+						type="submit"
+					>
+						{t("submit")}
+					</Button>
+				</div>
+			</Stepper.Step>
+			<Stepper.Completed>
+				{/*TODO implement UI here*/}
+				completed/failed
+			</Stepper.Completed>
+		</Stepper>
 	);
 });
+
+const stageToActive = {
+	"upload-recovery": 0,
+	"submit-categories": 1,
+	"submit-subscriptions": 2,
+	failed: 3,
+	completed: 3,
+} satisfies Record<RecoveryImportStateStage, number>;

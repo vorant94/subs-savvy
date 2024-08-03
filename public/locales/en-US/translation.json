@@ -10,5 +10,19 @@
 	"expenses-in": "Expenses in",
 	"previous-month": "Previous month",
 	"next-month": "Next month",
-	"subs-amount": "{{amount}} subs"
+	"subs-amount": "{{amount}} subs",
+	"upload-recovery": "Upload Recovery",
+	"submit-categories": "Submit Categories",
+	"submit-subscriptions": "Submit Subscriptions",
+	"submit": "Submit",
+	"name": "Name",
+	"color": "Color",
+	"description": "Description",
+	"icon": "Icon",
+	"price": "Price",
+	"started-at": "Started At",
+	"ended-at": "Ended At",
+	"each": "Each",
+	"period": "Period",
+	"category": "Category"
 }

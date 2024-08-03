@@ -2,6 +2,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
 import type { CategoryModel } from "../models/category.model.ts";
 import { CategoryNotFound, findCategories } from "../models/category.table.ts";
 
@@ -10,7 +11,7 @@ export function useCategories(): ReadonlyArray<CategoryModel> {
 }
 
 export function useSelectedCategory(): UseSelectedCategory {
-	return useStore(selectSelectedCategory);
+	return useStore(useShallow(selectSelectedCategory));
 }
 
 export type UseSelectedCategory = [

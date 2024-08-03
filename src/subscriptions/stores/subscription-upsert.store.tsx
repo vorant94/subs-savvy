@@ -2,6 +2,7 @@ import { usePrevious } from "@mantine/hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
 import { useDefaultLayout } from "../../ui/hooks/use-default-layout.tsx";
 import type {
 	InsertSubscriptionModel,
@@ -16,7 +17,7 @@ import {
 } from "../models/subscription.table.ts";
 
 export function useSubscriptionUpsertState(): SubscriptionUpsertState {
-	return useStore(selectState);
+	return useStore(useShallow(selectState));
 }
 
 export type SubscriptionUpsertState =
@@ -34,7 +35,7 @@ export function useSubscriptionUpsertMode(): SubscriptionUpsertState["mode"] {
 }
 
 export function useSubscriptionUpsertActions(): SubscriptionUpsertActions {
-	return useStore(selectActions);
+	return useStore(useShallow(selectActions));
 }
 
 export interface SubscriptionUpsertActions {

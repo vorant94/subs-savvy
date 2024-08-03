@@ -76,11 +76,13 @@ test.describe("recovery", () => {
 			pom.chooseFileButton.click(),
 		]);
 		await fileChooser.setFiles(filePathToImport);
-		await pom.importButton.click();
+		await pom.submitButton.click();
+		await pom.submitButton.click();
 		const importedSubscriptions = await page.evaluate(
 			async () => await window.db.subscriptions.toArray(),
 		);
 
+		// TODO validate categories as well
 		const areAllSubscriptionsImported = recoveryToImport.subscriptions.every(
 			(subscriptionToImport) =>
 				!!importedSubscriptions.find(

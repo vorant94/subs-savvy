@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
 import type {
 	CategoryModel,
 	InsertCategoryModel,
@@ -9,7 +10,7 @@ import type {
 import { insertCategory, updateCategory } from "../models/category.table.ts";
 
 export function useCategoryUpsertState(): CategoryUpsertState {
-	return useStore(selectState);
+	return useStore(useShallow(selectState));
 }
 
 export type CategoryUpsertState =
@@ -27,7 +28,7 @@ export function useCategoryUpsertMode(): CategoryUpsertState["mode"] {
 }
 
 export function useCategoryUpsertActions(): CategoryUpsertActions {
-	return useStore(selectActions);
+	return useStore(useShallow(selectActions));
 }
 
 export interface CategoryUpsertActions {

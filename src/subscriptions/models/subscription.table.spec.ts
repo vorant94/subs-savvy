@@ -12,7 +12,6 @@ import {
 	deleteSubscription,
 	findSubscriptions,
 	insertSubscription,
-	insertSubscriptions,
 	updateSubscription,
 } from "./subscription.table.ts";
 
@@ -36,7 +35,7 @@ describe("with data", () => {
 		await db.categories.delete(categoryMock.id);
 
 		expect(async () => await findSubscriptions()).rejects.toThrowError(
-			/Category with id 1 not found!/,
+			/Category with id 5 not found!/,
 		);
 	});
 
@@ -101,18 +100,6 @@ describe("without data", () => {
 			categoryId: subscriptionToInsert.category.id,
 		};
 		expect(await db.subscriptions.get(id)).toEqual(expected);
-	});
-
-	it("should insert subscriptions", async () => {
-		const subscriptionsToInsert = [monthlySubscription, yearlySubscription].map(
-			({ id: _, ...subscriptionToInsert }) => subscriptionToInsert,
-		);
-
-		await insertSubscriptions(subscriptionsToInsert);
-
-		expect((await db.subscriptions.toArray()).length).toEqual(
-			subscriptionsToInsert.length,
-		);
 	});
 
 	it(`should throw on insert if subscription category doesn't exist`, async () => {

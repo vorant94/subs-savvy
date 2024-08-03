@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ColorInput, NumberInput, TextInput } from "@mantine/core";
+import { ColorInput, TextInput } from "@mantine/core";
 import { forwardRef, memo } from "react";
 import { Controller, type DefaultValues, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../ui/utils/cn.ts";
 import {
 	type UpsertCategoryModel,
@@ -30,6 +31,8 @@ export const CategoryForm = memo(
 			defaultValues: state.mode === "update" ? state.category : defaultValues,
 		});
 
+		const { t } = useTranslation();
+
 		return (
 			<form
 				id="categoryForm"
@@ -37,23 +40,10 @@ export const CategoryForm = memo(
 				onSubmit={handleSubmit(actions.upsert)}
 				className={cn("flex flex-col gap-2 self-stretch")}
 			>
-				<Controller
-					control={control}
-					name="id"
-					render={({ field: { onChange, onBlur, value } }) => (
-						<NumberInput
-							value={value}
-							onBlur={onBlur}
-							onChange={onChange}
-							className={cn("hidden")}
-						/>
-					)}
-				/>
-
 				<TextInput
 					{...register("name")}
-					label="Name"
-					placeholder="Name"
+					label={t("name")}
+					placeholder={t("name")}
 					type="text"
 					autoComplete="off"
 					error={errors.name?.message}
@@ -67,8 +57,8 @@ export const CategoryForm = memo(
 							value={value}
 							onChange={onChange}
 							onBlur={onBlur}
-							label="Color"
-							placeholder="Color"
+							label={t("color")}
+							placeholder={t("color")}
 							error={errors.color?.message}
 						/>
 					)}

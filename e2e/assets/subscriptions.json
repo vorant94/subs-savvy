@@ -2,6 +2,7 @@
 	"dbVersion": 4,
 	"subscriptions": [
 		{
+			"id": 1,
 			"name": "Goolge",
 			"description": "Google One",
 			"icon": "google",
@@ -13,6 +14,7 @@
 			}
 		},
 		{
+			"id": 2,
 			"name": "Spotify",
 			"description": "Spotify Premium",
 			"icon": "spotify",
@@ -23,5 +25,6 @@
 				"period": "monthly"
 			}
 		}
-	]
+	],
+	"categories": []
 }

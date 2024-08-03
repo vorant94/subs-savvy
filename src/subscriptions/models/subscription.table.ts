@@ -14,7 +14,7 @@ export function findSubscriptions(): Promise<ReadonlyArray<SubscriptionModel>> {
 	return db.transaction("r", db.subscriptions, db.categories, async () => {
 		const raws = await db.subscriptions.orderBy("price").reverse().toArray();
 
-		return await Promise.all(
+		return Promise.all(
 			raws.map(async ({ categoryId, ...raw }) => {
 				let category: CategoryModel | null = null;
 				if (categoryId) {
@@ -30,17 +30,19 @@ export function findSubscriptions(): Promise<ReadonlyArray<SubscriptionModel>> {
 export function insertSubscription(
 	raw: InsertSubscriptionModel,
 ): Promise<SubscriptionModel> {
-	return db.transaction("rw", db.subscriptions, db.categories, () =>
-		_insertSubscription(raw),
-	);
-}
+	return db.transaction("rw", db.subscriptions, db.categories, async () => {
+		const { category, ...rest } = insertSubscriptionSchema.parse(raw);
 
-export function insertSubscriptions(
-	raw: Array<InsertSubscriptionModel>,
-): Promise<Array<SubscriptionModel>> {
-	return db.transaction("rw", db.subscriptions, db.categories, () =>
-		Promise.all(raw.map((raw) => _insertSubscription(raw))),
-	);
+		if (category) {
+			await _getCategory(category.id);
+		}
+
+		const id = await db.subscriptions.add({
+			...rest,
+			categoryId: category?.id,
+		});
+		return _getSubscription(id);
+	});
 }
 
 export function updateSubscription(
@@ -80,19 +82,6 @@ async function _getSubscription(id: number): Promise<SubscriptionModel> {
 	}
 
 	return subscriptionSchema.parse({ ...raw, category });
-}
-
-async function _insertSubscription(
-	raw: InsertSubscriptionModel,
-): Promise<SubscriptionModel> {
-	const { category, ...rest } = insertSubscriptionSchema.parse(raw);
-
-	if (category) {
-		await _getCategory(category.id);
-	}
-
-	const id = await db.subscriptions.add({ ...rest, categoryId: category?.id });
-	return _getSubscription(id);
 }
 
 export class SubscriptionNotFound extends Error {

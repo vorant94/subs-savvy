@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	type ComboboxData,
 	NumberInput,
@@ -7,7 +8,6 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { usePrevious } from "@mantine/hooks";
-import { useLiveQuery } from "dexie-react-hooks";
 import { forwardRef, memo, useEffect, useMemo } from "react";
 import {
 	Controller,
@@ -15,22 +15,29 @@ import {
 	useFieldArray,
 	useForm,
 } from "react-hook-form";
-import { findCategories } from "../../categories/models/category.table.ts";
+import { useTranslation } from "react-i18next";
+import { z } from "zod";
+import type { CategoryModel } from "../../categories/models/category.model.ts";
+import { useCategories } from "../../categories/stores/categories.store.tsx";
 import { cn } from "../../ui/utils/cn.ts";
-import type { InsertSubscriptionModel } from "../models/subscription.model.ts";
-import { insertSubscriptions } from "../models/subscription.table.ts";
+import {
+	type InsertSubscriptionModel,
+	subscriptionSchema,
+} from "../models/subscription.model.ts";
 import { subscriptionCyclePeriodsComboboxData } from "../types/subscription-cycle-period.ts";
 import { subscriptionIconsComboboxData } from "../types/subscription-icon.ts";
 
 export const SubscriptionsInsertTable = memo(
 	forwardRef<HTMLFormElement, SubscriptionsInsertTableProps>(
-		({ subscriptions, onInsert }, ref) => {
+		({ subscriptions, categories: categoriesFromProps, onSubmit }, ref) => {
 			const {
 				handleSubmit,
 				control,
 				register,
 				formState: { errors },
-			} = useForm<SubscriptionsInsertTableFormValue>();
+			} = useForm<SubscriptionsInsertTableFormValue>({
+				resolver: zodResolver(schema),
+			});
 			const { fields, append, remove } = useFieldArray({
 				control,
 				name: "subscriptions",
@@ -44,7 +51,12 @@ export const SubscriptionsInsertTable = memo(
 				}
 			}, [append, prevSubscriptions, remove, subscriptions]);
 
-			const categories = useLiveQuery(() => findCategories(), [], []);
+			const categoriesFromDb = useCategories();
+			const categories = useMemo(
+				() => categoriesFromProps ?? categoriesFromDb,
+				[categoriesFromProps, categoriesFromDb],
+			);
+
 			const categoriesData: ComboboxData = useMemo(() => {
 				return categories.map((category) => ({
 					label: category.name,
@@ -52,32 +64,33 @@ export const SubscriptionsInsertTable = memo(
 				}));
 			}, [categories]);
 
-			const insertSubscriptionsCb: SubmitHandler<
+			const submitSubscriptions: SubmitHandler<
 				SubscriptionsInsertTableFormValue
-			> = async ({ subscriptions }) => {
-				await insertSubscriptions(subscriptions);
-				onInsert?.();
+			> = ({ subscriptions }) => {
+				onSubmit(subscriptions);
 			};
+
+			const { t } = useTranslation();
 
 			return (
 				<form
 					id="subscriptionsUpsertTableForm"
-					onSubmit={handleSubmit(insertSubscriptionsCb)}
+					onSubmit={handleSubmit(submitSubscriptions)}
 					ref={ref}
 				>
 					<Table.ScrollContainer minWidth="100%">
 						<Table>
 							<Table.Thead>
 								<Table.Tr>
-									<Table.Th>Name</Table.Th>
-									<Table.Th>Description</Table.Th>
-									<Table.Th>Icon</Table.Th>
-									<Table.Th>Price</Table.Th>
-									<Table.Th>Started At</Table.Th>
-									<Table.Th>Ended At</Table.Th>
-									<Table.Th>Each</Table.Th>
-									<Table.Th>Period</Table.Th>
-									<Table.Th>Category</Table.Th>
+									<Table.Th>{t("name")}</Table.Th>
+									<Table.Th>{t("description")}</Table.Th>
+									<Table.Th>{t("icon")}</Table.Th>
+									<Table.Th>{t("price")}</Table.Th>
+									<Table.Th>{t("started-at")}</Table.Th>
+									<Table.Th>{t("ended-at")}</Table.Th>
+									<Table.Th>{t("each")}</Table.Th>
+									<Table.Th>{t("period")}</Table.Th>
+									<Table.Th>{t("category")}</Table.Th>
 								</Table.Tr>
 							</Table.Thead>
 
@@ -87,7 +100,7 @@ export const SubscriptionsInsertTable = memo(
 										<Table.Td className={cn("min-w-40")}>
 											<TextInput
 												{...register(`subscriptions.${index}.name`)}
-												placeholder="Name"
+												placeholder={t("name")}
 												autoComplete="off"
 												error={errors.subscriptions?.[index]?.name?.message}
 											/>
@@ -96,7 +109,7 @@ export const SubscriptionsInsertTable = memo(
 										<Table.Td className={cn("min-w-40")}>
 											<TextInput
 												{...register(`subscriptions.${index}.description`)}
-												placeholder="Description"
+												placeholder={t("description")}
 												error={
 													errors.subscriptions?.[index]?.description?.message
 												}
@@ -112,7 +125,7 @@ export const SubscriptionsInsertTable = memo(
 														value={value}
 														onChange={(_, option) => onChange(option.value)}
 														onBlur={onBlur}
-														placeholder="Icon"
+														placeholder={t("icon")}
 														data={subscriptionIconsComboboxData}
 														error={errors.subscriptions?.[index]?.icon?.message}
 													/>
@@ -129,7 +142,7 @@ export const SubscriptionsInsertTable = memo(
 														value={value}
 														onBlur={onBlur}
 														onChange={onChange}
-														placeholder="Price"
+														placeholder={t("price")}
 														error={
 															errors.subscriptions?.[index]?.price?.message
 														}
@@ -145,7 +158,7 @@ export const SubscriptionsInsertTable = memo(
 												render={({ field: { onChange, onBlur, value } }) => (
 													<DatePickerInput
 														className={cn("text-nowrap")}
-														placeholder="Started At"
+														placeholder={t("started-at")}
 														value={value}
 														onChange={onChange}
 														onBlur={onBlur}
@@ -164,7 +177,7 @@ export const SubscriptionsInsertTable = memo(
 												render={({ field: { onChange, onBlur, value } }) => (
 													<DatePickerInput
 														className={cn("text-nowrap")}
-														placeholder="Ended At"
+														placeholder={t("ended-at")}
 														value={value}
 														onChange={onChange}
 														onBlur={onBlur}
@@ -185,7 +198,7 @@ export const SubscriptionsInsertTable = memo(
 														value={value}
 														onBlur={onBlur}
 														onChange={onChange}
-														placeholder="Each"
+														placeholder={t("each")}
 														error={
 															errors.subscriptions?.[index]?.cycle?.each
 																?.message
@@ -204,7 +217,7 @@ export const SubscriptionsInsertTable = memo(
 														value={value}
 														onChange={(_, option) => onChange(option.value)}
 														onBlur={onBlur}
-														placeholder="Period"
+														placeholder={t("period")}
 														data={subscriptionCyclePeriodsComboboxData}
 														error={
 															errors.subscriptions?.[index]?.cycle?.period
@@ -221,7 +234,7 @@ export const SubscriptionsInsertTable = memo(
 												name={`subscriptions.${index}.category`}
 												render={({ field: { value, onChange, onBlur } }) => (
 													<Select
-														placeholder="Category"
+														placeholder={t("category")}
 														data={categoriesData}
 														value={`${value?.id}`}
 														onChange={(categoryId) =>
@@ -252,9 +265,14 @@ export const SubscriptionsInsertTable = memo(
 
 export interface SubscriptionsInsertTableProps {
 	subscriptions: Array<InsertSubscriptionModel>;
-	onInsert?: () => void;
+	categories?: Array<CategoryModel>;
+	onSubmit(subscriptions: Array<InsertSubscriptionModel>): void;
 }
 
 export interface SubscriptionsInsertTableFormValue {
 	subscriptions: Array<InsertSubscriptionModel>;
 }
+
+const schema = z.object({
+	subscriptions: z.array(subscriptionSchema),
+});

@@ -57,19 +57,6 @@ export const SubscriptionUpsert = memo(() => {
 			onSubmit={handleSubmit(actions.upsert)}
 			className={cn("flex flex-col gap-2 self-stretch")}
 		>
-			<Controller
-				control={control}
-				name="id"
-				render={({ field: { onChange, onBlur, value } }) => (
-					<NumberInput
-						value={value}
-						onBlur={onBlur}
-						onChange={onChange}
-						className={cn("hidden")}
-					/>
-				)}
-			/>
-
 			<TextInput
 				{...register("name")}
 				label="Name"
