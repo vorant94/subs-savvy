@@ -28,9 +28,9 @@ if (import.meta.env.DEV) {
 // setting it to the window so db is easily accessible to populate it with data during e2e tests
 window.db = db;
 
-const instance = i18next.use(I18NextFetchBackend).use(initReactI18next);
+const i18n = i18next.use(I18NextFetchBackend).use(initReactI18next);
 if (import.meta.env.DEV) {
-	instance.use(
+	i18n.use(
 		new HMRPlugin({
 			vite: {
 				client: typeof window !== "undefined",
@@ -39,7 +39,7 @@ if (import.meta.env.DEV) {
 	);
 }
 
-instance.init({
+i18n.init({
 	fallbackLng: "en-US",
 	supportedLngs: supportedLanguages,
 	interpolation: { escapeValue: false },
