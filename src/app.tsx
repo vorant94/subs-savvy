@@ -4,37 +4,18 @@ import {
 	faCreditCard,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { memo, useEffect } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { memo } from "react";
+import { Outlet } from "react-router-dom";
 import { CategoriesProvider } from "./categories/stores/categories.store.tsx";
-import {
-	useRecoveryImportActions,
-	useRecoveryImportStage,
-} from "./recovery/stores/recovery-import.store.ts";
-import { recoveryRoute } from "./recovery/types/recovery-route.ts";
-import { SubscriptionUpsertProvider } from "./subscriptions/stores/subscription-upsert.store.tsx";
+import { ImportRecoveryProvider } from "./recovery/stores/import-recovery.store.tsx";
 import { SubscriptionsProvider } from "./subscriptions/stores/subscriptions.store.tsx";
+import { UpsertSubscriptionProvider } from "./subscriptions/stores/upsert-subscription.store.tsx";
 import { BreakpointsProvider } from "./ui/hooks/use-breakpoint.tsx";
 import { DefaultLayoutProvider } from "./ui/hooks/use-default-layout.tsx";
 import { type NavLink, NavLinksProvider } from "./ui/hooks/use-nav-links.tsx";
 import { rootRoute } from "./ui/types/root-route.ts";
 
 export const App = memo(() => {
-	const { pathname } = useLocation();
-	const stage = useRecoveryImportStage();
-	const { reset } = useRecoveryImportActions();
-	useEffect(
-		() => () => {
-			if (
-				stage !== "upload-recovery" &&
-				pathname !== `/${rootRoute.recovery}/${recoveryRoute.import}`
-			) {
-				reset();
-			}
-		},
-		[pathname, stage, reset],
-	);
-
 	return (
 		<NavLinksProvider
 			topNavLinks={topNavLinks}
@@ -42,13 +23,15 @@ export const App = memo(() => {
 		>
 			<BreakpointsProvider>
 				<DefaultLayoutProvider>
-					<SubscriptionUpsertProvider>
+					<UpsertSubscriptionProvider>
 						<CategoriesProvider>
 							<SubscriptionsProvider>
-								<Outlet />
+								<ImportRecoveryProvider>
+									<Outlet />
+								</ImportRecoveryProvider>
 							</SubscriptionsProvider>
 						</CategoriesProvider>
-					</SubscriptionUpsertProvider>
+					</UpsertSubscriptionProvider>
 				</DefaultLayoutProvider>
 			</BreakpointsProvider>
 		</NavLinksProvider>

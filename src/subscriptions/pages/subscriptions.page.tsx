@@ -1,26 +1,26 @@
 import { memo } from "react";
-import { CategorySelect } from "../../categories/components/category-select.tsx";
+import { SelectCategory } from "../../categories/components/select-category.tsx";
 import {
 	DefaultLayout,
 	DefaultLayoutHeader,
 } from "../../ui/layouts/default.layout.tsx";
 import { AddSubscriptionButton } from "../components/add-subscription-button.tsx";
 import { SubscriptionList } from "../components/subscription-list.tsx";
-import { SubscriptionUpsert } from "../components/subscription-upsert.tsx";
-import { useSubscriptionUpsertMode } from "../stores/subscription-upsert.store.tsx";
+import { UpsertSubscription } from "../components/upsert-subscription.tsx";
+import { useUpsertSubscriptionMode } from "../stores/upsert-subscription.store.tsx";
 
 export const SubscriptionsPage = memo(() => {
-	const subscriptionUpsertMode = useSubscriptionUpsertMode();
+	const mode = useUpsertSubscriptionMode();
 
 	return (
 		<DefaultLayout
 			header={
 				<DefaultLayoutHeader actions={<AddSubscriptionButton />}>
-					<CategorySelect />
+					<SelectCategory />
 				</DefaultLayoutHeader>
 			}
-			drawerContent={<SubscriptionUpsert />}
-			drawerTitle={`${subscriptionUpsertMode === "update" ? "Update" : "Insert"} Subscription`}
+			drawerContent={<UpsertSubscription />}
+			drawerTitle={`${mode === "update" ? "Update" : "Insert"} Subscription`}
 		>
 			<SubscriptionList />
 		</DefaultLayout>

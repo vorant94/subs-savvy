@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 
-export class RecoveryImportPom {
+export class ImportRecoveryPom {
 	readonly recoveryNavLink: Locator;
 	readonly importTab: Locator;
 

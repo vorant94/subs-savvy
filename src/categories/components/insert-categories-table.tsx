@@ -16,15 +16,15 @@ import {
 	categorySchema,
 } from "../models/category.model.ts";
 
-export const CategoriesInsertTable = memo(
-	forwardRef<HTMLFormElement, CategoriesInsertTableProps>(
+export const InsertCategoriesTable = memo(
+	forwardRef<HTMLFormElement, InsertCategoriesTableProps>(
 		({ categories, onSubmit }, ref) => {
 			const {
 				handleSubmit,
 				control,
 				register,
 				formState: { errors },
-			} = useForm<CategoriesInsertTableFormValue>({
+			} = useForm<InsertCategoriesTableFormValue>({
 				resolver: zodResolver(schema),
 			});
 			const { fields, append, remove } = useFieldArray({
@@ -40,7 +40,7 @@ export const CategoriesInsertTable = memo(
 				}
 			}, [append, prevCategories, remove, categories]);
 
-			const submitCategories: SubmitHandler<CategoriesInsertTableFormValue> = ({
+			const submitCategories: SubmitHandler<InsertCategoriesTableFormValue> = ({
 				categories,
 			}) => {
 				onSubmit(categories);
@@ -101,12 +101,12 @@ export const CategoriesInsertTable = memo(
 	),
 );
 
-export interface CategoriesInsertTableProps {
+export interface InsertCategoriesTableProps {
 	categories: Array<CategoryModel>;
 	onSubmit(subscriptions: Array<CategoryModel>): void;
 }
 
-export interface CategoriesInsertTableFormValue {
+export interface InsertCategoriesTableFormValue {
 	categories: Array<CategoryModel>;
 }
 

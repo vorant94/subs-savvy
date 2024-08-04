@@ -4,10 +4,10 @@ import { ActionIcon, Button } from "@mantine/core";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useBreakpoint } from "../../ui/hooks/use-breakpoint.tsx";
-import { useSubscriptionUpsertActions } from "../stores/subscription-upsert.store.tsx";
+import { useUpsertSubscriptionActions } from "../stores/upsert-subscription.store.tsx";
 
 export const AddSubscriptionButton = memo(() => {
-	const { open } = useSubscriptionUpsertActions();
+	const { open } = useUpsertSubscriptionActions();
 	const isMd = useBreakpoint("md");
 	const { t } = useTranslation();
 

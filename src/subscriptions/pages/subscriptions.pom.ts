@@ -1,7 +1,7 @@
 import type { Locator, Page } from "@playwright/test";
-import { CategorySelectCom } from "../../categories/components/category-select.com.ts";
+import { SelectCategoryCom } from "../../categories/components/select-category.com.ts";
 import { InputCom } from "../../ui/components/input.com.ts";
-import { SubscriptionUpsertCom } from "../components/subscription-upsert.com";
+import { UpsertSubscriptionCom } from "../components/upsert-subscription.com.ts";
 import type {
 	SubscriptionModel,
 	UpsertSubscriptionModel,
@@ -13,9 +13,9 @@ export class SubscriptionsPom {
 	readonly namePrefixControl: InputCom;
 	readonly clearNamePrefixButton: Locator;
 
-	readonly subscriptionUpsert: SubscriptionUpsertCom;
+	readonly subscriptionUpsert: UpsertSubscriptionCom;
 
-	readonly categorySelect: CategorySelectCom;
+	readonly categorySelect: SelectCategoryCom;
 
 	readonly subscriptionsNavLink: Locator;
 
@@ -31,9 +31,9 @@ export class SubscriptionsPom {
 		this.namePrefixControl = new InputCom(this.#page.getByLabel("name prefix"));
 		this.clearNamePrefixButton = this.#page.getByLabel("clear name prefix");
 
-		this.subscriptionUpsert = new SubscriptionUpsertCom(this.#page);
+		this.subscriptionUpsert = new UpsertSubscriptionCom(this.#page);
 
-		this.categorySelect = new CategorySelectCom(this.#page);
+		this.categorySelect = new SelectCategoryCom(this.#page);
 
 		this.subscriptionsNavLink = this.#page.getByRole("link", {
 			name: "subscriptions",

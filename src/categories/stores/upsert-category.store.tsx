@@ -9,11 +9,11 @@ import type {
 } from "../models/category.model.ts";
 import { insertCategory, updateCategory } from "../models/category.table.ts";
 
-export function useCategoryUpsertState(): CategoryUpsertState {
+export function useUpsertCategory(): UpsertCategoryState {
 	return useStore(useShallow(selectState));
 }
 
-export type CategoryUpsertState =
+export type UpsertCategoryState =
 	| {
 			mode: "update";
 			category: CategoryModel;
@@ -23,15 +23,15 @@ export type CategoryUpsertState =
 			category: null;
 	  };
 
-export function useCategoryUpsertMode(): CategoryUpsertState["mode"] {
+export function useUpsertCategoryMode(): UpsertCategoryState["mode"] {
 	return useStore(selectMode);
 }
 
-export function useCategoryUpsertActions(): CategoryUpsertActions {
+export function useUpsertCategoryActions(): UpsertCategoryActions {
 	return useStore(useShallow(selectActions));
 }
 
-export interface CategoryUpsertActions {
+export interface UpsertCategoryActions {
 	open(category?: CategoryModel | null): void;
 	close(): void;
 	upsert(raw: UpsertCategoryModel): Promise<void>;
@@ -78,20 +78,20 @@ const useStore = create<Store>()(
 				set({}, undefined, { type: "upsert", raw });
 			},
 		}),
-		{ name: "CategoryUpsert", enabled: import.meta.env.DEV },
+		{ name: "UpsertCategory", enabled: import.meta.env.DEV },
 	),
 );
 
-type Store = CategoryUpsertState & CategoryUpsertActions;
+type Store = UpsertCategoryState & UpsertCategoryActions;
 
-function selectState({ category, mode }: Store): CategoryUpsertState {
-	return { category, mode } as CategoryUpsertState;
+function selectState({ category, mode }: Store): UpsertCategoryState {
+	return { category, mode } as UpsertCategoryState;
 }
 
-function selectMode({ mode }: Store): CategoryUpsertState["mode"] {
+function selectMode({ mode }: Store): UpsertCategoryState["mode"] {
 	return mode;
 }
 
-function selectActions({ open, close, upsert }: Store): CategoryUpsertActions {
+function selectActions({ open, close, upsert }: Store): UpsertCategoryActions {
 	return { open, close, upsert };
 }

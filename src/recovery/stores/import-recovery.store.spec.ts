@@ -25,16 +25,16 @@ import type { SubscriptionModel } from "../../subscriptions/models/subscription.
 import type { RecoveryModel } from "../models/recovery.model.ts";
 import * as recoveryTable from "../models/recovery.table.ts";
 import {
-	type RecoveryImportActions,
-	type RecoveryImportState,
-	useRecoveryImport,
-	useRecoveryImportActions,
+	type ImportRecoveryActions,
+	type ImportRecoveryState,
+	useImportRecovery,
+	useImportRecoveryActions,
 	useStore,
-} from "./recovery-import.store.ts";
+} from "./import-recovery.store.tsx";
 
 vi.mock(import("../models/recovery.table.ts"));
 
-describe("recovery-import.store", () => {
+describe("import-recovery.store", () => {
 	let renderResult: RenderHookResult<HooksCombined, void>;
 	let hooks: RenderHookResult<HooksCombined, void>["result"];
 	const initialState = useStore.getState();
@@ -46,8 +46,8 @@ describe("recovery-import.store", () => {
 
 	beforeEach(() => {
 		renderResult = renderHook<HooksCombined, void>(() => ({
-			state: useRecoveryImport(),
-			actions: useRecoveryImportActions(),
+			state: useImportRecovery(),
+			actions: useImportRecoveryActions(),
 		}));
 
 		hooks = renderResult.result;
@@ -217,6 +217,6 @@ describe("recovery-import.store", () => {
 });
 
 interface HooksCombined {
-	state: RecoveryImportState;
-	actions: RecoveryImportActions;
+	state: ImportRecoveryState;
+	actions: ImportRecoveryActions;
 }

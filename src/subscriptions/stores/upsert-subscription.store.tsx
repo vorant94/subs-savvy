@@ -1,9 +1,12 @@
 import { usePrevious } from "@mantine/hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { useShallow } from "zustand/react/shallow";
+import { useSelectedCategory } from "../../categories/stores/categories.store.tsx";
 import { useDefaultLayout } from "../../ui/hooks/use-default-layout.tsx";
+import { rootRoute } from "../../ui/types/root-route.ts";
 import type {
 	InsertSubscriptionModel,
 	SubscriptionModel,
@@ -16,11 +19,11 @@ import {
 	updateSubscription,
 } from "../models/subscription.table.ts";
 
-export function useSubscriptionUpsertState(): SubscriptionUpsertState {
+export function useUpsertSubscription(): UpsertSubscriptionState {
 	return useStore(useShallow(selectState));
 }
 
-export type SubscriptionUpsertState =
+export type UpsertSubscriptionState =
 	| {
 			mode: "update";
 			subscription: SubscriptionModel;
@@ -30,22 +33,22 @@ export type SubscriptionUpsertState =
 			subscription: null;
 	  };
 
-export function useSubscriptionUpsertMode(): SubscriptionUpsertState["mode"] {
+export function useUpsertSubscriptionMode(): UpsertSubscriptionState["mode"] {
 	return useStore(selectMode);
 }
 
-export function useSubscriptionUpsertActions(): SubscriptionUpsertActions {
+export function useUpsertSubscriptionActions(): UpsertSubscriptionActions {
 	return useStore(useShallow(selectActions));
 }
 
-export interface SubscriptionUpsertActions {
+export interface UpsertSubscriptionActions {
 	open(subscription?: SubscriptionModel | null): void;
 	close(): void;
 	upsert(raw: UpsertSubscriptionModel): Promise<void>;
 	delete(): Promise<void>;
 }
 
-export const SubscriptionUpsertProvider = memo(
+export const UpsertSubscriptionProvider = memo(
 	({ children }: PropsWithChildren) => {
 		const { drawer, isDrawerOpened } = useDefaultLayout();
 		const prevIsDrawerOpened = usePrevious(isDrawerOpened);
@@ -76,6 +79,21 @@ export const SubscriptionUpsertProvider = memo(
 			prevMode,
 			prevIsDrawerOpened,
 		]);
+
+		const { pathname } = useLocation();
+		const [selectedCategory, selectCategory] = useSelectedCategory();
+		useEffect(
+			() => () => {
+				if (
+					selectedCategory !== null &&
+					pathname !== `/${rootRoute.dashboard}` &&
+					pathname !== `/${rootRoute.subscriptions}`
+				) {
+					selectCategory(null);
+				}
+			},
+			[pathname, selectedCategory, selectCategory],
+		);
 
 		return <>{children}</>;
 	},
@@ -133,18 +151,18 @@ const useStore = create<Store>()(
 				set({}, undefined, { type: "delete" });
 			},
 		}),
-		{ name: "SubscriptionUpsert", enabled: import.meta.env.DEV },
+		{ name: "UpsertSubscription", enabled: import.meta.env.DEV },
 	),
 );
 
-type Store = SubscriptionUpsertState & SubscriptionUpsertActions;
+type Store = UpsertSubscriptionState & UpsertSubscriptionActions;
 
-function selectMode({ mode }: Store): SubscriptionUpsertState["mode"] {
+function selectMode({ mode }: Store): UpsertSubscriptionState["mode"] {
 	return mode;
 }
 
-function selectState({ subscription, mode }: Store): SubscriptionUpsertState {
-	return { subscription, mode } as SubscriptionUpsertState;
+function selectState({ subscription, mode }: Store): UpsertSubscriptionState {
+	return { subscription, mode } as UpsertSubscriptionState;
 }
 
 function selectActions({
@@ -152,6 +170,6 @@ function selectActions({
 	close,
 	upsert,
 	delete: deleteSubscription,
-}: Store): SubscriptionUpsertActions {
+}: Store): UpsertSubscriptionActions {
 	return { open, close, upsert, delete: deleteSubscription };
 }

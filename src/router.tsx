@@ -52,17 +52,17 @@ export const router = createBrowserRouter([
 					{
 						path: `/${rootRoute.recovery}/${recoveryRoute.import}`,
 						lazy: () =>
-							import("./recovery/pages/recovery-import.page.tsx").then((m) => ({
+							import("./recovery/pages/import-recovery.page.tsx").then((m) => ({
 								// biome-ignore lint/style/useNamingConvention: 3-rd party type
-								Component: m.RecoveryImportPage,
+								Component: m.ImportRecoveryPage,
 							})),
 					},
 					{
 						path: `/${rootRoute.recovery}/${recoveryRoute.export}`,
 						lazy: () =>
-							import("./recovery/pages/recovery-export.page.tsx").then((m) => ({
+							import("./recovery/pages/export-recovery.page.tsx").then((m) => ({
 								// biome-ignore lint/style/useNamingConvention: 3-rd party type
-								Component: m.RecoveryExportPage,
+								Component: m.ExportRecoveryPage,
 							})),
 					},
 				],

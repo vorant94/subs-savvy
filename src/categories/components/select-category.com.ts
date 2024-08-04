@@ -5,7 +5,7 @@ import type {
 } from "../models/category.model.ts";
 import { CategoryFormCom } from "./category-form.com.ts";
 
-export class CategorySelectCom {
+export class SelectCategoryCom {
 	readonly manageButton: Locator;
 	readonly addButton: Locator;
 	readonly insertButton: Locator;

@@ -2,13 +2,13 @@ import { Avatar, Card, Indicator, Text, Title } from "@mantine/core";
 import { memo, useCallback, useMemo } from "react";
 import { cn } from "../../ui/utils/cn.ts";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
-import { useSubscriptionUpsertActions } from "../stores/subscription-upsert.store.tsx";
+import { useUpsertSubscriptionActions } from "../stores/upsert-subscription.store.tsx";
 import { subscriptionIconToSvg } from "../types/subscription-icon-to-svg.tsx";
 import { isSubscriptionExpired } from "../utils/is-subscription-expired.ts";
 
 export const SubscriptionListItem = memo(
 	({ subscription }: SubscriptionListItemProps) => {
-		const { open } = useSubscriptionUpsertActions();
+		const { open } = useUpsertSubscriptionActions();
 
 		const openSubscriptionUpdate = useCallback(
 			() => open(subscription),

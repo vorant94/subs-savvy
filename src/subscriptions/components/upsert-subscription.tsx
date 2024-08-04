@@ -20,15 +20,15 @@ import {
 	updateSubscriptionSchema,
 } from "../models/subscription.model.ts";
 import {
-	useSubscriptionUpsertActions,
-	useSubscriptionUpsertState,
-} from "../stores/subscription-upsert.store.tsx";
+	useUpsertSubscription,
+	useUpsertSubscriptionActions,
+} from "../stores/upsert-subscription.store.tsx";
 import { subscriptionCyclePeriodsComboboxData } from "../types/subscription-cycle-period.ts";
 import { subscriptionIconsComboboxData } from "../types/subscription-icon.ts";
 
-export const SubscriptionUpsert = memo(() => {
-	const state = useSubscriptionUpsertState();
-	const actions = useSubscriptionUpsertActions();
+export const UpsertSubscription = memo(() => {
+	const state = useUpsertSubscription();
+	const actions = useUpsertSubscriptionActions();
 
 	const {
 		register,

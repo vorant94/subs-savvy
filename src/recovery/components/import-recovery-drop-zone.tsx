@@ -9,8 +9,8 @@ import {
 	recoverySchema,
 } from "../models/recovery.model.ts";
 
-export const RecoveryImportDropZone = memo(
-	({ onRecoveryParsed }: RecoveryImportDropZoneProps) => {
+export const ImportRecoveryDropZone = memo(
+	({ onRecoveryParsed }: ImportRecoveryDropZoneProps) => {
 		const [reader] = useState(() => new FileReader());
 
 		const readFile = useCallback(
@@ -82,6 +82,6 @@ export const RecoveryImportDropZone = memo(
 	},
 );
 
-export interface RecoveryImportDropZoneProps {
+export interface ImportRecoveryDropZoneProps {
 	onRecoveryParsed(recovery: RecoveryModel): void;
 }

@@ -3,8 +3,8 @@ import path from "node:path";
 import process from "node:process";
 import { type Page, expect, test } from "@playwright/test";
 import { recoverySchema } from "../src/recovery/models/recovery.model.ts";
-import { RecoveryExportPom } from "../src/recovery/pages/recovery-export.pom.ts";
-import { RecoveryImportPom } from "../src/recovery/pages/recovery-import.pom.ts";
+import { ExportRecoveryPom } from "../src/recovery/pages/export-recovery.pom.ts";
+import { ImportRecoveryPom } from "../src/recovery/pages/import-recovery.pom.ts";
 import { RecoveryPom } from "../src/recovery/pages/recovery.pom.ts";
 import { recoveryRoute } from "../src/recovery/types/recovery-route.ts";
 import {
@@ -28,7 +28,7 @@ test.describe("recovery", () => {
 	});
 
 	test("should export all subscriptions as a JSON file", async ({ page }) => {
-		const pom = new RecoveryExportPom(page);
+		const pom = new ExportRecoveryPom(page);
 		const subscriptionsToExport = [
 			monthlySubscription,
 			yearlySubscription,
@@ -58,7 +58,7 @@ test.describe("recovery", () => {
 	});
 
 	test("should import all subscriptions from a JSON file", async ({ page }) => {
-		const pom = new RecoveryImportPom(page);
+		const pom = new ImportRecoveryPom(page);
 		const filePathToImport = path.join(
 			process.cwd(),
 			"e2e/assets/subscriptions.json",

@@ -13,7 +13,7 @@ import {
 	subscriptionIconToLabel,
 } from "../types/subscription-icon";
 
-export class SubscriptionUpsertCom {
+export class UpsertSubscriptionCom {
 	readonly insertButton: Locator;
 	readonly updateButton: Locator;
 	readonly deleteButton: Locator;

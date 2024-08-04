@@ -1,14 +1,13 @@
 import { Button, Switch } from "@mantine/core";
-import { useLiveQuery } from "dexie-react-hooks";
 import { memo, useCallback, useState } from "react";
 import { dbVersion } from "../../db/globals/db.ts";
-import { SubscriptionsSelectTable } from "../../subscriptions/components/subscriptions-select-table.tsx";
-import { findSubscriptions } from "../../subscriptions/models/subscription.table.ts";
+import { SelectSubscriptionsTable } from "../../subscriptions/components/select-subscriptions-table.tsx";
+import { useSubscriptions } from "../../subscriptions/stores/subscriptions.store.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import { recoverySchema } from "../models/recovery.model.ts";
 
-export const RecoveryExportPage = memo(() => {
-	const subscriptions = useLiveQuery(() => findSubscriptions(), [], []);
+export const ExportRecoveryPage = memo(() => {
+	const subscriptions = useSubscriptions();
 	const [selectedIds, setSelectedIds] = useState<Array<number>>([]);
 
 	const [isPrettify, setIsPrettify] = useState(true);
@@ -41,7 +40,7 @@ export const RecoveryExportPage = memo(() => {
 
 	return (
 		<div className={cn("flex flex-col gap-4")}>
-			<SubscriptionsSelectTable
+			<SelectSubscriptionsTable
 				subscriptions={subscriptions}
 				selectedIds={selectedIds}
 				setSelectedIds={setSelectedIds}

@@ -10,14 +10,14 @@ import {
 	updateCategorySchema,
 } from "../models/category.model.ts";
 import {
-	useCategoryUpsertActions,
-	useCategoryUpsertState,
-} from "../stores/category-upsert.store.tsx";
+	useUpsertCategory,
+	useUpsertCategoryActions,
+} from "../stores/upsert-category.store.tsx";
 
 export const CategoryForm = memo(
 	forwardRef<HTMLFormElement>((_, ref) => {
-		const state = useCategoryUpsertState();
-		const actions = useCategoryUpsertActions();
+		const state = useUpsertCategory();
+		const actions = useUpsertCategoryActions();
 
 		const {
 			register,

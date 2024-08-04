@@ -8,11 +8,11 @@ import {
 	useCategories,
 	useSelectedCategory,
 } from "../stores/categories.store.tsx";
-import { CategorySelect } from "./category-select.tsx";
+import { SelectCategory } from "./select-category.tsx";
 
 vi.mock(import("../stores/categories.store.tsx"));
 
-describe("CategorySelect", () => {
+describe("SelectCategory", () => {
 	let screen: RenderResult;
 	const selectCategorySpy = vi.fn();
 
@@ -22,7 +22,7 @@ describe("CategorySelect", () => {
 	});
 
 	beforeEach(() => {
-		screen = render(<CategorySelect />, { wrapper });
+		screen = render(<SelectCategory />, { wrapper });
 	});
 
 	it("should call selectCategory and close combobox on category selected", () => {

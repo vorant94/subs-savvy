@@ -27,15 +27,15 @@ import {
 import { subscriptionCyclePeriodsComboboxData } from "../types/subscription-cycle-period.ts";
 import { subscriptionIconsComboboxData } from "../types/subscription-icon.ts";
 
-export const SubscriptionsInsertTable = memo(
-	forwardRef<HTMLFormElement, SubscriptionsInsertTableProps>(
+export const InsertSubscriptionsTable = memo(
+	forwardRef<HTMLFormElement, InsertSubscriptionsTableProps>(
 		({ subscriptions, categories: categoriesFromProps, onSubmit }, ref) => {
 			const {
 				handleSubmit,
 				control,
 				register,
 				formState: { errors },
-			} = useForm<SubscriptionsInsertTableFormValue>({
+			} = useForm<InsertSubscriptionsTableFormValue>({
 				resolver: zodResolver(schema),
 			});
 			const { fields, append, remove } = useFieldArray({
@@ -65,7 +65,7 @@ export const SubscriptionsInsertTable = memo(
 			}, [categories]);
 
 			const submitSubscriptions: SubmitHandler<
-				SubscriptionsInsertTableFormValue
+				InsertSubscriptionsTableFormValue
 			> = ({ subscriptions }) => {
 				onSubmit(subscriptions);
 			};
@@ -263,13 +263,13 @@ export const SubscriptionsInsertTable = memo(
 	),
 );
 
-export interface SubscriptionsInsertTableProps {
+export interface InsertSubscriptionsTableProps {
 	subscriptions: Array<InsertSubscriptionModel>;
 	categories?: Array<CategoryModel>;
 	onSubmit(subscriptions: Array<InsertSubscriptionModel>): void;
 }
 
-export interface SubscriptionsInsertTableFormValue {
+export interface InsertSubscriptionsTableFormValue {
 	subscriptions: Array<InsertSubscriptionModel>;
 }
 

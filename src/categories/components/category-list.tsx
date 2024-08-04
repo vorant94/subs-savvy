@@ -6,12 +6,12 @@ import { cn } from "../../ui/utils/cn.ts";
 import type { CategoryModel } from "../models/category.model.ts";
 import { deleteCategory } from "../models/category.table.ts";
 import { useCategories } from "../stores/categories.store.tsx";
-import { useCategoryUpsertActions } from "../stores/category-upsert.store.tsx";
+import { useUpsertCategoryActions } from "../stores/upsert-category.store.tsx";
 
 export const CategoryList = memo(() => {
 	const categories = useCategories();
 
-	const { open } = useCategoryUpsertActions();
+	const { open } = useUpsertCategoryActions();
 	const openCategoryUpdate = useCallback(
 		(category: CategoryModel) => {
 			open(category);

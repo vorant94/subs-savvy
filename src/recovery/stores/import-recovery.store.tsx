@@ -1,41 +1,45 @@
+import { type PropsWithChildren, memo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { useShallow } from "zustand/react/shallow";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
 import { CategoryNotFound } from "../../categories/models/category.table.ts";
 import type { SubscriptionModel } from "../../subscriptions/models/subscription.model.ts";
+import { rootRoute } from "../../ui/types/root-route.ts";
 import type { RecoveryModel } from "../models/recovery.model.ts";
 import { upsertCategoriesAndSubscriptions } from "../models/recovery.table.ts";
+import { recoveryRoute } from "../types/recovery-route.ts";
 
-export function useRecoveryImport(): RecoveryImportState {
+export function useImportRecovery(): ImportRecoveryState {
 	return useStore(useShallow(selectState));
 }
 
-export function useRecoveryImportStage(): RecoveryImportStateStage {
+export function useImportRecoveryStage(): ImportRecoveryStateStage {
 	return useStore(selectStage);
 }
 
-export const recoveryImportStateStages = [
+export const importRecoveryStateStages = [
 	"upload-recovery",
 	"submit-categories",
 	"submit-subscriptions",
 	"failed",
 	"completed",
 ] as const;
-export type RecoveryImportStateStage =
-	(typeof recoveryImportStateStages)[number];
+export type ImportRecoveryStateStage =
+	(typeof importRecoveryStateStages)[number];
 
-export interface RecoveryImportState {
-	stage: RecoveryImportStateStage;
+export interface ImportRecoveryState {
+	stage: ImportRecoveryStateStage;
 	categories: Array<CategoryModel>;
 	subscriptions: Array<SubscriptionModel>;
 }
 
-export function useRecoveryImportActions(): RecoveryImportActions {
+export function useImportRecoveryActions(): ImportRecoveryActions {
 	return useStore(useShallow(selectActions));
 }
 
-export interface RecoveryImportActions {
+export interface ImportRecoveryActions {
 	goNextFromUploadRecovery(recovery: RecoveryModel): void;
 	goPrevFromSubmitCategories(): void;
 	goNextFromSubmitCategories(categories: Array<CategoryModel>): void;
@@ -46,11 +50,30 @@ export interface RecoveryImportActions {
 	reset(): void;
 }
 
+export const ImportRecoveryProvider = memo(
+	({ children }: PropsWithChildren) => {
+		const { pathname } = useLocation();
+		const stage = useImportRecoveryStage();
+		const { reset } = useImportRecoveryActions();
+
+		useEffect(
+			() => () => {
+				if (
+					stage !== "upload-recovery" &&
+					pathname !== `/${rootRoute.recovery}/${recoveryRoute.import}`
+				) {
+					reset();
+				}
+			},
+			[pathname, stage, reset],
+		);
+
+		return <>{children}</>;
+	},
+);
+
 export class IllegalTransitionError extends Error {
-	constructor(
-		from: RecoveryImportState["stage"],
-		to: RecoveryImportState["stage"],
-	) {
+	constructor(from: ImportRecoveryStateStage, to: ImportRecoveryStateStage) {
 		super(`Illegal transition from "${from}" to "${to}"`);
 	}
 }
@@ -194,21 +217,21 @@ export const useStore = create<Store>()(
 				);
 			},
 		}),
-		{ name: "RecoveryImport", enabled: import.meta.env.DEV },
+		{ name: "ImportRecovery", enabled: import.meta.env.DEV },
 	),
 );
 
-type Store = RecoveryImportState & RecoveryImportActions;
+type Store = ImportRecoveryState & ImportRecoveryActions;
 
 function selectState({
 	stage,
 	categories,
 	subscriptions,
-}: Store): RecoveryImportState {
+}: Store): ImportRecoveryState {
 	return { stage, categories, subscriptions };
 }
 
-function selectStage({ stage }: Store): RecoveryImportStateStage {
+function selectStage({ stage }: Store): ImportRecoveryStateStage {
 	return stage;
 }
 
@@ -219,7 +242,7 @@ function selectActions({
 	goPrevFromSubmitSubscriptions,
 	goNextFromSubmitSubscriptions,
 	reset,
-}: Store): RecoveryImportActions {
+}: Store): ImportRecoveryActions {
 	return {
 		goNextFromUploadRecovery,
 		goPrevFromSubmitCategories,

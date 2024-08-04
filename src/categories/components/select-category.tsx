@@ -18,7 +18,7 @@ import {
 } from "../stores/categories.store.tsx";
 import { ManageCategoriesModal } from "./manage-categories-modal.tsx";
 
-export const CategorySelect = memo(() => {
+export const SelectCategory = memo(() => {
 	const categories = useCategories();
 
 	const combobox = useCombobox({

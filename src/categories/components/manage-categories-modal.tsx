@@ -2,9 +2,9 @@ import { Button, Modal } from "@mantine/core";
 import { memo, useCallback, useEffect, useState } from "react";
 import { cn } from "../../ui/utils/cn.ts";
 import {
-	useCategoryUpsertActions,
-	useCategoryUpsertMode,
-} from "../stores/category-upsert.store.tsx";
+	useUpsertCategoryActions,
+	useUpsertCategoryMode,
+} from "../stores/upsert-category.store.tsx";
 import { CategoryForm } from "./category-form.tsx";
 import { CategoryList } from "./category-list.tsx";
 
@@ -12,8 +12,8 @@ export const ManageCategoriesModal = memo(
 	({ isOpen, close }: ManageCategoriesModalProps) => {
 		const [mode, setMode] = useState<"view" | "upsert">("view");
 
-		const upsertMode = useCategoryUpsertMode();
-		const upsertActions = useCategoryUpsertActions();
+		const upsertMode = useUpsertCategoryMode();
+		const upsertActions = useUpsertCategoryActions();
 		const openCategoryInsert = useCallback(() => {
 			setMode("upsert");
 			upsertActions.open();

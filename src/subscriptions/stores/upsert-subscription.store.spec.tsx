@@ -8,20 +8,22 @@ import {
 	useDefaultLayout,
 } from "../../ui/hooks/use-default-layout.tsx";
 import {
-	SubscriptionUpsertProvider,
-	useSubscriptionUpsertActions,
-	useSubscriptionUpsertMode,
-} from "./subscription-upsert.store.tsx";
+	type UpsertSubscriptionActions,
+	UpsertSubscriptionProvider,
+	type UpsertSubscriptionState,
+	useUpsertSubscriptionActions,
+	useUpsertSubscriptionMode,
+} from "./upsert-subscription.store.tsx";
 
-describe("useSubscriptionUpsert", () => {
+describe("upsert-subscription.store", () => {
 	let renderResult: RenderHookResult<HooksCombined, void>;
 	let hooks: RenderHookResult<HooksCombined, void>["result"];
 
 	beforeEach(() => {
 		renderResult = renderHook<HooksCombined, void>(
 			() => ({
-				mode: useSubscriptionUpsertMode(),
-				actions: useSubscriptionUpsertActions(),
+				mode: useUpsertSubscriptionMode(),
+				actions: useUpsertSubscriptionActions(),
 				defaultLayout: useDefaultLayout(),
 			}),
 			{
@@ -58,14 +60,14 @@ const wrapper: FC<PropsWithChildren> = ({ children }) => {
 	return (
 		<BrowserRouter>
 			<DefaultLayoutProvider>
-				<SubscriptionUpsertProvider>{children}</SubscriptionUpsertProvider>
+				<UpsertSubscriptionProvider>{children}</UpsertSubscriptionProvider>
 			</DefaultLayoutProvider>
 		</BrowserRouter>
 	);
 };
 
 interface HooksCombined {
-	mode: ReturnType<typeof useSubscriptionUpsertMode>;
-	actions: ReturnType<typeof useSubscriptionUpsertActions>;
+	mode: UpsertSubscriptionState["mode"];
+	actions: UpsertSubscriptionActions;
 	defaultLayout: UseDefaultLayout;
 }

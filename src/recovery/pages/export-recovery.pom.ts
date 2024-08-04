@@ -1,7 +1,7 @@
 import type { Locator, Page } from "@playwright/test";
 import { CheckboxCom } from "../../ui/components/checkbox.com.ts";
 
-export class RecoveryExportPom {
+export class ExportRecoveryPom {
 	readonly recoveryNavLink: Locator;
 	readonly exportTab: Locator;
 	readonly exportButton: Locator;

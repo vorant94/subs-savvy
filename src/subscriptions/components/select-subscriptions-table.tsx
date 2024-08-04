@@ -5,12 +5,12 @@ import type { SubscriptionModel } from "../models/subscription.model.ts";
 import { subscriptionCyclePeriodToLabel } from "../types/subscription-cycle-period.ts";
 import { subscriptionIconToLabel } from "../types/subscription-icon.ts";
 
-export const SubscriptionsSelectTable = memo(
+export const SelectSubscriptionsTable = memo(
 	({
 		subscriptions,
 		selectedIds,
 		setSelectedIds,
-	}: SubscriptionsSelectTableProps) => {
+	}: SelectSubscriptionsTableProps) => {
 		const toggleAll = () => {
 			selectedIds.length === subscriptions.length
 				? setSelectedIds([])
@@ -90,7 +90,7 @@ export const SubscriptionsSelectTable = memo(
 	},
 );
 
-export interface SubscriptionsSelectTableProps {
+export interface SelectSubscriptionsTableProps {
 	subscriptions: ReadonlyArray<SubscriptionModel>;
 	selectedIds: Array<number>;
 	setSelectedIds: Dispatch<SetStateAction<Array<number>>>;
