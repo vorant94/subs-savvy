@@ -14,14 +14,14 @@ import {
 	it,
 	vi,
 } from "vitest";
-import { categoryMock } from "../../categories/models/category.mock.ts";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
+import { categoryStub } from "../../categories/models/category.stub.ts";
 import { dbVersion } from "../../db/globals/db.ts";
+import type { SubscriptionModel } from "../../subscriptions/models/subscription.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
-} from "../../subscriptions/models/subscription.mock.ts";
-import type { SubscriptionModel } from "../../subscriptions/models/subscription.model.ts";
+} from "../../subscriptions/models/subscription.stub.ts";
 import type { RecoveryModel } from "../models/recovery.model.ts";
 import * as recoveryTable from "../models/recovery.table.ts";
 import {
@@ -41,7 +41,7 @@ describe("import-recovery.store", () => {
 	const recovery = {
 		dbVersion,
 		subscriptions: [monthlySubscription, yearlySubscription],
-		categories: [categoryMock],
+		categories: [categoryStub],
 	} as const satisfies RecoveryModel;
 
 	beforeEach(() => {
@@ -83,7 +83,7 @@ describe("import-recovery.store", () => {
 
 			expect(hooks.current.state.stage).toEqual("submit-categories");
 			expect(hooks.current.state.subscriptions).toEqual(recovery.subscriptions);
-			expect(hooks.current.state.categories).toEqual([categoryMock]);
+			expect(hooks.current.state.categories).toEqual([categoryStub]);
 		});
 
 		it("should go prev and reset subscriptions and categories", () => {
@@ -112,20 +112,22 @@ describe("import-recovery.store", () => {
 		});
 
 		it("should go next and adjust categories if they were changed", () => {
-			const category = {
-				...categoryMock,
+			const adjustedCategory = {
+				...categoryStub,
 				name: "adjusted",
 			} satisfies CategoryModel;
 			const subscriptions = [
-				{ ...monthlySubscription, category },
+				{ ...monthlySubscription, category: adjustedCategory },
 				yearlySubscription,
 			] satisfies Array<SubscriptionModel>;
 
-			act(() => hooks.current.actions.goNextFromSubmitCategories([category]));
+			act(() =>
+				hooks.current.actions.goNextFromSubmitCategories([adjustedCategory]),
+			);
 
 			expect(hooks.current.state.stage).toEqual("submit-subscriptions");
 			expect(hooks.current.state.subscriptions).toEqual(subscriptions);
-			expect(hooks.current.state.categories).toEqual([category]);
+			expect(hooks.current.state.categories).toEqual([adjustedCategory]);
 		});
 
 		it("should go prev", () => {

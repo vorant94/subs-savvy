@@ -1,32 +1,26 @@
 import { MantineProvider } from "@mantine/core";
 import { type RenderResult, fireEvent, render } from "@testing-library/react";
-import type { FC, PropsWithChildren } from "react";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { categoryMock } from "../models/category.mock.ts";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CategoryModel } from "../models/category.model.ts";
-import {
-	useCategories,
-	useSelectedCategory,
-} from "../stores/categories.store.tsx";
+import { categoryStub } from "../models/category.stub.ts";
+import { selectCategorySpy } from "../stores/__mocks__/categories.store.tsx";
 import { SelectCategory } from "./select-category.tsx";
 
 vi.mock(import("../stores/categories.store.tsx"));
 
 describe("SelectCategory", () => {
 	let screen: RenderResult;
-	const selectCategorySpy = vi.fn();
-
-	beforeAll(() => {
-		vi.mocked(useCategories).mockReturnValue([categoryMock]);
-		vi.mocked(useSelectedCategory).mockReturnValue([null, selectCategorySpy]);
-	});
 
 	beforeEach(() => {
-		screen = render(<SelectCategory />, { wrapper });
+		screen = render(<SelectCategory />, {
+			wrapper: ({ children }) => {
+				return <MantineProvider>{children}</MantineProvider>;
+			},
+		});
 	});
 
 	it("should call selectCategory and close combobox on category selected", () => {
-		const categoryToSelect = { ...categoryMock } satisfies CategoryModel;
+		const categoryToSelect = { ...categoryStub } satisfies CategoryModel;
 
 		fireEvent.click(screen.getByLabelText("select-category"));
 		fireEvent.click(
@@ -39,7 +33,3 @@ describe("SelectCategory", () => {
 		).not.toBeInTheDocument();
 	});
 });
-
-const wrapper: FC<PropsWithChildren> = ({ children }) => {
-	return <MantineProvider>{children}</MantineProvider>;
-};

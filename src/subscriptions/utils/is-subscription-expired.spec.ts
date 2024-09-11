@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { describe, expect, it } from "vitest";
-import { monthlySubscription } from "../models/subscription.mock.ts";
 import type { SubscriptionModel } from "../models/subscription.model.ts";
+import { monthlySubscription } from "../models/subscription.stub.ts";
 import { isSubscriptionExpired } from "./is-subscription-expired.ts";
 
 describe("compare by day", () => {

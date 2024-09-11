@@ -1,6 +1,6 @@
 import type { UseDefaultLayout } from "./use-default-layout.tsx";
 
-export const useDefaultLayoutMock = {
+export const useDefaultLayoutStub = {
 	isDrawerOpened: false,
 	drawer: {
 		open: () => {},

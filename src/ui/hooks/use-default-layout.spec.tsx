@@ -1,5 +1,4 @@
 import { type RenderHookResult, act, renderHook } from "@testing-library/react";
-import type { FC, PropsWithChildren } from "react";
 import { MemoryRouter, useNavigate } from "react-router-dom";
 import type { NavigateFunction } from "react-router/dist/lib/hooks";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -20,7 +19,13 @@ describe("useDefaultLayout", () => {
 				defaultLayout: useDefaultLayout(),
 			}),
 			{
-				wrapper,
+				wrapper: ({ children }) => {
+					return (
+						<MemoryRouter>
+							<DefaultLayoutProvider>{children}</DefaultLayoutProvider>
+						</MemoryRouter>
+					);
+				},
 			},
 		);
 
@@ -34,14 +39,6 @@ describe("useDefaultLayout", () => {
 		expect(hooks.current.defaultLayout.isNavOpened).toBeFalsy();
 	});
 });
-
-const wrapper: FC<PropsWithChildren> = ({ children }) => {
-	return (
-		<MemoryRouter>
-			<DefaultLayoutProvider>{children}</DefaultLayoutProvider>
-		</MemoryRouter>
-	);
-};
 
 interface HooksCombined {
 	navigate: NavigateFunction;

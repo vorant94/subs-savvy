@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useLocation } from "react-router-dom";
 import type { Disclosure } from "../types/disclosure.ts";
-import { useDefaultLayoutMock } from "./use-default-layout.mock.ts";
+import { useDefaultLayoutStub } from "./use-default-layout.stub.ts";
 
 export function useDefaultLayout(): UseDefaultLayout {
 	return useContext(defaultLayoutContext);
@@ -43,4 +43,4 @@ export const DefaultLayoutProvider = memo(({ children }: PropsWithChildren) => {
 });
 
 const defaultLayoutContext =
-	createContext<UseDefaultLayout>(useDefaultLayoutMock);
+	createContext<UseDefaultLayout>(useDefaultLayoutStub);

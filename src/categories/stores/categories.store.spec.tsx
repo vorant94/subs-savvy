@@ -4,11 +4,9 @@ import {
 	renderHook,
 	waitFor,
 } from "@testing-library/react";
-import type { FC, PropsWithChildren } from "react";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { categoryMock } from "../models/category.mock.ts";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CategoryModel } from "../models/category.model.ts";
-import { findCategories } from "../models/category.table.ts";
+import { categoryStub } from "../models/category.stub.ts";
 import {
 	CategoriesProvider,
 	useCategories,
@@ -20,10 +18,6 @@ vi.mock(import("../models/category.table.ts"));
 describe("categories.store", () => {
 	let screen: RenderHookResult<HooksCombined, void>;
 	let hook: RenderHookResult<HooksCombined, void>["result"];
-
-	beforeAll(() => {
-		vi.mocked(findCategories).mockResolvedValue([categoryMock]);
-	});
 
 	beforeEach(() => {
 		screen = renderHook<HooksCombined, void>(
@@ -38,7 +32,9 @@ describe("categories.store", () => {
 				};
 			},
 			{
-				wrapper,
+				wrapper: ({ children }) => {
+					return <CategoriesProvider>{children}</CategoriesProvider>;
+				},
 			},
 		);
 
@@ -48,7 +44,7 @@ describe("categories.store", () => {
 	it("should fetch categories", async () => {
 		await Promise.all([
 			waitFor(() => expect(hook.current.selectedCategory).toBeFalsy()),
-			waitFor(() => expect(hook.current.categories).toEqual([categoryMock])),
+			waitFor(() => expect(hook.current.categories).toEqual([categoryStub])),
 		]);
 	});
 
@@ -60,10 +56,6 @@ describe("categories.store", () => {
 		expect(() => act(() => hook.current.selectCategory("7"))).toThrowError();
 	});
 });
-
-const wrapper: FC<PropsWithChildren> = ({ children }) => {
-	return <CategoriesProvider>{children}</CategoriesProvider>;
-};
 
 interface HooksCombined {
 	categories: ReadonlyArray<CategoryModel>;

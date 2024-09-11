@@ -1,5 +1,4 @@
 import { type RenderHookResult, act, renderHook } from "@testing-library/react";
-import type { FC, PropsWithChildren } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
@@ -27,7 +26,17 @@ describe("upsert-subscription.store", () => {
 				defaultLayout: useDefaultLayout(),
 			}),
 			{
-				wrapper,
+				wrapper: ({ children }) => {
+					return (
+						<BrowserRouter>
+							<DefaultLayoutProvider>
+								<UpsertSubscriptionProvider>
+									{children}
+								</UpsertSubscriptionProvider>
+							</DefaultLayoutProvider>
+						</BrowserRouter>
+					);
+				},
 			},
 		);
 
@@ -55,16 +64,6 @@ describe("upsert-subscription.store", () => {
 		expect(hooks.current.mode).toBeFalsy();
 	});
 });
-
-const wrapper: FC<PropsWithChildren> = ({ children }) => {
-	return (
-		<BrowserRouter>
-			<DefaultLayoutProvider>
-				<UpsertSubscriptionProvider>{children}</UpsertSubscriptionProvider>
-			</DefaultLayoutProvider>
-		</BrowserRouter>
-	);
-};
 
 interface HooksCombined {
 	mode: UpsertSubscriptionState["mode"];

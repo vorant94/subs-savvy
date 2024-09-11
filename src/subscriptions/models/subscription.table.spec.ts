@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { categoryMock } from "../../categories/models/category.mock.ts";
+import { categoryStub } from "../../categories/models/category.stub.ts";
 import { db } from "../../db/globals/db.ts";
 import { cleanUpDb } from "../../db/utils/clean-up-db.ts";
 import { populateDb } from "../../db/utils/populate-db.ts";
+import type { SubscriptionModel } from "./subscription.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
-} from "./subscription.mock.ts";
-import type { SubscriptionModel } from "./subscription.model.ts";
+} from "./subscription.stub.ts";
 import {
 	deleteSubscription,
 	findSubscriptions,
@@ -32,7 +32,7 @@ describe("with data", () => {
 	});
 
 	it("should throw if there are subscriptions with non-existing categories", async () => {
-		await db.categories.delete(categoryMock.id);
+		await db.categories.delete(categoryStub.id);
 
 		expect(async () => await findSubscriptions()).rejects.toThrowError(
 			/Category with id 5 not found!/,
@@ -83,7 +83,7 @@ describe("with data", () => {
 });
 
 describe("without data", () => {
-	beforeEach(async () => await populateDb(undefined, [categoryMock]));
+	beforeEach(async () => await populateDb(undefined, [categoryStub]));
 
 	afterEach(async () => await cleanUpDb());
 

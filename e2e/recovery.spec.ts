@@ -7,11 +7,11 @@ import { ExportRecoveryPom } from "../src/recovery/pages/export-recovery.pom.ts"
 import { ImportRecoveryPom } from "../src/recovery/pages/import-recovery.pom.ts";
 import { RecoveryPom } from "../src/recovery/pages/recovery.pom.ts";
 import { recoveryRoute } from "../src/recovery/types/recovery-route.ts";
+import type { SubscriptionModel } from "../src/subscriptions/models/subscription.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
-} from "../src/subscriptions/models/subscription.mock.ts";
-import type { SubscriptionModel } from "../src/subscriptions/models/subscription.model.ts";
+} from "../src/subscriptions/models/subscription.stub.ts";
 import { rootRoute } from "../src/ui/types/root-route.ts";
 
 test.describe("recovery", () => {

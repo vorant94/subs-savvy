@@ -6,6 +6,7 @@ export default mergeConfig(
 	defineConfig({
 		test: {
 			environment: "happy-dom",
+			clearMocks: true,
 			root: "./src",
 			setupFiles: ["./src/test-setup.ts"],
 			coverage: {
@@ -15,8 +16,9 @@ export default mergeConfig(
 					"**/*.d.ts",
 					"**/*.spec.ts",
 					"**/*.spec.tsx",
-					"**/*.mock.ts",
-					"**/*.mock.tsx",
+					"**/*.stub.ts",
+					"**/*.stub.tsx",
+					"**/__mocks__/*",
 					"**/types/*",
 					"**/globals/*",
 					"**/models/*.model.ts",

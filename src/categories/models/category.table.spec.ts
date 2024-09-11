@@ -5,9 +5,9 @@ import { populateDb } from "../../db/utils/populate-db.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
-} from "../../subscriptions/models/subscription.mock.ts";
-import { categoryMock } from "./category.mock.ts";
+} from "../../subscriptions/models/subscription.stub.ts";
 import type { CategoryModel } from "./category.model.ts";
+import { categoryStub } from "./category.stub.ts";
 import {
 	deleteCategory,
 	findCategories,
@@ -23,14 +23,14 @@ describe("with data", () => {
 	afterEach(async () => await cleanUpDb());
 
 	it("should find categories", async () => {
-		const categories = [categoryMock] satisfies ReadonlyArray<CategoryModel>;
+		const categories = [categoryStub] satisfies ReadonlyArray<CategoryModel>;
 
 		expect(await findCategories()).toEqual(categories);
 	});
 
 	it("should update category", async () => {
 		const categoryToUpdate = {
-			...categoryMock,
+			...categoryStub,
 			name: "Car",
 		} satisfies CategoryModel;
 
@@ -42,14 +42,17 @@ describe("with data", () => {
 	});
 
 	it("should delete category and unlink all linked to it subscriptions", async () => {
-		const category = { ...categoryMock } satisfies CategoryModel;
+		const categoryToDelete = { ...categoryStub } satisfies CategoryModel;
 
-		await deleteCategory(category.id);
+		await deleteCategory(categoryToDelete.id);
 
-		expect(await db.categories.get(category.id)).toBeFalsy();
+		expect(await db.categories.get(categoryToDelete.id)).toBeFalsy();
 		expect(
-			(await db.subscriptions.where({ categoryId: category.id }).toArray())
-				.length,
+			(
+				await db.subscriptions
+					.where({ categoryId: categoryToDelete.id })
+					.toArray()
+			).length,
 		).toEqual(0);
 	});
 });
@@ -59,7 +62,7 @@ describe("without data", () => {
 
 	it("should insert category", async () => {
 		const { id: _, ...categoryToInsert } = {
-			...categoryMock,
+			...categoryStub,
 		} satisfies CategoryModel;
 
 		const { id } = await insertCategory(categoryToInsert);

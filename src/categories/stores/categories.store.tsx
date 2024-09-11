@@ -14,10 +14,9 @@ export function useSelectedCategory(): UseSelectedCategory {
 	return useStore(useShallow(selectSelectedCategory));
 }
 
-export type UseSelectedCategory = [
-	CategoryModel | null,
-	(categoryId: string | null) => void,
-];
+export type UseSelectedCategory = Readonly<
+	[CategoryModel | null, (categoryId: string | null) => void]
+>;
 
 export const CategoriesProvider = memo(({ children }: PropsWithChildren) => {
 	const { setCategories } = useStore();

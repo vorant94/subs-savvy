@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`monthly > each = 2 && startedAtMonth % month = 0 && startedAtYear < year 1`] = `826`;
+
+exports[`monthly > each = 2 && startedAtMonth % month = 1 && startedAtYear < year 1`] = `0`;
+
+exports[`monthly > month < startedAtMonth && startedAtYear = year 1`] = `0`;
+
+exports[`monthly > month < startedAtMonth && year < startedAtYear 1`] = `0`;
+
+exports[`monthly > startedAtMonth < endedAtMonth < month && startedAtYear < endedAtYear < year 1`] = `0`;
+
+exports[`monthly > startedAtMonth < endedAtMonth < month && startedAtYear < year < endedAtYear 1`] = `13.33`;
+
+exports[`monthly > startedAtMonth < endedAtMonth < month && startedAtYear < year = endedAtYear 1`] = `0`;
+
+exports[`monthly > startedAtMonth < month && startedAtYear < year 1`] = `13.33`;
+
+exports[`monthly > startedAtMonth < month && startedAtYear = year 1`] = `13.33`;
+
+exports[`monthly > startedAtMonth < month < endedAtMonth && startedAtYear < year < endedAtYear 1`] = `13.33`;
+
+exports[`monthly > startedAtMonth < month < endedAtMonth && startedAtYear < year = endedAtYear 1`] = `13.33`;
+
+exports[`monthly > startedAtMonth < month = endedAtMonth && startedAtYear < year = endedAtYear 1`] = `0`;
+
+exports[`monthly > startedAtMonth = month && startedAtYear = year 1`] = `13.33`;
+
+exports[`yearly > each = 2 && startedAtMonth = month && startedAtYear % year = 0 1`] = `300`;
+
+exports[`yearly > each = 2 && startedAtMonth = month && startedAtYear % year = 1 1`] = `0`;
+
+exports[`yearly > month < startedAtMonth && startedAtYear = year 1`] = `0`;
+
+exports[`yearly > month < startedAtMonth && year < startedAtYear 1`] = `0`;
+
+exports[`yearly > month < startedAtMonth < endedAtMonth && year < startedAtYear < endedAtYear 1`] = `0`;
+
+exports[`yearly > startedAtMonth < endedAtMonth < month && startedAtYear < endedAtYear < year 1`] = `0`;
+
+exports[`yearly > startedAtMonth < endedAtMonth < month && startedAtYear < year = endedAtYear 1`] = `0`;
+
+exports[`yearly > startedAtMonth < month && startedAtYear < year 1`] = `0`;
+
+exports[`yearly > startedAtMonth < month && startedAtYear = year 1`] = `0`;
+
+exports[`yearly > startedAtMonth < month = endedAtMonth && startedAtYear < year = endedAtYear 1`] = `0`;
+
+exports[`yearly > startedAtMonth < month = endedAtMonth && startedAtYear = year < endedAtYear 1`] = `0`;
+
+exports[`yearly > startedAtMonth = month && startedAtYear < year 1`] = `20.2`;
+
+exports[`yearly > startedAtMonth = month && startedAtYear = year 1`] = `20.2`;
+
+exports[`yearly > startedAtMonth = month < endedAtMonth && startedAtYear < year < endedAtYear 1`] = `20.2`;
+
+exports[`yearly > startedAtMonth = month < endedAtMonth && year < startedAtYear < endedAtYear 1`] = `0`;

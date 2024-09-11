@@ -4,22 +4,19 @@ import {
 	renderHook,
 	waitFor,
 } from "@testing-library/react";
-import type { FC, PropsWithChildren } from "react";
-import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { categoryMock } from "../../categories/models/category.mock.ts";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CategoryModel } from "../../categories/models/category.model.ts";
-import { findCategories } from "../../categories/models/category.table.ts";
+import { categoryStub } from "../../categories/models/category.stub.ts";
 import {
 	CategoriesProvider,
 	useCategories,
 	useSelectedCategory,
 } from "../../categories/stores/categories.store.tsx";
+import type { SubscriptionModel } from "../models/subscription.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
-} from "../models/subscription.mock.ts";
-import type { SubscriptionModel } from "../models/subscription.model.ts";
-import { findSubscriptions } from "../models/subscription.table.ts";
+} from "../models/subscription.stub.ts";
 import {
 	SubscriptionsProvider,
 	useSubscriptions,
@@ -31,15 +28,6 @@ vi.mock(import("../models/subscription.table.ts"));
 describe("subscriptions.store", () => {
 	let screen: RenderHookResult<HooksCombined, void>;
 	let hook: RenderHookResult<HooksCombined, void>["result"];
-
-	beforeAll(() => {
-		vi.mocked(findSubscriptions).mockResolvedValue([
-			monthlySubscription,
-			yearlySubscription,
-		]);
-
-		vi.mocked(findCategories).mockResolvedValue([categoryMock]);
-	});
 
 	beforeEach(() => {
 		screen = renderHook<HooksCombined, void>(
@@ -56,7 +44,13 @@ describe("subscriptions.store", () => {
 				};
 			},
 			{
-				wrapper,
+				wrapper: ({ children }) => {
+					return (
+						<CategoriesProvider>
+							<SubscriptionsProvider>{children}</SubscriptionsProvider>
+						</CategoriesProvider>
+					);
+				},
 			},
 		);
 
@@ -75,17 +69,17 @@ describe("subscriptions.store", () => {
 	});
 
 	it("should filter/unfilter subscriptions based on selected category", async () => {
-		const category = {
-			...categoryMock,
+		const categoryToSelect = {
+			...categoryStub,
 		} satisfies CategoryModel;
 
 		// not real validation, but just to ensure that component is stable and is ready for upcoming `act` to be called
 		await waitFor(() => expect(hook.current.categories.length).toEqual(1));
 
-		act(() => hook.current.selectCategory(`${category.id}`));
+		act(() => hook.current.selectCategory(`${categoryToSelect.id}`));
 		await Promise.all([
 			waitFor(() =>
-				expect(hook.current.selectedCategory?.id).toEqual(category.id),
+				expect(hook.current.selectedCategory?.id).toEqual(categoryToSelect.id),
 			),
 			waitFor(() => expect(hook.current.subscriptions.length).toEqual(1)),
 		]);
@@ -97,14 +91,6 @@ describe("subscriptions.store", () => {
 		]);
 	});
 });
-
-const wrapper: FC<PropsWithChildren> = ({ children }) => {
-	return (
-		<CategoriesProvider>
-			<SubscriptionsProvider>{children}</SubscriptionsProvider>
-		</CategoriesProvider>
-	);
-};
 
 interface HooksCombined {
 	subscriptions: ReadonlyArray<SubscriptionModel>;
