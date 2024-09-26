@@ -2,7 +2,7 @@ import process from "node:process";
 import { defineConfig, devices } from "@playwright/test";
 import { z } from "zod";
 
-export const envSchema = z.object({
+const envSchema = z.object({
 	// biome-ignore lint/style/useNamingConvention: env variables have different convention
 	NODE_ENV: z.enum(["development", "production"]).default("development"),
 	// biome-ignore lint/style/useNamingConvention: env variables have different convention
