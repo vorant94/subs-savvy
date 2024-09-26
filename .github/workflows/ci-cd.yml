@@ -56,13 +56,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/setup
+      - id: setup
+        uses: ./.github/actions/setup
+
+      - run: |
+          PLAYWRIGHT_VERSION=$(cat package-lock.json | jq -r '.packages["node_modules/@playwright/test"].version')
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+
 
       - id: cache-playwright
         uses: actions/cache@v3
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{hashFiles('playwright.config.js')}}
+          key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{hashFiles('playwright.config.js')}}
 
       - run: npm run e2e:setup
         if: steps.cache-playwright.outputs.cache-hit != 'true'

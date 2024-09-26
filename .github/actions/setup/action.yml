@@ -1,5 +1,10 @@
 name: Setup
 
+outputs:
+  node-version:
+    description: 'The installed node version.'
+    value: ${{ steps.setup-node.outputs.node-version }}
+
 runs:
   using: 'composite'
   steps:
