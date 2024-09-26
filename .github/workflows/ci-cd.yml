@@ -41,14 +41,13 @@ jobs:
 
       - uses: ./.github/actions/setup
 
+      - run: npm run build
+
       - id: cache-build-output
         uses: actions/cache@v3
         with:
           path: dist
           key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-build-output-${{hashFiles('dist/**')}}
-
-      - run: npm run build
-        if: steps.cache-build-output.outputs.cache-hit != 'true'
 
       - uses: actions/upload-artifact@v4
         if: steps.cache-build-output.outputs.cache-hit != 'true'
