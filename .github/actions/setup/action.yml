@@ -8,5 +8,12 @@ runs:
         node-version: 22
         cache: "npm"
 
-#    - run: npm ci --ignore-scripts --no-audit
-#      shell: bash
+    - id: cache-node_modules
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{hashFiles('package-lock.json')}}
+
+    - run: npm ci --ignore-scripts --no-audit
+      if: steps.cache-node_modules.outputs.cache-hit != 'true'
+      shell: bash
