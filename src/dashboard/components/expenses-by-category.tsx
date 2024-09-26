@@ -145,7 +145,8 @@ const LabelContent = ({
 				<tspan alignmentBaseline="middle">
 					{aggregatedSubscriptions[activeIndex]?.category.id === -1
 						? t(noCategoryPlaceholder.name)
-						: aggregatedSubscriptions[activeIndex]?.category.name ?? t("total")}
+						: (aggregatedSubscriptions[activeIndex]?.category.name ??
+							t("total"))}
 				</tspan>
 			</text>
 			<text
