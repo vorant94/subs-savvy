@@ -63,7 +63,7 @@ jobs:
     needs:
       - test
       - build
-    if: jobs.build.outputs.build-output-cache-hit != 'true'
+    if: needs.build.outputs.build-output-cache-hit != 'true'
     steps:
       - uses: actions/checkout@v4
 
