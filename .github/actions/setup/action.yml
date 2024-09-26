@@ -8,5 +8,5 @@ runs:
         node-version: 22
         cache: "npm"
 
-    - run: npm ci --ignore-scripts --no-audit
-      shell: bash
+#    - run: npm ci --ignore-scripts --no-audit
+#      shell: bash
