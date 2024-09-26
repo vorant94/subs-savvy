@@ -34,14 +34,24 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    outputs:
+      build-output-cache-hit: ${{ steps.cache-build-output.outputs.cache-hit }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/setup
 
+      - id: cache-build-output
+        uses: actions/cache@v3
+        with:
+          path: dist
+          key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-build-output-${{hashFiles('dist/**')}}
+
       - run: npm run build
+        if: steps.cache-build-output.outputs.cache-hit != 'true'
 
       - uses: actions/upload-artifact@v4
+        if: steps.cache-build-output.outputs.cache-hit != 'true'
         with:
           name: build-output
           path: dist/
@@ -53,6 +63,7 @@ jobs:
     needs:
       - test
       - build
+    if: jobs.build.outputs.build-output-cache-hit != 'true'
     steps:
       - uses: actions/checkout@v4
 
