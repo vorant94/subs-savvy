@@ -1,6 +1,5 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { App } from "./app.tsx";
-import { devOnlyRoute } from "./dev-only/types/dev-only-route.ts";
 import { recoveryRoute } from "./recovery/types/recovery-route.ts";
 import { rootRoute } from "./ui/types/root-route.ts";
 
@@ -63,25 +62,6 @@ export const router = createBrowserRouter([
 							import("./recovery/pages/export-recovery.page.tsx").then((m) => ({
 								// biome-ignore lint/style/useNamingConvention: 3-rd party type
 								Component: m.ExportRecoveryPage,
-							})),
-					},
-				],
-			},
-			{
-				path: `/${rootRoute.devOnly}`,
-				children: [
-					{
-						path: `/${rootRoute.devOnly}`,
-						element: (
-							<Navigate to={`/${rootRoute.devOnly}/${devOnlyRoute.iconList}`} />
-						),
-					},
-					{
-						path: `/${rootRoute.devOnly}/${devOnlyRoute.iconList}`,
-						lazy: () =>
-							import("./dev-only/pages/icon-list.page.tsx").then((m) => ({
-								// biome-ignore lint/style/useNamingConvention: 3-rd party type
-								Component: m.IconListPage,
 							})),
 					},
 				],
