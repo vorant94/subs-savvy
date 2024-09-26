@@ -58,7 +58,14 @@ jobs:
 
       - uses: ./.github/actions/setup
 
+      - id: cache-playwright
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{hashFiles('playwright.config.js')}}
+
       - run: npm run e2e:setup
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
 
       - run: npm run e2e
 
