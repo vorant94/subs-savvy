@@ -16,6 +16,7 @@ runs:
       run: |
         PLAYWRIGHT_VERSION=$(cat package-lock.json | jq -r '.packages["node_modules/@playwright/test"].version')
         echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+      shell: bash
 
     - name: Cache Playwright Browsers
       id: cache-playwright
@@ -27,11 +28,13 @@ runs:
     - name: Install Playwright Browsers
       if: steps.cache-playwright.outputs.cache-hit != 'true'
       run: npm run e2e:setup:ci
+      shell: bash
 
     - name: Run E2E
       run: npm run e2e
       env:
         NODE_ENV: ${{ inputs.env }}
+      shell: bash
 
     - name: Upload E2E Test Report
       if: always() # is needed here to upload report even if e2e failed
