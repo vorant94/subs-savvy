@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { CheckboxCom } from "../../ui/components/checkbox.com.ts";
 import { rootRoute } from "../../ui/types/root-route.ts";
 import { recoveryRoute } from "../types/recovery-route.ts";
@@ -28,7 +28,7 @@ export class ExportRecoveryPom {
 		await this.#page.goto("/");
 		await this.recoveryNavLink.click();
 		await this.exportTab.click();
-		await expect(this.#page).toHaveURL(
+		await this.#page.waitForURL(
 			`/${rootRoute.recovery}/${recoveryRoute.export}`,
 		);
 	}

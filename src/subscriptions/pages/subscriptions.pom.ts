@@ -1,4 +1,4 @@
-import { type Locator, type Page, expect } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { SelectCategoryCom } from "../../categories/components/select-category.com.ts";
 import { InputCom } from "../../ui/components/input.com.ts";
 import { rootRoute } from "../../ui/types/root-route.ts";
@@ -44,7 +44,7 @@ export class SubscriptionsPom {
 	async goto() {
 		await this.#page.goto("/");
 		await this.subscriptionsNavLink.click();
-		await expect(this.#page).toHaveURL(`/${rootRoute.subscriptions}`);
+		await this.#page.waitForURL(`/${rootRoute.subscriptions}`);
 	}
 
 	subscriptionListItem({
