@@ -1,4 +1,5 @@
-import type { Locator, Page } from "@playwright/test";
+import { type Locator, type Page, expect } from "@playwright/test";
+import { rootRoute } from "../../ui/types/root-route.ts";
 
 export class RecoveryPom {
 	readonly recoveryNavLink: Locator;
@@ -14,5 +15,6 @@ export class RecoveryPom {
 	async goto() {
 		await this.#page.goto("/");
 		await this.recoveryNavLink.click();
+		await expect(this.#page).toHaveURL(`/${rootRoute.recovery}`);
 	}
 }
