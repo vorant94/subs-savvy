@@ -28,14 +28,14 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: test-report
           path: coverage/
           retention-days: 30
 
   build:
     runs-on: ubuntu-latest
     outputs:
-      build-output-cache-hit: ${{ steps.cache-build-output.outputs.cache-hit }}
+      bundle-cache-hit: ${{ steps.cache-bundle.outputs.cache-hit }}
     steps:
       - uses: actions/checkout@v4
 
@@ -44,16 +44,16 @@ jobs:
 
       - run: npm run build
 
-      - id: cache-build-output
+      - id: cache-bundle
         uses: actions/cache@v4
         with:
           path: dist
-          key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-build-output-${{hashFiles('dist/**')}}
+          key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-bundle-${{hashFiles('dist/**')}}
 
       - uses: actions/upload-artifact@v4
-        if: steps.cache-build-output.outputs.cache-hit != 'true'
+        if: steps.cache-bundle.outputs.cache-hit != 'true'
         with:
-          name: build-output
+          name: bundle
           path: dist/
           retention-days: 30
 
@@ -87,7 +87,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always() # is needed here to upload report even if e2e failed
         with:
-          name: playwright-report
+          name: e2e-report
           path: playwright-report/
           retention-days: 30
 
@@ -101,13 +101,13 @@ jobs:
       - test
       - e2e
       - build
-    if: needs.build.outputs.build-output-cache-hit != 'true'
+    if: needs.build.outputs.bundle-cache-hit != 'true'
     steps:
       - uses: actions/checkout@v4 # is needed only for proper deployment source description in cloudflare dashboard
 
       - uses: actions/download-artifact@v4
         with:
-          name: build-output
+          name: bundle
           path: dist/
 
       - uses: cloudflare/wrangler-action@v3
