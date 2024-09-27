@@ -1,4 +1,4 @@
-name: Setup
+name: Setup Node & NPM
 
 outputs:
   node-version:
@@ -8,18 +8,21 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - id: setup-node
+    - name: Setup Node
+      id: setup-node
       uses: actions/setup-node@v4
       with:
         node-version: 22
         cache: "npm"
 
-    - id: cache-node_modules
+    - name: Cache Node Modules
+      id: cache-node_modules
       uses: actions/cache@v4
       with:
         path: node_modules
         key: ${{ runner.os }}-${{steps.setup-node.outputs.node-version}}-node_modules-${{hashFiles('package-lock.json')}}
 
-    - run: npm ci --ignore-scripts --no-audit
+    - name: Install Node Modules
       if: steps.cache-node_modules.outputs.cache-hit != 'true'
+      run: npm ci --ignore-scripts --no-audit
       shell: bash

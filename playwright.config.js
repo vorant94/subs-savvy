@@ -20,7 +20,10 @@ export default defineConfig({
 	reporter: "html",
 	use: {
 		// biome-ignore lint/style/useNamingConvention: 3-rd party type
-		baseURL: "http://localhost:5173",
+		baseURL:
+			env.NODE_ENV === "production"
+				? "https://subs-savvy.vorant94.io/"
+				: "http://localhost:5173",
 		trace: "on-first-retry",
 	},
 	projects: [
@@ -29,9 +32,12 @@ export default defineConfig({
 			use: { ...devices["Desktop Chrome"] },
 		},
 	],
-	webServer: {
-		command: "npm run start:dev",
-		url: "http://localhost:5173",
-		reuseExistingServer: !env.CI,
-	},
+	webServer:
+		env.NODE_ENV === "production"
+			? null
+			: {
+					command: "npm run start:dev",
+					url: "http://localhost:5173",
+					reuseExistingServer: !env.CI,
+				},
 });

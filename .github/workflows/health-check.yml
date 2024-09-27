@@ -1,13 +1,14 @@
-name: Dependencies check
+name: Health Check
 
 on:
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
-  deps-check:
-    name: Dependencies check
+  health-check:
+    name: Health Check
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -16,5 +17,8 @@ jobs:
       - name: Setup Node & NPM
         uses: ./.github/actions/setup
 
-      - name: Check for Outdated Packages
-        run: npm outdated
+      - name: Run E2E Tests
+        uses: ./.github/actions/e2e
+        with:
+          env: 'production'
+
