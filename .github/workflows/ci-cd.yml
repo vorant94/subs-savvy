@@ -85,7 +85,7 @@ jobs:
       - run: npm run e2e
 
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() # is needed here to upload report even if e2e failed
         with:
           name: playwright-report
           path: playwright-report/

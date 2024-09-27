@@ -113,7 +113,6 @@ export const UpsertSubscription = memo(() => {
 					render={({ field: { onChange, onBlur, value } }) => (
 						<DatePickerInput
 							label="Started At"
-							aria-label="Started At"
 							ariaLabels={createDatePickerInputAriaLabels("started at")}
 							placeholder="Started At"
 							value={value}
@@ -130,7 +129,6 @@ export const UpsertSubscription = memo(() => {
 					render={({ field: { onChange, onBlur, value } }) => (
 						<DatePickerInput
 							label="Ended At"
-							aria-label="Ended At"
 							ariaLabels={createDatePickerInputAriaLabels("ended at")}
 							placeholder="Ended At"
 							value={value}
