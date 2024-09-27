@@ -1,6 +1,9 @@
 import process from "node:process";
 import { defineConfig, devices } from "@playwright/test";
+import { config } from "dotenv";
 import { z } from "zod";
+
+const dotenv = config();
 
 const envSchema = z.object({
 	// biome-ignore lint/style/useNamingConvention: env variables have different convention
@@ -9,7 +12,7 @@ const envSchema = z.object({
 	CI: z.coerce.boolean().default(false),
 });
 
-const env = envSchema.parse(process.env);
+const env = envSchema.parse(dotenv.error ? process.env : dotenv.parsed);
 
 export default defineConfig({
 	testDir: "./e2e",
@@ -22,9 +25,9 @@ export default defineConfig({
 		// biome-ignore lint/style/useNamingConvention: 3-rd party type
 		baseURL:
 			env.NODE_ENV === "production"
-				? "https://subs-savvy.vorant94.io/"
+				? "https://subs-savvy.vorant94.io"
 				: "http://localhost:5173",
-		trace: "on-first-retry",
+		trace: "retain-on-failure",
 	},
 	projects: [
 		{

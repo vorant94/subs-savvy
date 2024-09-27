@@ -32,3 +32,5 @@ dist-ssr
 
 .husky/_/*
 .wrangler
+
+.env
