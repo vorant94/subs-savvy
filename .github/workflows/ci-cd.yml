@@ -79,7 +79,7 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{hashFiles('playwright.config.js')}}
 
-      - run: npm run e2e:setup
+      - run: npm run e2e:setup:ci
         if: steps.cache-playwright.outputs.cache-hit != 'true'
 
       - run: npm run e2e
