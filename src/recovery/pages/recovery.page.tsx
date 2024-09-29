@@ -1,8 +1,8 @@
-import { faDownload, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, Tabs, Text } from "@mantine/core";
+import { IconDownload, IconUpload } from "@tabler/icons-react";
 import { memo, useCallback, useMemo } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Icon } from "../../ui/components/icon.tsx";
 import {
 	DefaultLayout,
 	DefaultLayoutHeader,
@@ -40,13 +40,13 @@ export const RecoveryPage = memo(() => {
 							<Tabs.List>
 								<Tabs.Tab
 									value={recoveryRoute.import}
-									leftSection={<FontAwesomeIcon icon={faUpload} />}
+									leftSection={<Icon icon={IconUpload} />}
 								>
 									Import
 								</Tabs.Tab>
 								<Tabs.Tab
 									value={recoveryRoute.export}
-									leftSection={<FontAwesomeIcon icon={faDownload} />}
+									leftSection={<Icon icon={IconDownload} />}
 								>
 									Export
 								</Tabs.Tab>

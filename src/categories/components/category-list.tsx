@@ -1,7 +1,7 @@
-import { faCircle, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Text } from "@mantine/core";
+import { IconCircleFilled, IconPencil, IconTrash } from "@tabler/icons-react";
 import { memo, useCallback } from "react";
+import { Icon } from "../../ui/components/icon.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import type { CategoryModel } from "../models/category.model.ts";
 import { deleteCategory } from "../models/category.table.ts";
@@ -31,8 +31,8 @@ export const CategoryList = memo(() => {
 					className={cn("flex items-center gap-2 py-1")}
 					key={category.id}
 				>
-					<FontAwesomeIcon
-						icon={faCircle}
+					<Icon
+						icon={IconCircleFilled}
 						color={category.color}
 					/>
 
@@ -45,7 +45,7 @@ export const CategoryList = memo(() => {
 						variant="subtle"
 						onClick={() => openCategoryUpdate(category)}
 					>
-						<FontAwesomeIcon icon={faPen} />
+						<Icon icon={IconPencil} />
 					</ActionIcon>
 
 					<ActionIcon
@@ -54,7 +54,7 @@ export const CategoryList = memo(() => {
 						color="red"
 						onClick={() => handleDeleteCategory(category.id)}
 					>
-						<FontAwesomeIcon icon={faTrash} />
+						<Icon icon={IconTrash} />
 					</ActionIcon>
 				</div>
 			))}

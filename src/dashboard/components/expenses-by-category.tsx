@@ -1,6 +1,5 @@
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, Divider, Text } from "@mantine/core";
+import { IconCircleFilled } from "@tabler/icons-react";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
@@ -9,6 +8,7 @@ import { startOfYear } from "../../date/globals/start-of-year.ts";
 import { useCurrencyFormatter } from "../../i18n/hooks/use-currency-formatter.ts";
 import { useSubscriptions } from "../../subscriptions/stores/subscriptions.store.tsx";
 import { calculateSubscriptionPriceForYear } from "../../subscriptions/utils/calculate-subscription-price-for-year.ts";
+import { Icon } from "../../ui/components/icon.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import {
 	type SubscriptionsAggregatedByCategory,
@@ -90,10 +90,10 @@ export const ExpensesByCategory = memo(() => {
 								className={cn("flex items-center gap-2")}
 								key={category.id}
 							>
-								<FontAwesomeIcon
-									size="xs"
+								<Icon
+									icon={IconCircleFilled}
 									color={category.color}
-									icon={faCircle}
+									size="0.5em"
 								/>
 								<Text
 									size="xs"

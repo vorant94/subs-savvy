@@ -1,8 +1,8 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Button } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { Icon } from "../../ui/components/icon.tsx";
 import { useBreakpoint } from "../../ui/hooks/use-breakpoint.tsx";
 import { useUpsertSubscriptionActions } from "../stores/upsert-subscription.store.tsx";
 
@@ -22,7 +22,10 @@ export const AddSubscriptionButton = memo(() => {
 			radius="xl"
 			aria-label={t("add-sub")}
 		>
-			<FontAwesomeIcon icon={faPlus} />
+			<Icon
+				icon={IconPlus}
+				size="2em"
+			/>
 		</ActionIcon>
 	);
 });

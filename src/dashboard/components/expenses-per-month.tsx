@@ -1,10 +1,9 @@
-import {
-	faChevronLeft,
-	faChevronRight,
-	faCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionIcon, Card, Divider, Text, Title } from "@mantine/core";
+import {
+	IconChevronLeft,
+	IconChevronRight,
+	IconCircleFilled,
+} from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,6 +14,7 @@ import { useCurrencyFormatter } from "../../i18n/hooks/use-currency-formatter.ts
 import { usePercentageFormatter } from "../../i18n/hooks/use-percentage-formatter.ts";
 import { useSubscriptions } from "../../subscriptions/stores/subscriptions.store.tsx";
 import { calculateSubscriptionPriceForMonth } from "../../subscriptions/utils/calculate-subscription-price-for-month.ts";
+import { Icon } from "../../ui/components/icon.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import {
 	type SubscriptionsAggregatedByCategory,
@@ -103,7 +103,10 @@ export const ExpensesPerMonth = memo(() => {
 					aria-label={t("previous-month")}
 					onClick={goPreviousMonth}
 				>
-					<FontAwesomeIcon icon={faChevronLeft} />
+					<Icon
+						icon={IconChevronLeft}
+						size="1.5em"
+					/>
 				</ActionIcon>
 				<Title order={5}>{monthName}</Title>
 				<ActionIcon
@@ -111,7 +114,10 @@ export const ExpensesPerMonth = memo(() => {
 					aria-label={t("next-month")}
 					onClick={goNextMonth}
 				>
-					<FontAwesomeIcon icon={faChevronRight} />
+					<Icon
+						icon={IconChevronRight}
+						size="1.5em"
+					/>
 				</ActionIcon>
 			</div>
 
@@ -192,11 +198,11 @@ const LegendContent = memo(
 						key={c.category.id}
 						className={cn("flex items-center")}
 					>
-						<FontAwesomeIcon
-							size="xs"
+						<Icon
+							icon={IconCircleFilled}
 							color={c.category.color}
-							icon={faCircle}
 							className={cn("mr-2")}
+							size="0.5em"
 						/>
 						<Text size="xs">
 							{c.category.id === -1

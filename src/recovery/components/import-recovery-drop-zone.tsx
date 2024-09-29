@@ -1,8 +1,8 @@
-import { faFileCode } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Text } from "@mantine/core";
+import { IconFileCode } from "@tabler/icons-react";
 import { memo, useCallback, useEffect, useState } from "react";
 import { type FileWithPath, useDropzone } from "react-dropzone";
+import { Icon } from "../../ui/components/icon.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import {
 	type RecoveryModel,
@@ -64,10 +64,10 @@ export const ImportRecoveryDropZone = memo(
 						"grid grid-flow-row auto-rows-auto gap-x-4 lg:auto-cols-auto lg:grid-flow-col",
 					)}
 				>
-					<FontAwesomeIcon
+					<Icon
+						icon={IconFileCode}
 						className={cn("justify-self-center text-gray-400 lg:row-span-2")}
-						size="4x"
-						icon={faFileCode}
+						size="4em"
 					/>
 					<Text size="xl">Drag file here or click to select it</Text>
 					<Text

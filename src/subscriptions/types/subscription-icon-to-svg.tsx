@@ -1,32 +1,30 @@
 import {
-	faBolt,
-	faBuilding,
-	faCakeCandles,
-	faCar,
-	faCarBurst,
-	faCat,
-	faCity,
-	faCreditCard,
-	faDumbbell,
-	faEye,
-	faFaucetDrip,
-	faFireFlameSimple,
-	faGlobe,
-	faHeart,
-	faHouse,
-	faKitMedical,
-	faLandmark,
-	faPeopleGroup,
-	faPhone,
-	faPlaneArrival,
-	faPlaneDeparture,
-	faReceipt,
-	faSackDollar,
-	faScissors,
-	faTooth,
-	faYinYang,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+	IconBarbell,
+	IconBolt,
+	IconBucketDroplet,
+	IconBuilding,
+	IconBuildings,
+	IconCake,
+	IconCar,
+	IconCarCrash,
+	IconCat,
+	IconCreditCard,
+	IconDental,
+	IconEye,
+	IconFlame,
+	IconHeart,
+	IconHome,
+	IconMedicalCross,
+	IconMoneybag,
+	IconPhone,
+	IconPlaneArrival,
+	IconPlaneDeparture,
+	IconReceipt,
+	IconScissors,
+	IconUsers,
+	IconWorld,
+	IconYinYang,
+} from "@tabler/icons-react";
 import type { ReactElement } from "react";
 import GitHub from "simple-icons/icons/github.svg?react";
 import GoDaddy from "simple-icons/icons/godaddy.svg?react";
@@ -38,6 +36,7 @@ import ProtonMail from "simple-icons/icons/protonmail.svg?react";
 import Spotify from "simple-icons/icons/spotify.svg?react";
 import Telegram from "simple-icons/icons/telegram.svg?react";
 import YouTube from "simple-icons/icons/youtube.svg?react";
+import { Icon } from "../../ui/components/icon.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import Moovit from "../assets/moovit.svg?react";
 import type { SubscriptionIcon } from "./subscription-icon.ts";
@@ -50,9 +49,9 @@ export const subscriptionIconToSvg = {
 	github: <GitHub className={cn("fill-[#181717]")} />,
 	youtube: <YouTube className={cn("fill-[#FF0000]")} />,
 	house: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faHouse}
+		<Icon
+			size="2em"
+			icon={IconHome}
 			className={cn("text-slate-800")}
 		/>
 	),
@@ -60,107 +59,107 @@ export const subscriptionIconToSvg = {
 	godaddy: <GoDaddy className={cn("fill-[#1BDBDB]")} />,
 	moovit: <Moovit className={cn("fill-[#FF6400]")} />,
 	tooth: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faTooth}
+		<Icon
+			size="2em"
+			icon={IconDental}
 			className={cn("text-slate-800")}
 		/>
 	),
 	car: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faCar}
+		<Icon
+			size="2em"
+			icon={IconCar}
 			className={cn("text-slate-800")}
 		/>
 	),
 	eye: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faEye}
+		<Icon
+			size="2em"
+			icon={IconEye}
 			className={cn("text-slate-800")}
 		/>
 	),
 	heart: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faHeart}
+		<Icon
+			size="2em"
+			icon={IconHeart}
 			className={cn("text-slate-800")}
 		/>
 	),
 	city: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faCity}
+		<Icon
+			size="2em"
+			icon={IconBuildings}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"plane-departure": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faPlaneDeparture}
+		<Icon
+			size="2em"
+			icon={IconPlaneDeparture}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"plane-arrival": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faPlaneArrival}
+		<Icon
+			size="2em"
+			icon={IconPlaneArrival}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"car-burst": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faCarBurst}
+		<Icon
+			size="2em"
+			icon={IconCarCrash}
 			className={cn("text-slate-800")}
 		/>
 	),
 	dumbbell: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faDumbbell}
+		<Icon
+			size="2em"
+			icon={IconBarbell}
 			className={cn("text-slate-800")}
 		/>
 	),
 	bolt: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faBolt}
+		<Icon
+			size="2em"
+			icon={IconBolt}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"people-group": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faPeopleGroup}
+		<Icon
+			size="2em"
+			icon={IconUsers}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"sack-dollar": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faSackDollar}
+		<Icon
+			size="2em"
+			icon={IconMoneybag}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"yin-yang": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faYinYang}
+		<Icon
+			size="2em"
+			icon={IconYinYang}
 			className={cn("text-slate-800")}
 		/>
 	),
 	cat: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faCat}
+		<Icon
+			size="2em"
+			icon={IconCat}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"kit-medical": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faKitMedical}
+		<Icon
+			size="2em"
+			icon={IconMedicalCross}
 			className={cn("text-slate-800")}
 		/>
 	),
@@ -168,72 +167,72 @@ export const subscriptionIconToSvg = {
 	google: <Google className={cn("fill-[#4285F4]")} />,
 	spotify: <Spotify className={cn("fill-[#1DB954]")} />,
 	landmark: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faLandmark}
+		<Icon
+			size="2em"
+			icon={IconMedicalCross}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"faucet-drip": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faFaucetDrip}
+		<Icon
+			size="2em"
+			icon={IconBucketDroplet}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"fire-flame-simple": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faFireFlameSimple}
+		<Icon
+			size="2em"
+			icon={IconFlame}
 			className={cn("text-slate-800")}
 		/>
 	),
 	scissors: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faScissors}
+		<Icon
+			size="2em"
+			icon={IconScissors}
 			className={cn("text-slate-800")}
 		/>
 	),
 	receipt: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faReceipt}
+		<Icon
+			size="2em"
+			icon={IconReceipt}
 			className={cn("text-slate-800")}
 		/>
 	),
 	globe: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faGlobe}
+		<Icon
+			size="2em"
+			icon={IconWorld}
 			className={cn("text-slate-800")}
 		/>
 	),
 	building: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faBuilding}
+		<Icon
+			size="2em"
+			icon={IconBuilding}
 			className={cn("text-slate-800")}
 		/>
 	),
 	phone: (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faPhone}
+		<Icon
+			size="2em"
+			icon={IconPhone}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"credit-card": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faCreditCard}
+		<Icon
+			size="2em"
+			icon={IconCreditCard}
 			className={cn("text-slate-800")}
 		/>
 	),
 	"cake-candles": (
-		<FontAwesomeIcon
-			size={"2xl"}
-			icon={faCakeCandles}
+		<Icon
+			size="2em"
+			icon={IconCake}
 			className={cn("text-slate-800")}
 		/>
 	),

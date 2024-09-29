@@ -1,5 +1,3 @@
-import { faCircle, faSliders } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	ActionIcon,
 	CloseButton,
@@ -9,8 +7,13 @@ import {
 	useCombobox,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import {
+	IconAdjustmentsHorizontal,
+	IconCircleFilled,
+} from "@tabler/icons-react";
 import { memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { Icon } from "../../ui/components/icon.tsx";
 import { cn } from "../../ui/utils/cn.ts";
 import {
 	useCategories,
@@ -53,9 +56,9 @@ export const SelectCategory = memo(() => {
 							pointer
 							leftSection={
 								selectedCategory ? (
-									<FontAwesomeIcon
+									<Icon
+										icon={IconCircleFilled}
 										color={selectedCategory.color}
-										icon={faCircle}
 									/>
 								) : null
 							}
@@ -87,9 +90,9 @@ export const SelectCategory = memo(() => {
 									value={`${category.id}`}
 									key={category.id}
 								>
-									<FontAwesomeIcon
+									<Icon
+										icon={IconCircleFilled}
 										color={category.color}
-										icon={faCircle}
 									/>{" "}
 									{category.name}
 								</Combobox.Option>
@@ -104,10 +107,7 @@ export const SelectCategory = memo(() => {
 					size="lg"
 					variant="light"
 				>
-					<FontAwesomeIcon
-						className={cn("mr-1")}
-						icon={faSliders}
-					/>
+					<Icon icon={IconAdjustmentsHorizontal} />
 				</ActionIcon>
 			</div>
 
