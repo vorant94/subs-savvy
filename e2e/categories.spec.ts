@@ -1,15 +1,15 @@
 import { type Page, expect, test } from "@playwright/test";
+import { categoryMock } from "../src/shared/api/__mocks__/category.model.ts";
 import type {
 	CategoryModel,
 	InsertCategoryModel,
-} from "../src/categories/models/category.model.ts";
-import { categoryStub } from "../src/categories/models/category.stub.ts";
-import { SubscriptionsPom } from "../src/subscriptions/pages/subscriptions.pom.ts";
+} from "../src/shared/api/category.model.ts";
+import { SubscriptionsPom } from "./poms/subscriptions.pom.ts";
 
 test.describe("categories", () => {
 	test("should find categories", async ({ page }) => {
 		const pom = new SubscriptionsPom(page);
-		const categories = [categoryStub];
+		const categories = [categoryMock];
 
 		await pom.goto();
 		await populateDb(page, categories);
@@ -24,7 +24,7 @@ test.describe("categories", () => {
 	test("should insert category", async ({ page }) => {
 		const pom = new SubscriptionsPom(page);
 		const categoryToCreate = {
-			...categoryStub,
+			...categoryMock,
 		} as const satisfies InsertCategoryModel;
 
 		await pom.goto();
@@ -40,7 +40,7 @@ test.describe("categories", () => {
 	test("should update category", async ({ page }) => {
 		const pom = new SubscriptionsPom(page);
 		const categoryToUpdate = {
-			...categoryStub,
+			...categoryMock,
 		} as const satisfies InsertCategoryModel;
 		const updatedCategory = {
 			...categoryToUpdate,
@@ -64,7 +64,7 @@ test.describe("categories", () => {
 	test("should delete category", async ({ page }) => {
 		const pom = new SubscriptionsPom(page);
 		const categoryToDelete = {
-			...categoryStub,
+			...categoryMock,
 		} as const satisfies CategoryModel;
 
 		await pom.goto();

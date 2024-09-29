@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { rootRoute } from "../src/ui/types/root-route.ts";
+import { rootRoute } from "../src/shared/lib/route.ts";
 
 test.describe("root", () => {
 	test("should redirect from root url to dashboard", async ({ page }) => {

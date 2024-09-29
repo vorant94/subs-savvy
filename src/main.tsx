@@ -2,14 +2,14 @@ import { MantineProvider } from "@mantine/core";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { db } from "./db/globals/db.ts";
-import "./index.css";
+import { db } from "./shared/lib/db.ts";
+import "./style.css";
 import i18next from "i18next";
 import I18NextFetchBackend from "i18next-fetch-backend";
 import { HMRPlugin } from "i18next-hmr/plugin";
 import { initReactI18next } from "react-i18next";
-import { supportedLanguages } from "./i18n/types/supported-language.ts";
-import { router } from "./router.tsx";
+import { router } from "./app/router/router.tsx";
+import { supportedLanguages } from "./features/i18n/model/use-language.ts";
 
 if (import.meta.env.DEV) {
 	window.addEventListener("unhandledrejection", ({ reason }) => {

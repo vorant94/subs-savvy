@@ -2,17 +2,17 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { type Page, expect, test } from "@playwright/test";
-import { recoverySchema } from "../src/recovery/models/recovery.model.ts";
-import { ExportRecoveryPom } from "../src/recovery/pages/export-recovery.pom.ts";
-import { ImportRecoveryPom } from "../src/recovery/pages/import-recovery.pom.ts";
-import { RecoveryPom } from "../src/recovery/pages/recovery.pom.ts";
-import { recoveryRoute } from "../src/recovery/types/recovery-route.ts";
-import type { SubscriptionModel } from "../src/subscriptions/models/subscription.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
-} from "../src/subscriptions/models/subscription.stub.ts";
-import { rootRoute } from "../src/ui/types/root-route.ts";
+} from "../src/shared/api/__mocks__/subscription.model.ts";
+import { recoverySchema } from "../src/shared/api/recovery.model.ts";
+import type { SubscriptionModel } from "../src/shared/api/subscription.model.ts";
+import { recoveryRoute } from "../src/shared/lib/route.ts";
+import { rootRoute } from "../src/shared/lib/route.ts";
+import { ExportRecoveryPom } from "./poms/export-recovery.pom.ts";
+import { ImportRecoveryPom } from "./poms/import-recovery.pom.ts";
+import { RecoveryPom } from "./poms/recovery.pom.ts";
 
 test.describe("recovery", () => {
 	test("should redirect from recovery url to recovery import", async ({

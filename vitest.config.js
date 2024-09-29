@@ -16,24 +16,14 @@ export default mergeConfig(
 					"**/*.d.ts",
 					"**/*.spec.ts",
 					"**/*.spec.tsx",
-					"**/*.stub.ts",
-					"**/*.stub.tsx",
 					"**/__mocks__/*",
-					"**/types/*",
-					"**/globals/*",
-					"**/models/*.model.ts",
-					"**/models/*.model.tsx",
-					"**/pages/*.pom.ts",
-					"**/pages/*.pom.tsx",
-					"**/components/*.com.ts",
-					"**/components/*.com.tsx",
-					"**/utils/*.matchers.ts",
-					"db/utils/populate-db.ts", // utility function for tests only
-					"db/utils/clean-up-db.ts", // utility function for tests only
-					"ui/utils/cn.ts", // a simple wrapper to unify two external libs
-					"main.tsx", // main setup file
-					"router.tsx", // part of main file, standalone only because this one is big on its own
-					"dev-only/*", // internal dev-only modules
+					"**/*.model.ts",
+					"**/*.model.tsx",
+					"shared/test/**",
+					"shared/ui/cn.ts",
+					"main.tsx",
+					"app/router/router.tsx",
+					"app/ui/app.tsx",
 				],
 			},
 		},

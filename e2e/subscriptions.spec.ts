@@ -1,17 +1,17 @@
 import { type Page, expect, test } from "@playwright/test";
 import dayjs from "dayjs";
-import type { CategoryModel } from "../src/categories/models/category.model.ts";
-import { categoryStub } from "../src/categories/models/category.stub.ts";
+import { categoryMock } from "../src/shared/api/__mocks__/category.model.ts";
+import {
+	monthlySubscription,
+	yearlySubscription,
+} from "../src/shared/api/__mocks__/subscription.model.ts";
+import type { CategoryModel } from "../src/shared/api/category.model.ts";
 import type {
 	InsertSubscriptionModel,
 	SubscriptionModel,
 	UpdateSubscriptionModel,
-} from "../src/subscriptions/models/subscription.model.ts";
-import {
-	monthlySubscription,
-	yearlySubscription,
-} from "../src/subscriptions/models/subscription.stub.ts";
-import { SubscriptionsPom } from "../src/subscriptions/pages/subscriptions.pom.ts";
+} from "../src/shared/api/subscription.model.ts";
+import { SubscriptionsPom } from "./poms/subscriptions.pom.ts";
 
 test.describe("subscriptions", () => {
 	test("should find subscriptions", async ({ page }) => {
@@ -61,7 +61,7 @@ test.describe("subscriptions", () => {
 		} as const satisfies InsertSubscriptionModel;
 
 		await pom.goto();
-		await populateDb(page, [], [categoryStub]);
+		await populateDb(page, [], [categoryMock]);
 
 		await pom.addSubscriptionButton.click();
 		await pom.subscriptionUpsert.fill(subscriptionToCreate);

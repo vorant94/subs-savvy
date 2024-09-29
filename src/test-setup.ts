@@ -4,7 +4,7 @@ import "fake-indexeddb/auto";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { afterEach, expect, vi } from "vitest";
-import { dateMatchers } from "./date/utils/date.matchers.ts";
+import { dateMatchers } from "./shared/test/date.matchers.ts";
 
 // react testing library
 afterEach(() => {

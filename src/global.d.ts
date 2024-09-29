@@ -1,8 +1,8 @@
 import "vitest";
 import type { TypeOptions } from "i18next";
-import type { DateMatchers } from "./date/utils/date.matchers.ts";
-import type { db } from "./db/globals/db.ts";
-import type { Translation } from "./i18n/types/translation.ts";
+import type { db } from "./shared/lib/db.ts";
+import type { Translation } from "./shared/lib/translation.ts";
+import type { DateMatchers } from "./shared/test/date.matchers.ts";
 
 declare global {
 	interface Window {
