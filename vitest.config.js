@@ -10,6 +10,7 @@ export default mergeConfig(
 			root: "./src",
 			setupFiles: ["./src/test-setup.ts"],
 			coverage: {
+				provider: "v8",
 				reportsDirectory: "../coverage",
 				reporter: ["text", "html"],
 				exclude: [
