@@ -12,7 +12,7 @@ import {
 import { calculateSubscriptionPriceForYear } from "../../../entities/subscription/lib/calculate-subscription-price-for-year.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
 import { useCurrencyFormatter } from "../../../features/i18n/model/use-currency-formatter.ts";
-import { startOfYear } from "../../../shared/lib/start-of-year.ts";
+import { startOfYear } from "../../../shared/lib/dates.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
 

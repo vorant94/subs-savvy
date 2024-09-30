@@ -7,7 +7,7 @@ import {
 	yearlySubscription,
 } from "../../../shared/api/__mocks__/subscription.model.ts";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
-import { startOfYear } from "../../../shared/lib/start-of-year.ts";
+import { startOfYear } from "../../../shared/lib/dates.ts";
 import { calculateSubscriptionPriceForMonth } from "./calculate-subscription-price-for-month.ts";
 
 describe("monthly", () => {
