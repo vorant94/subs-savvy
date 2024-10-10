@@ -79,7 +79,7 @@ jobs:
       - lint
       - test
       - build
-    if: needs.build.outputs.bundle-cache-hit != 'true'
+#    if: needs.build.outputs.bundle-cache-hit != 'true'
     concurrency:
       group: deploy
       cancel-in-progress: false
@@ -94,12 +94,20 @@ jobs:
           path: dist/
 
       - name: Deploy Bundle
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages deploy
-          wranglerVersion: "3.67.1"
+          wranglerVersion: "3.78.10"
+
+      - name: Save Deployment ID
+        run: |
+          echo stdout ${{ steps.deploy.outputs.command-output }}
+          DEPLOYMENT_ID=$(echo "${{ steps.deploy.outputs.command-output }}" | grep -oP 'Deployment ID: \K.*')
+          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+          echo $DEPLOYMENT_ID
 
   e2e:
     name: E2E
