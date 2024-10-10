@@ -26,38 +26,42 @@ export const CategoryList = memo(() => {
 
 	return (
 		<div className={cn("flex flex-col divide-y divide-dashed")}>
-			{categories.map((category) => (
-				<div
-					className={cn("flex items-center gap-2 py-1")}
-					key={category.id}
-				>
-					<Icon
-						icon={IconCircleFilled}
-						color={category.color}
-					/>
-
-					<Text>{category.name}</Text>
-
-					<div className={cn("flex-1")} />
-
-					<ActionIcon
-						aria-label={`edit ${category.name} category`}
-						variant="subtle"
-						onClick={() => openCategoryUpdate(category)}
+			{categories.length > 0 ? (
+				categories.map((category) => (
+					<div
+						className={cn("flex items-center gap-2 py-1")}
+						key={category.id}
 					>
-						<Icon icon={IconPencil} />
-					</ActionIcon>
+						<Icon
+							icon={IconCircleFilled}
+							color={category.color}
+						/>
 
-					<ActionIcon
-						aria-label={`delete ${category.name} category`}
-						variant="subtle"
-						color="red"
-						onClick={() => handleDeleteCategory(category.id)}
-					>
-						<Icon icon={IconTrash} />
-					</ActionIcon>
-				</div>
-			))}
+						<Text>{category.name}</Text>
+
+						<div className={cn("flex-1")} />
+
+						<ActionIcon
+							aria-label={`edit ${category.name} category`}
+							variant="subtle"
+							onClick={() => openCategoryUpdate(category)}
+						>
+							<Icon icon={IconPencil} />
+						</ActionIcon>
+
+						<ActionIcon
+							aria-label={`delete ${category.name} category`}
+							variant="subtle"
+							color="red"
+							onClick={() => handleDeleteCategory(category.id)}
+						>
+							<Icon icon={IconTrash} />
+						</ActionIcon>
+					</div>
+				))
+			) : (
+				<div>No Categories</div>
+			)}
 		</div>
 	);
 });

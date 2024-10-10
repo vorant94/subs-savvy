@@ -10,6 +10,7 @@ export class SelectCategoryCom {
 	readonly addButton: Locator;
 	readonly insertButton: Locator;
 	readonly updateButton: Locator;
+	readonly noCategoriesPlaceholder: Locator;
 
 	readonly form: CategoryFormCom;
 
@@ -22,6 +23,7 @@ export class SelectCategoryCom {
 		this.addButton = this.#page.getByRole("button", { name: "add category" });
 		this.insertButton = this.#page.getByRole("button", { name: "insert" });
 		this.updateButton = this.#page.getByRole("button", { name: "update" });
+		this.noCategoriesPlaceholder = this.#page.getByText("No Categories");
 
 		this.form = new CategoryFormCom(this.#page);
 	}

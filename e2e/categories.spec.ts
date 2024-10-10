@@ -1,18 +1,29 @@
-import { type Page, expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { categoryMock } from "../src/shared/api/__mocks__/category.model.ts";
 import type {
 	CategoryModel,
 	InsertCategoryModel,
 } from "../src/shared/api/category.model.ts";
 import { SubscriptionsPom } from "./poms/subscriptions.pom.ts";
+import { populateDb } from "./utils/populate-db.ts";
 
 test.describe("categories", () => {
-	test("should find categories", async ({ page }) => {
+	test("should have no categories initially", async ({ page }) => {
+		const pom = new SubscriptionsPom(page);
+
+		await pom.goto();
+
+		await pom.categorySelect.manageButton.click();
+
+		await expect(pom.categorySelect.noCategoriesPlaceholder).toBeVisible();
+	});
+
+	test("should find existing categories", async ({ page }) => {
 		const pom = new SubscriptionsPom(page);
 		const categories = [categoryMock];
 
 		await pom.goto();
-		await populateDb(page, categories);
+		await populateDb(page, undefined, categories);
 
 		await pom.categorySelect.manageButton.click();
 
@@ -48,7 +59,7 @@ test.describe("categories", () => {
 		} as const satisfies InsertCategoryModel;
 
 		await pom.goto();
-		await populateDb(page, [categoryToUpdate]);
+		await populateDb(page, undefined, [categoryToUpdate]);
 
 		await pom.categorySelect.manageButton.click();
 		await pom.categorySelect.editButton(categoryToUpdate).click();
@@ -68,7 +79,7 @@ test.describe("categories", () => {
 		} as const satisfies CategoryModel;
 
 		await pom.goto();
-		await populateDb(page, [categoryToDelete]);
+		await populateDb(page, undefined, [categoryToDelete]);
 
 		await pom.categorySelect.manageButton.click();
 		await pom.categorySelect.deleteButton(categoryToDelete).click();
@@ -78,16 +89,3 @@ test.describe("categories", () => {
 		).not.toBeVisible();
 	});
 });
-
-async function populateDb(
-	page: Page,
-	categories: ReadonlyArray<CategoryModel>,
-): Promise<void> {
-	await page.evaluate(async (categories) => {
-		await window.db.transaction("rw", window.db.categories, async () => {
-			await Promise.all(
-				categories.map((category) => window.db.categories.put(category)),
-			);
-		});
-	}, categories);
-}

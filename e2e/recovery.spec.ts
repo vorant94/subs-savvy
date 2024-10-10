@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { type Page, expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import {
 	monthlySubscription,
 	yearlySubscription,
@@ -13,6 +13,7 @@ import { rootRoute } from "../src/shared/lib/route.ts";
 import { ExportRecoveryPom } from "./poms/export-recovery.pom.ts";
 import { ImportRecoveryPom } from "./poms/import-recovery.pom.ts";
 import { RecoveryPom } from "./poms/recovery.pom.ts";
+import { populateDb } from "./utils/populate-db.ts";
 
 test.describe("recovery", () => {
 	test("should redirect from recovery url to recovery import", async ({
@@ -93,35 +94,3 @@ test.describe("recovery", () => {
 		expect(areAllSubscriptionsImported).toBeTruthy();
 	});
 });
-
-async function populateDb(
-	page: Page,
-	subscriptions: ReadonlyArray<SubscriptionModel>,
-): Promise<void> {
-	await page.evaluate(async (subscriptions) => {
-		await window.db.transaction(
-			"rw",
-			window.db.subscriptions,
-			window.db.categories,
-			async () => {
-				const subscriptionPuts: Array<Promise<unknown>> = [];
-				const categoryPuts: Array<Promise<unknown>> = [];
-
-				for (const { category, ...subscription } of subscriptions) {
-					subscriptionPuts.push(
-						window.db.subscriptions.put({
-							...subscription,
-							categoryId: category?.id,
-						}),
-					);
-
-					if (category) {
-						categoryPuts.push(window.db.categories.put(category));
-					}
-				}
-
-				await Promise.all([...subscriptionPuts, ...categoryPuts]);
-			},
-		);
-	}, subscriptions);
-}

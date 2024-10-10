@@ -1,20 +1,30 @@
-import { type Page, expect, test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import dayjs from "dayjs";
 import { categoryMock } from "../src/shared/api/__mocks__/category.model.ts";
 import {
 	monthlySubscription,
 	yearlySubscription,
 } from "../src/shared/api/__mocks__/subscription.model.ts";
-import type { CategoryModel } from "../src/shared/api/category.model.ts";
 import type {
 	InsertSubscriptionModel,
 	SubscriptionModel,
 	UpdateSubscriptionModel,
 } from "../src/shared/api/subscription.model.ts";
 import { SubscriptionsPom } from "./poms/subscriptions.pom.ts";
+import { populateDb } from "./utils/populate-db.ts";
 
 test.describe("subscriptions", () => {
-	test("should find subscriptions", async ({ page }) => {
+	test("should have no subscriptions initially", async ({ page }) => {
+		const pom = new SubscriptionsPom(page);
+
+		await pom.goto();
+
+		await pom.categorySelect.manageButton.click();
+
+		await expect(pom.noSubscriptionsPlaceholder).toBeVisible();
+	});
+
+	test("should find existing subscriptions", async ({ page }) => {
 		const pom = new SubscriptionsPom(page);
 		const subscriptions = [
 			monthlySubscription,
@@ -110,43 +120,3 @@ test.describe("subscriptions", () => {
 		).not.toBeVisible();
 	});
 });
-
-async function populateDb(
-	page: Page,
-	subscriptions: ReadonlyArray<SubscriptionModel> = [],
-	categories: ReadonlyArray<CategoryModel> = [],
-): Promise<void> {
-	await page.evaluate(
-		async ([subscriptions, categories]) => {
-			await window.db.transaction(
-				"rw",
-				window.db.subscriptions,
-				window.db.categories,
-				async () => {
-					const subscriptionPuts: Array<Promise<unknown>> = [];
-					const categoryPuts: Array<Promise<unknown>> = [];
-
-					for (const { category, ...subscription } of subscriptions) {
-						subscriptionPuts.push(
-							window.db.subscriptions.put({
-								...subscription,
-								categoryId: category?.id,
-							}),
-						);
-
-						if (category) {
-							categoryPuts.push(window.db.categories.put(category));
-						}
-					}
-
-					for (const category of categories) {
-						categoryPuts.push(window.db.categories.put(category));
-					}
-
-					await Promise.all([...subscriptionPuts, ...categoryPuts]);
-				},
-			);
-		},
-		[subscriptions, categories] as const,
-	);
-}
