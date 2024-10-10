@@ -101,27 +101,13 @@ jobs:
           command: pages deploy
           wranglerVersion: "3.67.1"
 
-  debug:
-    name: Debug
-    runs-on: ubuntu-latest
-    needs:
-      - deploy
-    steps:
-      - run: |
-          echo ${{ needs.deploy.result == 'skipped' || needs.deploy.result == 'success' }}
-          echo ${{ (needs.deploy.result == 'skipped' || needs.deploy.result == 'success') == 'true' }}
-          echo ${{ needs.deploy.result == 'skipped' }}
-          echo ${{ (needs.deploy.result == 'skipped') == 'true' }}
-          echo ${{ needs.deploy.result == 'skipped' }}
-          echo ${{ (needs.deploy.result == 'skipped') == 'true' }}
-
   e2e:
     name: E2E
     timeout-minutes: 60
     runs-on: ubuntu-latest
     needs:
       - deploy
-    if: (needs.deploy.result == 'skipped' || needs.deploy.result == 'success') == 'true'
+    if: always() && (needs.deploy.result == 'skipped' || needs.deploy.result == 'success')
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
