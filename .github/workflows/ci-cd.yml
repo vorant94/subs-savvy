@@ -72,33 +72,12 @@ jobs:
           path: dist/
           retention-days: 30
 
-  e2e:
-    name: E2E
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    needs:
-      - test
-      - build
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node & NPM
-        id: setup
-        uses: ./.github/actions/setup
-
-      - name: Run E2E Tests
-        uses: ./.github/actions/e2e
-        with:
-          env: 'development'
-
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     needs:
       - lint
       - test
-      - e2e
       - build
     if: needs.build.outputs.bundle-cache-hit != 'true'
     concurrency:
@@ -121,3 +100,23 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: pages deploy
           wranglerVersion: "3.67.1"
+
+  e2e:
+    name: E2E
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs:
+      - deploy
+    if: (needs.deploy.result == 'skipped' || needs.deploy.result == 'success') == 'true'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node & NPM
+        id: setup
+        uses: ./.github/actions/setup
+
+      - name: Run E2E Tests
+        uses: ./.github/actions/e2e
+        with:
+          env: 'production'
