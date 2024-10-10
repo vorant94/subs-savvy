@@ -3,6 +3,7 @@ import process from "node:process";
 import react from "@vitejs/plugin-react-swc";
 import { i18nextHMRPlugin } from "i18next-hmr/vite";
 import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
 import postcss from "./postcss.config.js";
 
@@ -13,6 +14,7 @@ export default defineConfig({
 		i18nextHMRPlugin({
 			localesDir: path.resolve(process.cwd(), "public/locales"),
 		}),
+		VitePWA({ registerType: "autoUpdate" }),
 	],
 	// can't detect ESM-based postcss config by itself, see here https://github.com/vitejs/vite/issues/15869
 	css: { postcss },
