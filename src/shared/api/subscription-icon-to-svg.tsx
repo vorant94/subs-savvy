@@ -22,6 +22,7 @@ import {
 	IconReceipt,
 	IconScissors,
 	IconUsers,
+	IconWiperWash,
 	IconWorld,
 	IconYinYang,
 } from "@tabler/icons-react";
@@ -233,6 +234,13 @@ export const subscriptionIconToSvg = {
 		<Icon
 			size="2em"
 			icon={IconCake}
+			className={cn("text-slate-800")}
+		/>
+	),
+	"wiper-wash": (
+		<Icon
+			size="2em"
+			icon={IconWiperWash}
 			className={cn("text-slate-800")}
 		/>
 	),
