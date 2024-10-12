@@ -1,8 +1,10 @@
 import {
 	IconBarbell,
+	IconBed,
 	IconBolt,
 	IconBucketDroplet,
 	IconBuilding,
+	IconBuildingBank,
 	IconBuildings,
 	IconCake,
 	IconCar,
@@ -10,6 +12,7 @@ import {
 	IconCat,
 	IconCreditCard,
 	IconDental,
+	IconDeviceMobile,
 	IconEye,
 	IconFlame,
 	IconHeart,
@@ -170,7 +173,7 @@ export const subscriptionIconToSvg = {
 	landmark: (
 		<Icon
 			size="2em"
-			icon={IconMedicalCross}
+			icon={IconBuildingBank}
 			className={cn("text-slate-800")}
 		/>
 	),
@@ -241,6 +244,20 @@ export const subscriptionIconToSvg = {
 		<Icon
 			size="2em"
 			icon={IconWiperWash}
+			className={cn("text-slate-800")}
+		/>
+	),
+	bed: (
+		<Icon
+			size="2em"
+			icon={IconBed}
+			className={cn("text-slate-800")}
+		/>
+	),
+	"device-mobile": (
+		<Icon
+			size="2em"
+			icon={IconDeviceMobile}
 			className={cn("text-slate-800")}
 		/>
 	),
