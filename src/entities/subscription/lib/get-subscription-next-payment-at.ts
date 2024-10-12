@@ -29,7 +29,14 @@ export function getSubscriptionNextPaymentAt(
 		.set("month", now.getMonth())
 		.diff(subscription.startedAt, manipulateUnit);
 
-	return startedAtDayJs
-		.add(Math.floor(differenceInPeriods) + 1, manipulateUnit)
-		.toDate();
+	const nextPaymentAtDayJs = startedAtDayJs.add(
+		Math.floor(differenceInPeriods),
+		manipulateUnit,
+	);
+
+	if (nextPaymentAtDayJs.isBefore(now)) {
+		return nextPaymentAtDayJs.add(1, manipulateUnit).toDate();
+	}
+
+	return nextPaymentAtDayJs.toDate();
 }

@@ -82,3 +82,19 @@ it("startedAt is in the future", () => {
 	const expected = dayjs(subscription.startedAt).toDate();
 	expect(getSubscriptionNextPaymentAt(subscription)).toBeSame(expected, "day");
 });
+
+it("startedAt is in past, but its day is bigger that current", () => {
+	const subscription = {
+		...monthlySubscription,
+		startedAt: dayjs(monthlySubscription.startedAt)
+			.subtract(3, "year")
+			.toDate(),
+	} satisfies SubscriptionModel;
+	const now = dayjs(monthlySubscription.startedAt).subtract(2, "days").toDate();
+
+	const expected = dayjs(monthlySubscription.startedAt).toDate();
+	expect(getSubscriptionNextPaymentAt(subscription, now)).toBeSame(
+		expected,
+		"day",
+	);
+});

@@ -73,6 +73,7 @@ export const SubscriptionList = memo(() => {
 						subscriptions={activeSubscriptions}
 						noSubscriptionsPlaceholder={"No Active Subscriptions"}
 						onItemClick={openSubscriptionUpdate}
+						hideNextPaymentAt={true}
 					/>
 
 					<Divider />
@@ -81,6 +82,7 @@ export const SubscriptionList = memo(() => {
 						subscriptions={expiredSubscriptions}
 						noSubscriptionsPlaceholder={"No Expired Subscriptions"}
 						onItemClick={openSubscriptionUpdate}
+						hideNextPaymentAt={true}
 					/>
 				</>
 			) : (

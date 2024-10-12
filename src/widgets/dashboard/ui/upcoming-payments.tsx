@@ -1,44 +1,66 @@
-import { Card, Title } from "@mantine/core";
+import { Text } from "@mantine/core";
 import dayjs from "dayjs";
-import { memo, useMemo } from "react";
+import {
+	type FC,
+	type HTMLAttributes,
+	memo,
+	useCallback,
+	useMemo,
+} from "react";
+import { useTranslation } from "react-i18next";
 import { getSubscriptionNextPaymentAt } from "../../../entities/subscription/lib/get-subscription-next-payment-at.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
+import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
+import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 
-export const UpcomingPayments = memo(() => {
-	const subscriptions = useSubscriptions();
+export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
+	({ className }) => {
+		const subscriptions = useSubscriptions();
 
-	const subscriptionsWithNextPaymentAt = useMemo(
-		() => filterSubscriptionsWithNextPaymentAt(subscriptions),
-		[subscriptions],
-	);
+		const subscriptionsWithNextPaymentAt = useMemo(
+			() =>
+				filterSubscriptionsWithNextPaymentAt(subscriptions)
+					.toSorted((a, b) =>
+						dayjs(a.nextPaymentAt).diff(b.nextPaymentAt, "days"),
+					)
+					.slice(0, 4),
+			[subscriptions],
+		);
 
-	return (
-		<Card
-			className={cn("flex h-full flex-col gap-2")}
-			shadow="xs"
-			padding="xs"
-			radius="md"
-			withBorder
-		>
-			<Title
-				className={cn("self-center")}
-				order={5}
-			>
-				Upcoming Payments
-			</Title>
+		const { open } = useUpsertSubscriptionActions();
 
-			<div className={cn("flex flex-1 basis-0 flex-col overflow-y-auto")}>
-				{subscriptionsWithNextPaymentAt.map((subscription) => (
-					<div key={subscription.id}>
-						{subscription.name} - {subscription.nextPaymentAt.toISOString()}
-					</div>
-				))}
+		const openSubscriptionUpdate = useCallback(
+			(subscription: SubscriptionModel) => open(subscription),
+			[open],
+		);
+
+		const { t } = useTranslation();
+
+		return (
+			<div className={cn("flex flex-col gap-4", className)}>
+				<Text
+					className={cn("font-medium")}
+					size="sm"
+					c="dimmed"
+				>
+					{t("upcoming-payments")}
+				</Text>
+
+				<SubscriptionGrid
+					subscriptions={subscriptionsWithNextPaymentAt}
+					onItemClick={openSubscriptionUpdate}
+					noSubscriptionsPlaceholder={"No Upcoming Subscriptions"}
+					hideDescription={true}
+				/>
 			</div>
-		</Card>
-	);
-});
+		);
+	},
+);
+
+export interface UpcomingPaymentsProps
+	extends Pick<HTMLAttributes<HTMLDivElement>, "className"> {}
 
 interface SubscriptionWithNextPaymentAt extends SubscriptionModel {
 	nextPaymentAt: Date;

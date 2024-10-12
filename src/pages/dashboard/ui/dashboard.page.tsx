@@ -10,6 +10,7 @@ import {
 import { ManageCategories } from "../../../widgets/category/ui/manage-categories.tsx";
 import { ExpensesByCategory } from "../../../widgets/dashboard/ui/expenses-by-category.tsx";
 import { ExpensesPerMonth } from "../../../widgets/dashboard/ui/expenses-per-month.tsx";
+import { UpcomingPayments } from "../../../widgets/dashboard/ui/upcoming-payments.tsx";
 import { UpsertSubscription } from "../../../widgets/subscription/ui/upsert-subscription.tsx";
 
 export const DashboardPage = memo(() => {
@@ -31,7 +32,7 @@ export const DashboardPage = memo(() => {
 			<div className={cn("flex flex-col items-start gap-8")}>
 				<ExpensesPerMonth />
 
-				{/*<UpcomingPayments />*/}
+				<UpcomingPayments className={cn("self-stretch")} />
 
 				<ExpensesByCategory />
 			</div>

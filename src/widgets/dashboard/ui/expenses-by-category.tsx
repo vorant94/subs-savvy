@@ -37,7 +37,7 @@ export const ExpensesByCategory = memo(() => {
 	const currencyFormatter = useCurrencyFormatter();
 
 	return (
-		<div className={cn("flex shrink-0 flex-col gap-4")}>
+		<div className={cn("flex flex-col gap-4")}>
 			<Text
 				className={cn("font-medium")}
 				size="sm"

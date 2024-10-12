@@ -8,6 +8,8 @@ export const SubscriptionGrid = memo(
 		subscriptions,
 		noSubscriptionsPlaceholder,
 		onItemClick,
+		hideDescription,
+		hideNextPaymentAt,
 	}: SubscriptionGridProps) => {
 		return (
 			<div
@@ -19,6 +21,8 @@ export const SubscriptionGrid = memo(
 							key={subscription.id}
 							subscription={subscription}
 							onClick={onItemClick}
+							hideDescription={hideDescription}
+							hideNextPaymentAt={hideNextPaymentAt}
 						/>
 					))
 				) : (
@@ -33,4 +37,6 @@ export interface SubscriptionGridProps {
 	subscriptions: Array<SubscriptionModel>;
 	noSubscriptionsPlaceholder: string;
 	onItemClick: (subscription: SubscriptionModel) => void;
+	hideDescription?: boolean;
+	hideNextPaymentAt?: boolean;
 }
