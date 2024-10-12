@@ -41,6 +41,7 @@ export const subscriptionIcons = [
 	"wiper-wash",
 	"bed",
 	"device-mobile",
+	"theater",
 ] as const;
 export type SubscriptionIconModel = (typeof subscriptionIcons)[number];
 
@@ -85,6 +86,7 @@ export const subscriptionIconToLabel = {
 	"wiper-wash": "Wiper Wash",
 	bed: "Bed",
 	"device-mobile": "Device Mobile",
+	theater: "Theater",
 } as const satisfies Record<SubscriptionIconModel, string>;
 
 export const subscriptionIconsComboboxData: ComboboxData = subscriptionIcons

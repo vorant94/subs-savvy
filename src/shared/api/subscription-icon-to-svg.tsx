@@ -24,6 +24,7 @@ import {
 	IconPlaneDeparture,
 	IconReceipt,
 	IconScissors,
+	IconTheater,
 	IconUsers,
 	IconWiperWash,
 	IconWorld,
@@ -258,6 +259,13 @@ export const subscriptionIconToSvg = {
 		<Icon
 			size="2em"
 			icon={IconDeviceMobile}
+			className={cn("text-slate-800")}
+		/>
+	),
+	theater: (
+		<Icon
+			size="2em"
+			icon={IconTheater}
 			className={cn("text-slate-800")}
 		/>
 	),
