@@ -106,7 +106,9 @@ jobs:
       - test
       - e2e
       - build
-    if: needs.build.outputs.bundle-cache-hit != 'true'
+    if: |
+      github.ref == 'refs/heads/master' &&
+      needs.build.outputs.bundle-cache-hit != 'true'
     concurrency:
       group: deploy
       cancel-in-progress: false
