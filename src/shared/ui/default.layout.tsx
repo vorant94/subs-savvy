@@ -81,6 +81,7 @@ export const DefaultLayout = memo(
 				<Drawer
 					offset={8}
 					radius="md"
+					size={isMd ? "md" : "xl"}
 					position={isMd ? "right" : "bottom"}
 					onClose={drawer.close}
 					opened={isDrawerOpened}

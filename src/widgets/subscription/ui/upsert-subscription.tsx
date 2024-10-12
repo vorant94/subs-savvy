@@ -55,7 +55,7 @@ export const UpsertSubscription = memo(() => {
 	return (
 		<form
 			onSubmit={handleSubmit(actions.upsert)}
-			className={cn("flex flex-col gap-2 self-stretch")}
+			className={cn("flex flex-1 flex-col gap-2 self-stretch")}
 		>
 			<TextInput
 				{...register("name")}
@@ -195,6 +195,8 @@ export const UpsertSubscription = memo(() => {
 					/>
 				)}
 			/>
+
+			<div className={cn("flex-1")} />
 
 			<div className={cn("flex justify-end gap-2")}>
 				<Button type="submit">
