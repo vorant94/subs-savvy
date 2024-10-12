@@ -14,15 +14,7 @@ git fetch --all
 setup Node via Homebrew
 
 ```bash
-brew install node@20
-```
-
-_OR_ setup Node via NVM
-
-```bash
- brew install nvm
- nvm install
- nvm use
+brew install node@22
 ```
 
 install dependencies
