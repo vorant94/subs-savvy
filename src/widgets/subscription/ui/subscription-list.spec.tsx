@@ -24,7 +24,7 @@ import { SubscriptionList } from "./subscription-list.tsx";
 
 vi.mock(import("../../../entities/subscription/model/subscriptions.store.tsx"));
 vi.mock(
-	import("../../../features/list-subscriptions/ui/subscription-list-item.tsx"),
+	import("../../../features/list-subscriptions/ui/subscription-grid.tsx"),
 );
 
 describe("SubscriptionList", () => {

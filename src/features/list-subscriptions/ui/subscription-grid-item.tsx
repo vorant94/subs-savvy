@@ -7,8 +7,8 @@ import type { SubscriptionModel } from "../../../shared/api/subscription.model.t
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
 
-export const SubscriptionListItem = memo(
-	({ subscription, onClick }: SubscriptionListItemProps) => {
+export const SubscriptionGridItem = memo(
+	({ subscription, onClick }: SubscriptionGridItemProps) => {
 		const isExpired = useMemo(
 			() => isSubscriptionExpired(subscription),
 			[subscription],
@@ -91,7 +91,7 @@ export const SubscriptionListItem = memo(
 	},
 );
 
-export interface SubscriptionListItemProps {
+export interface SubscriptionGridItemProps {
 	subscription: SubscriptionModel;
 	onClick: (subscription: SubscriptionModel) => void;
 }

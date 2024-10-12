@@ -1,7 +1,8 @@
-import { CloseButton, TextInput } from "@mantine/core";
+import { CloseButton, Divider, TextInput } from "@mantine/core";
 import { memo, useCallback, useMemo, useState } from "react";
+import { isSubscriptionExpired } from "../../../entities/subscription/lib/is-subscription-expired.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
-import { SubscriptionListItem } from "../../../features/list-subscriptions/ui/subscription-list-item.tsx";
+import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
 import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
@@ -20,6 +21,22 @@ export const SubscriptionList = memo(() => {
 				subscription.name.toLowerCase().startsWith(namePrefix),
 			),
 		[subscriptions, namePrefix],
+	);
+	const [activeSubscriptions, expiredSubscriptions] = useMemo(
+		() =>
+			filteredSubscriptions.reduce<
+				[Array<SubscriptionModel>, Array<SubscriptionModel>]
+			>(
+				(prev, curr) => {
+					const [active, expired] = prev;
+
+					isSubscriptionExpired(curr) ? expired.push(curr) : active.push(curr);
+
+					return prev;
+				},
+				[[], []],
+			),
+		[filteredSubscriptions],
 	);
 
 	const { open } = useUpsertSubscriptionActions();
@@ -50,21 +67,25 @@ export const SubscriptionList = memo(() => {
 				}
 			/>
 
-			<div
-				className={cn("grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4")}
-			>
-				{filteredSubscriptions.length > 0 ? (
-					filteredSubscriptions.map((subscription) => (
-						<SubscriptionListItem
-							key={subscription.id}
-							subscription={subscription}
-							onClick={openSubscriptionUpdate}
-						/>
-					))
-				) : (
-					<div>No Subscriptions</div>
-				)}
-			</div>
+			{filteredSubscriptions.length > 0 ? (
+				<>
+					<SubscriptionGrid
+						subscriptions={activeSubscriptions}
+						noSubscriptionsPlaceholder={"No Active Subscriptions"}
+						onItemClick={openSubscriptionUpdate}
+					/>
+
+					<Divider />
+
+					<SubscriptionGrid
+						subscriptions={expiredSubscriptions}
+						noSubscriptionsPlaceholder={"No Expired Subscriptions"}
+						onItemClick={openSubscriptionUpdate}
+					/>
+				</>
+			) : (
+				<div>No Subscriptions</div>
+			)}
 		</div>
 	);
 });
