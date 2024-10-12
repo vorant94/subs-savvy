@@ -2,7 +2,13 @@ name: CI/CD
 
 on:
   push:
-    branches: ['master']
+    branches:
+      - 'master'
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    branches:
+      - 'master'
     paths-ignore:
       - 'docs/**'
   workflow_dispatch:
@@ -100,7 +106,9 @@ jobs:
       - test
       - e2e
       - build
-    if: needs.build.outputs.bundle-cache-hit != 'true'
+    if: |
+      github.ref == 'refs/heads/master' &&
+      needs.build.outputs.bundle-cache-hit != 'true'
     concurrency:
       group: deploy
       cancel-in-progress: false
