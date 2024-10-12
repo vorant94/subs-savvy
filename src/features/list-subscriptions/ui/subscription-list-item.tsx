@@ -1,9 +1,11 @@
 import { Avatar, Card, Indicator, Text, Title } from "@mantine/core";
+import { IconCircleFilled } from "@tabler/icons-react";
 import { memo, useCallback, useMemo } from "react";
 import { isSubscriptionExpired } from "../../../entities/subscription/lib/is-subscription-expired.ts";
 import { subscriptionIconToSvg } from "../../../shared/api/subscription-icon-to-svg.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
+import { Icon } from "../../../shared/ui/icon.tsx";
 
 export const SubscriptionListItem = memo(
 	({ subscription, onClick }: SubscriptionListItemProps) => {
@@ -37,12 +39,21 @@ export const SubscriptionListItem = memo(
 					</Avatar>
 
 					<div className={cn("flex-1 overflow-hidden")}>
-						<Title
-							order={5}
-							className={cn("!mb-0 truncate uppercase")}
-						>
-							{subscription.name}
-						</Title>
+						<div className={cn("flex items-center gap-1")}>
+							<Title
+								order={5}
+								className={cn("!mb-0 truncate uppercase")}
+							>
+								{subscription.name}
+							</Title>
+
+							{subscription.category && (
+								<Icon
+									icon={IconCircleFilled}
+									color={subscription.category.color}
+								/>
+							)}
+						</div>
 
 						{subscription.description ? (
 							<Text
