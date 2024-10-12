@@ -20,7 +20,8 @@
 		"e2e:codegen": "playwright codegen",
 		"e2e:setup": "playwright install",
 		"e2e:setup:ci": "playwright install --with-deps",
-		"bundle:analyze": "vite-bundle-visualizer"
+		"bundle:analyze": "vite-bundle-visualizer",
+		"deploy": "wrangler pages deploy"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.6.0",
