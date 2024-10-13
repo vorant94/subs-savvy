@@ -26,6 +26,9 @@ vi.mock(import("../../../entities/subscription/model/subscriptions.store.tsx"));
 vi.mock(
 	import("../../../features/list-subscriptions/ui/subscription-grid.tsx"),
 );
+vi.mock(
+	import("../../../features/list-subscriptions/ui/subscription-grid-item.tsx"),
+);
 
 describe("SubscriptionList", () => {
 	let screen: RenderResult;

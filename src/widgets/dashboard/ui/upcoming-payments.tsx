@@ -10,6 +10,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { getSubscriptionNextPaymentAt } from "../../../entities/subscription/lib/get-subscription-next-payment-at.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
+import { SubscriptionGridItem } from "../../../features/list-subscriptions/ui/subscription-grid-item.tsx";
 import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
 import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
@@ -50,10 +51,17 @@ export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 
 				<SubscriptionGrid
 					subscriptions={subscriptionsWithNextPaymentAt}
-					onItemClick={openSubscriptionUpdate}
 					noSubscriptionsPlaceholder={"No Upcoming Subscriptions"}
-					hideDescription={true}
-				/>
+				>
+					{({ subscription }) => (
+						<SubscriptionGridItem
+							key={subscription.id}
+							subscription={subscription}
+							onClick={openSubscriptionUpdate}
+							hideDescription={true}
+						/>
+					)}
+				</SubscriptionGrid>
 			</div>
 		);
 	},
