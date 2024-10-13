@@ -1,4 +1,6 @@
 pre-push:
+  only: # run only if there were non-docs changes
+    - run: test "$(git diff --name-only HEAD^ | grep -v '^docs/')"
   commands:
     test:
       run: npm run test

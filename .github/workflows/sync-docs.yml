@@ -1,0 +1,29 @@
+name: Sync Docs
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-docs:
+    name: Sync Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add Docs Source
+        run: git remote add wiki https://github.com/vorant94/subs-savvy.wiki.git
+
+      - name: Push Docs Source
+        run: git subtree push --prefix docs wiki master
+
