@@ -34,3 +34,6 @@ dist-ssr
 .wrangler
 
 .env
+
+# Sentry Config File
+.env.sentry-build-plugin
