@@ -4,7 +4,11 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { db } from "./shared/lib/db.ts";
 import "./style.css";
-import { init as sentryInit } from "@sentry/react";
+import {
+	browserTracingIntegration,
+	replayIntegration,
+	init as sentryInit,
+} from "@sentry/react";
 import i18next from "i18next";
 import I18NextFetchBackend from "i18next-fetch-backend";
 import { HMRPlugin } from "i18next-hmr/plugin";
@@ -48,6 +52,11 @@ i18n.init({
 
 sentryInit({
 	dsn: "https://585522e72addbde0c551bdb732f3ceea@o4508115159154688.ingest.de.sentry.io/4508115166494800",
+	integrations: [browserTracingIntegration(), replayIntegration()],
+	tracesSampleRate: 1.0,
+	tracePropagationTargets: ["localhost", /^https:\/\/subs-savvy\.vorant94\.io/],
+	replaysSessionSampleRate: 0.1,
+	replaysOnErrorSampleRate: 1.0,
 	enabled: !import.meta.env.DEV,
 });
 
