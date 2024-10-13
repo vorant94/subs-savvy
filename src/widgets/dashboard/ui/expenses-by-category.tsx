@@ -1,6 +1,13 @@
 import { Card, Divider, Text } from "@mantine/core";
 import { IconCircleFilled } from "@tabler/icons-react";
-import { memo, useCallback, useMemo, useState } from "react";
+import {
+	type FC,
+	type HTMLAttributes,
+	memo,
+	useCallback,
+	useMemo,
+	useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
 import type { PolarViewBox } from "recharts/types/util/types";
@@ -16,102 +23,111 @@ import { startOfYear } from "../../../shared/lib/dates.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
 
-export const ExpensesByCategory = memo(() => {
-	const subscriptions = useSubscriptions();
-	const aggregatedSubscriptions = useMemo(() => {
-		return aggregateSubscriptionsByCategory(subscriptions, (subscription) =>
-			calculateSubscriptionPriceForYear(subscription, startOfYear),
-		);
-	}, [subscriptions]);
+export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
+	({ className }) => {
+		const subscriptions = useSubscriptions();
+		const aggregatedSubscriptions = useMemo(() => {
+			return aggregateSubscriptionsByCategory(subscriptions, (subscription) =>
+				calculateSubscriptionPriceForYear(subscription, startOfYear),
+			);
+		}, [subscriptions]);
 
-	const [activeIndex, setActiveIndex] = useState<number>(-1);
-	const updateActiveIndex = useCallback((_: unknown, index: number) => {
-		setActiveIndex(index);
-	}, []);
-	const resetActiveIndex = useCallback(() => {
-		setActiveIndex(-1);
-	}, []);
+		const [activeIndex, setActiveIndex] = useState<number>(-1);
+		const updateActiveIndex = useCallback((_: unknown, index: number) => {
+			setActiveIndex(index);
+		}, []);
+		const resetActiveIndex = useCallback(() => {
+			setActiveIndex(-1);
+		}, []);
 
-	const { t } = useTranslation();
+		const { t } = useTranslation();
 
-	const currencyFormatter = useCurrencyFormatter();
+		const currencyFormatter = useCurrencyFormatter();
 
-	return (
-		<div className={cn("flex flex-col gap-4")}>
-			<Text
-				className={cn("font-medium")}
-				size="sm"
-				c="dimmed"
-			>
-				{t("expenses-by-category")}
-			</Text>
+		return (
+			<div className={cn("flex flex-col gap-4", className)}>
+				<Text
+					className={cn("font-medium")}
+					size="sm"
+					c="dimmed"
+				>
+					{t("expenses-by-category")}
+				</Text>
 
-			<Card
-				padding="lg"
-				radius="md"
-			>
-				<div className={cn("flex h-[177px] flex-row items-center gap-8")}>
-					<PieChart
-						width={180}
-						height={180}
-					>
-						<Pie
-							innerRadius={70}
-							outerRadius={90}
-							data={aggregatedSubscriptions}
-							dataKey="totalExpenses"
-							onMouseEnter={updateActiveIndex}
-							onMouseLeave={resetActiveIndex}
-							activeIndex={activeIndex}
+				<Card
+					padding="lg"
+					radius="md"
+				>
+					<div className={cn("flex h-[177px] flex-row items-center gap-8")}>
+						<PieChart
+							width={180}
+							height={180}
 						>
-							{aggregatedSubscriptions.map((subByCategory) => (
-								<Cell
-									key={subByCategory.category.id}
-									fill={subByCategory.category.color}
-								/>
-							))}
-							<Label
-								content={(props) => (
-									<LabelContent
-										aggregatedSubscriptions={aggregatedSubscriptions}
-										activeIndex={activeIndex}
-										{...props}
-									/>
-								)}
-							/>
-						</Pie>
-					</PieChart>
-
-					<Divider orientation="vertical" />
-
-					<ul className={cn("flex max-h-full flex-col gap-4 overflow-y-auto")}>
-						{aggregatedSubscriptions.map(({ category, totalExpenses }) => (
-							<li
-								className={cn("flex items-center gap-2")}
-								key={category.id}
+							<Pie
+								innerRadius={70}
+								outerRadius={90}
+								data={aggregatedSubscriptions}
+								dataKey="totalExpenses"
+								onMouseEnter={updateActiveIndex}
+								onMouseLeave={resetActiveIndex}
+								activeIndex={activeIndex}
 							>
-								<Icon
-									icon={IconCircleFilled}
-									color={category.color}
-									size="0.5em"
+								{aggregatedSubscriptions.map((subByCategory) => (
+									<Cell
+										key={subByCategory.category.id}
+										fill={subByCategory.category.color}
+									/>
+								))}
+								<Label
+									content={(props) => (
+										<LabelContent
+											aggregatedSubscriptions={aggregatedSubscriptions}
+											activeIndex={activeIndex}
+											{...props}
+										/>
+									)}
 								/>
-								<Text
-									size="xs"
-									className={cn("flex-1")}
+							</Pie>
+						</PieChart>
+
+						<Divider orientation="vertical" />
+
+						<ul
+							className={cn("flex max-h-full flex-col gap-4 overflow-y-auto")}
+						>
+							{aggregatedSubscriptions.map(({ category, totalExpenses }) => (
+								<li
+									className={cn("flex items-center gap-2")}
+									key={category.id}
 								>
-									{category.id === -1
-										? t(noCategoryPlaceholder.name)
-										: category.name}
-								</Text>
-								<Text size="xs">{currencyFormatter.format(totalExpenses)}</Text>
-							</li>
-						))}
-					</ul>
-				</div>
-			</Card>
-		</div>
-	);
-});
+									<Icon
+										icon={IconCircleFilled}
+										color={category.color}
+										size="0.5em"
+									/>
+									<Text
+										size="xs"
+										className={cn("flex-1")}
+									>
+										{category.id === -1
+											? t(noCategoryPlaceholder.name)
+											: category.name}
+									</Text>
+									<Text size="xs">
+										{currencyFormatter.format(totalExpenses)}
+									</Text>
+								</li>
+							))}
+						</ul>
+					</div>
+				</Card>
+			</div>
+		);
+	},
+);
+
+export interface ExpensesByCategoryProps
+	extends Pick<HTMLAttributes<HTMLDivElement>, "className"> {}
 
 // TODO rewrite with foreignObject
 const LabelContent = ({

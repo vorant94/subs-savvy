@@ -29,12 +29,14 @@ export const DashboardPage = memo(() => {
 			drawerContent={<UpsertSubscription />}
 			drawerTitle={`${mode === "update" ? "Update" : "Insert"} Subscription`}
 		>
-			<div className={cn("flex flex-col items-start gap-8")}>
+			<div className={cn("flex flex-col gap-8")}>
 				<ExpensesPerMonth />
 
-				<UpcomingPayments className={cn("self-stretch")} />
+				<UpcomingPayments />
 
-				<ExpensesByCategory />
+				<div className={cn("flex gap-8")}>
+					<ExpensesByCategory />
+				</div>
 			</div>
 		</DefaultLayout>
 	);

@@ -7,7 +7,14 @@ import {
 import dayjs from "dayjs";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Bar, BarChart, Legend, XAxis, YAxis } from "recharts";
+import {
+	Bar,
+	BarChart,
+	Legend,
+	ResponsiveContainer,
+	XAxis,
+	YAxis,
+} from "recharts";
 import {
 	type SubscriptionsAggregatedByCategory,
 	aggregateSubscriptionsByCategory,
@@ -136,45 +143,49 @@ export const ExpensesPerMonth = memo(() => {
 
 				<Divider orientation="vertical" />
 
-				<BarChart
-					layout="vertical"
-					width={700}
+				<ResponsiveContainer
+					width={"100%"}
 					height={100}
-					data={[aggregatedByCategoryPerMonth]}
 				>
-					<YAxis
-						hide
-						type="category"
-					/>
-					<XAxis
-						hide
-						type="number"
-					/>
-					{aggregatedByCategory.map(({ category }, index) => (
-						<Bar
-							radius={calculateRadius(index)}
-							name={
-								category.id === -1
-									? t(noCategoryPlaceholder.name)
-									: category.name
-							}
-							key={category.id}
-							dataKey={`${category.id}.totalExpenses`}
-							stackId={monthName}
-							fill={category.color}
+					<BarChart
+						layout="vertical"
+						data={[aggregatedByCategoryPerMonth]}
+					>
+						<YAxis
+							hide
+							type="category"
 						/>
-					))}
-					<Legend
-						iconType="circle"
-						align="left"
-						content={
-							<LegendContent
-								aggregatedSubscriptions={aggregatedByCategory}
-								totalExpenses={totalExpenses}
+						<XAxis
+							domain={["dataMin", "dataMax"]}
+							hide
+							type="number"
+						/>
+						{aggregatedByCategory.map(({ category }, index) => (
+							<Bar
+								radius={calculateRadius(index)}
+								name={
+									category.id === -1
+										? t(noCategoryPlaceholder.name)
+										: category.name
+								}
+								key={category.id}
+								dataKey={`${category.id}.totalExpenses`}
+								stackId={monthName}
+								fill={category.color}
 							/>
-						}
-					/>
-				</BarChart>
+						))}
+						<Legend
+							iconType="circle"
+							align="left"
+							content={
+								<LegendContent
+									aggregatedSubscriptions={aggregatedByCategory}
+									totalExpenses={totalExpenses}
+								/>
+							}
+						/>
+					</BarChart>
+				</ResponsiveContainer>
 			</div>
 		</Card>
 	);
