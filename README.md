@@ -22,6 +22,7 @@ install dependencies
 ```bash
 npm i
 npm run e2e:setup
+npm run sentry:setup
 ```
 
 ## Push Changes
