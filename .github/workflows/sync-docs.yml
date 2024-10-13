@@ -24,6 +24,9 @@ jobs:
       - name: Add Docs Source
         run: git remote add wiki https://github.com/vorant94/subs-savvy.wiki.git
 
+      - name: Fetch Added Docs
+        run: git fetch --all
+
       - name: Push Docs Source
         run: git subtree push --prefix docs wiki master
 
