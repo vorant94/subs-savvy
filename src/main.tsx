@@ -55,8 +55,9 @@ sentryInit({
 	integrations: [browserTracingIntegration(), replayIntegration()],
 	tracesSampleRate: 1.0,
 	tracePropagationTargets: ["localhost", /^https:\/\/subs-savvy.vorant94\.io/],
-	replaysSessionSampleRate: import.meta.env.DEV ? 1 : 0.1,
+	replaysSessionSampleRate: 0.1,
 	replaysOnErrorSampleRate: 1.0,
+	enabled: !import.meta.env.DEV,
 });
 
 const rootElement = document.getElementById("root");
