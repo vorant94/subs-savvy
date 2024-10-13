@@ -127,6 +127,12 @@
 					"allowComments": true
 				}
 			}
+		},
+		{
+			"include": ["**/package.json"],
+			"formatter": {
+				"lineWidth": 1
+			}
 		}
 	]
 }
