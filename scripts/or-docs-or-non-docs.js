@@ -1,7 +1,4 @@
-import cp from "node:child_process";
-import { promisify } from "node:util";
-
-const exec = promisify(cp.exec);
+import { exec } from "./shared/promisified.js";
 
 const diffRaw = await exec("git diff --name-only HEAD");
 const diffFiles = diffRaw.stdout.split("\n").filter(Boolean);
