@@ -35,12 +35,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node & NPM
         uses: ./.github/actions/setup
 
       - name: Or Docs Or Non-Docs
-        run: node scripts/or-docs-or-non-docs.js --target ${{ github.event.pull_request.base.ref }}
+        run: node scripts/or-docs-or-non-docs.js --target origin/${{ github.event.pull_request.base.ref }}
 
   lint:
     name: Lint
