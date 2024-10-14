@@ -27,5 +27,7 @@ const [docs, nonDocs] = diffFiles.reduce(
 );
 
 if (docs.length && nonDocs.length) {
-	throw new Error(`Shouldn't commit docs and non-docs in the same commit!`);
+	throw new Error(
+		`There shouldn't be docs and non-docs changes in the same commit/pull request!`,
+	);
 }
