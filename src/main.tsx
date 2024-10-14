@@ -14,6 +14,7 @@ import I18NextFetchBackend from "i18next-fetch-backend";
 import { HMRPlugin } from "i18next-hmr/plugin";
 import { initReactI18next } from "react-i18next";
 import { router } from "./app/router/router.tsx";
+import { theme } from "./app/theme/theme.ts";
 import { supportedLanguages } from "./features/i18n/model/use-language.ts";
 
 if (import.meta.env.DEV) {
@@ -71,7 +72,7 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
 	<StrictMode>
-		<MantineProvider>
+		<MantineProvider theme={theme}>
 			<RouterProvider router={router} />
 		</MantineProvider>
 	</StrictMode>,

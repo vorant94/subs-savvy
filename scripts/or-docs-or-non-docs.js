@@ -8,9 +8,9 @@ const argsRaw = parseArgs({
 	},
 });
 
-const args = z
-	.object({ target: z.string().nullable().default("HEAD") })
-	.parse(argsRaw.values);
+const argsSchema = z.object({ target: z.string().nullable().default("HEAD") });
+
+const args = argsSchema.parse(argsRaw.values);
 
 const diffRaw = await exec(`git diff --name-only ${args.target}`);
 const diffFiles = diffRaw.stdout.split("\n").filter(Boolean);

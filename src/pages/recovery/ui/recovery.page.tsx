@@ -25,12 +25,7 @@ export const RecoveryPage = memo(() => {
 
 	return (
 		<DefaultLayout header={<DefaultLayoutHeader />}>
-			<Card
-				shadow="xs"
-				padding="xs"
-				radius="md"
-				withBorder
-			>
+			<Card>
 				<div className={cn("flex flex-col gap-2")}>
 					<Tabs
 						value={activeTab}

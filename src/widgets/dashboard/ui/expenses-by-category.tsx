@@ -54,10 +54,7 @@ export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 					{t("expenses-by-category")}
 				</Text>
 
-				<Card
-					padding="lg"
-					radius="md"
-				>
+				<Card>
 					<div className={cn("flex h-[177px] flex-row items-center gap-8")}>
 						<PieChart
 							width={180}

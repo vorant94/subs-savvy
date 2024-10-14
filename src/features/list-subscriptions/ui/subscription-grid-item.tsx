@@ -38,8 +38,6 @@ export const SubscriptionGridItem = memo(
 
 		const Component = (
 			<Card
-				padding="lg"
-				radius="md"
 				aria-label={subscription.name}
 				component="button"
 				className={cn("block min-h-16 text-left")}

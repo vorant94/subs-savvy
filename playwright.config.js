@@ -28,13 +28,8 @@ export default defineConfig({
 				? "https://subs-savvy.vorant94.io"
 				: "http://localhost:5173",
 		trace: "retain-on-failure",
+		...devices["Desktop Chrome"],
 	},
-	projects: [
-		{
-			name: "chromium",
-			use: { ...devices["Desktop Chrome"] },
-		},
-	],
 	webServer:
 		env.NODE_ENV === "production"
 			? null

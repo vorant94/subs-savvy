@@ -91,11 +91,7 @@ export const ExpensesPerMonth = memo(() => {
 	const currencyFormatter = useCurrencyFormatter();
 
 	return (
-		<Card
-			className={cn("flex shrink-0 flex-col gap-6")}
-			padding="lg"
-			radius="md"
-		>
+		<Card className={cn("flex shrink-0 flex-col gap-6")}>
 			<div className={cn("flex items-center")}>
 				<Text
 					className={cn("font-medium")}
