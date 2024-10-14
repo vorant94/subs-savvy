@@ -1,16 +1,18 @@
-import { translationFilePaths } from "./shared/config.js";
-import {
-	readTranslation,
-	sortTranslation,
-	writeTranslation,
-} from "./shared/translation.js";
+import path from "node:path";
+import process from "node:process";
+import fs from "fs-extra";
+import { sortTranslation, translationFilePaths } from "./shared/translation.js";
 
 await Promise.all(
 	translationFilePaths.map(async (filePath) => {
-		const translation = await readTranslation(filePath);
+		const fullFilePath = path.join(process.cwd(), filePath);
+
+		const translation = await fs.readJSON(fullFilePath);
 
 		const sortedTranslation = sortTranslation(translation);
 
-		await writeTranslation(filePath, sortedTranslation);
+		await fs.writeJSON(fullFilePath, sortedTranslation, {
+			spaces: "\t",
+		});
 	}),
 );

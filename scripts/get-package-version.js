@@ -1,9 +1,8 @@
-import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { parseArgs } from "node:util";
+import fs from "fs-extra";
 import { z } from "zod";
-import { encoding } from "./shared/config.js";
 
 const argsRaw = parseArgs({
 	options: {
@@ -15,11 +14,8 @@ const argsSchema = z.object({ package: z.string() });
 
 const args = argsSchema.parse(argsRaw.values);
 
-const lockfileJson = await fs.readFile(
+const lockfile = await fs.readJSON(
 	path.join(process.cwd(), "package-lock.json"),
-	{ encoding },
 );
-
-const lockfile = JSON.parse(lockfileJson);
 
 console.info(lockfile.packages[`node_modules/${args.package}`].version);
