@@ -6,7 +6,7 @@ pre-push:
       run: npm run test
 pre-commit:
   commands:
-    or-docs-or-non-docs: # forbid to commit both docs and non-docs files in the same commit
-      run: test -z "$(git diff --name-only HEAD | grep '^docs/')" -o -z "$(git diff --name-only HEAD | grep -v '^docs/')"
+    or-docs-or-non-docs:
+      run: node scripts/or-docs-or-non-docs.js
     lint:
       run: npm run lint:ci
