@@ -27,6 +27,21 @@ jobs:
       - name: Are Translations Sorted
         run: node scripts/are-translations-sorted.js
 
+  or-docs-or-non-docs:
+    name: Or Docs Or Non-Docs
+    runs-on: ubuntu-latest
+    # TODO should it be run on push to master as well?
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node & NPM
+        uses: ./.github/actions/setup
+
+      - name: Or Docs Or Non-Docs
+        run: node scripts/or-docs-or-non-docs.js --target ${{ github.event.pull_request.base.ref }}
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -124,6 +139,7 @@ jobs:
       - e2e
       - build
     if: |
+      github.event_name == 'push' &&
       github.ref == 'refs/heads/master' &&
       needs.build.outputs.bundle-cache-hit != 'true'
     concurrency:

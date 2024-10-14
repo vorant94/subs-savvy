@@ -12,6 +12,7 @@ permissions:
   contents: write
 
 jobs:
+  #  TODO add or-docs-or-non-docs validation here?
   sync-docs:
     name: Sync Docs
     runs-on: ubuntu-latest
