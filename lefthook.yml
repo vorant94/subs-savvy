@@ -6,6 +6,8 @@ pre-push:
       run: npm run test
 pre-commit:
   commands:
+    are-translations-sorted:
+      run: node scripts/are-translations-sorted.js
     or-docs-or-non-docs:
       run: node scripts/or-docs-or-non-docs.js
     lint:
