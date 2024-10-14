@@ -1,8 +1,8 @@
 pre-push:
-  only: # run only if there were non-docs changes
-    - run: test "$(git diff --name-only HEAD^ | grep -v '^docs/')"
   commands:
     test:
+      only:
+        - run: node scripts/is-non-docs-change.js
       run: npm run test
 pre-commit:
   commands:
