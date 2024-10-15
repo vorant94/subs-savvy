@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { db } from "./shared/lib/db.ts";
 import "./style.css";
+import { Notifications } from "@mantine/notifications";
 import i18next from "i18next";
 import I18NextFetchBackend from "i18next-fetch-backend";
 import { HMRPlugin } from "i18next-hmr/plugin";
@@ -54,6 +55,7 @@ if (!rootElement) {
 createRoot(rootElement).render(
 	<StrictMode>
 		<MantineProvider theme={theme}>
+			<Notifications />
 			<RouterProvider router={router} />
 		</MantineProvider>
 	</StrictMode>,
