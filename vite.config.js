@@ -6,6 +6,7 @@ import { i18nextHMRPlugin } from "i18next-hmr/vite";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
+import { version } from "./package.json";
 import postcss from "./postcss.config.js";
 
 export default defineConfig({
@@ -26,6 +27,7 @@ export default defineConfig({
 			org: "mordechai-dror",
 			project: "subs-savvy",
 			telemetry: false,
+			release: { name: `v${version}` },
 		}),
 	],
 	// can't detect ESM-based postcss config by itself, see here https://github.com/vitejs/vite/issues/15869
