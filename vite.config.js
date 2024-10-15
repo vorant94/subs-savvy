@@ -15,7 +15,13 @@ export default defineConfig({
 		i18nextHMRPlugin({
 			localesDir: path.resolve(process.cwd(), "public/locales"),
 		}),
-		VitePWA({ registerType: "autoUpdate" }),
+		VitePWA({
+			registerType: "autoUpdate",
+			manifest: {
+				// biome-ignore lint/style/useNamingConvention: 3-rd party type
+				theme_color: "white",
+			},
+		}),
 		sentryVitePlugin({
 			org: "mordechai-dror",
 			project: "subs-savvy",
