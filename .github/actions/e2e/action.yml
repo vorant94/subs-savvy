@@ -2,12 +2,14 @@ name: E2E Tests
 
 inputs:
   env:
-    type: choice
     description: Environment to run E2E in
     required: true
-    options:
-      - development
-      - production
+  shard:
+    description: Shard of E2E to run
+    default: '1'
+  total_shards:
+    description: Total amount of shards E2E is split to
+    default: '1'
 
 runs:
   using: 'composite'
@@ -32,15 +34,15 @@ runs:
       shell: bash
 
     - name: Run E2E
-      run: npm run e2e
+      run: npm run e2e -- --shard=${{ inputs.shard }}/${{ inputs.total_shards }}
       env:
         NODE_ENV: ${{ inputs.env }}
       shell: bash
 
     - name: Upload E2E Test Report
-      if: always() # is needed here to upload report even if e2e failed
+      if: failure()
       uses: actions/upload-artifact@v4
       with:
-        name: e2e-report
+        name: e2e-report-${{ inputs.shard }}_${{ inputs.total_shards }}
         path: playwright-report/
         retention-days: 30
