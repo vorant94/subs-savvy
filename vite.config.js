@@ -19,6 +19,7 @@ export default defineConfig({
 		sentryVitePlugin({
 			org: "mordechai-dror",
 			project: "subs-savvy",
+			telemetry: false,
 		}),
 	],
 	// can't detect ESM-based postcss config by itself, see here https://github.com/vitejs/vite/issues/15869
