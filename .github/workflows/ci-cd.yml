@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - 'master'
+    tags:
+      - 'v*.*.*'
     paths-ignore:
       - 'docs/**'
   pull_request:
@@ -114,15 +116,7 @@ jobs:
       - name: Build App Bundle
         run: npm run build
 
-      - name: Cache App Bundle
-        id: cache-bundle
-        uses: actions/cache@v4
-        with:
-          path: dist
-          key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-bundle-${{hashFiles('dist/**')}}
-
       - name: Upload App Bundle
-        if: steps.cache-bundle.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: bundle
@@ -160,10 +154,7 @@ jobs:
       - ts
       - are-translations-sorted
       - e2e
-    if: |
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/master' &&
-      needs.build.outputs.bundle-cache-hit != 'true'
+    if: startsWith(github.ref, 'refs/tags/v')
     concurrency:
       group: deploy
       cancel-in-progress: false
