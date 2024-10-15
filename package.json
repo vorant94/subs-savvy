@@ -23,7 +23,6 @@
 		"e2e:setup:ci": "playwright install --with-deps",
 		"bundle:analyze": "vite-bundle-visualizer",
 		"deploy": "wrangler pages deploy",
-		"sentry:setup": "sentry-wizard -i sourcemaps --saas",
 		"script": "tsx"
 	},
 	"dependencies": {
@@ -31,7 +30,6 @@
 		"@mantine/core": "^7.10.2",
 		"@mantine/dates": "^7.10.2",
 		"@mantine/hooks": "^7.10.2",
-		"@sentry/react": "^8.34.0",
 		"@tabler/icons-react": "^3.19.0",
 		"clsx": "^2.1.1",
 		"dayjs": "^1.11.11",
@@ -54,8 +52,6 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
 		"@playwright/test": "^1.44.1",
-		"@sentry/vite-plugin": "^2.22.5",
-		"@sentry/wizard": "^3.34.0",
 		"@testing-library/jest-dom": "^6.4.6",
 		"@testing-library/react": "^16.0.0",
 		"@total-typescript/ts-reset": "^0.5.1",
