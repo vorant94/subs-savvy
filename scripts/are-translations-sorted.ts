@@ -1,11 +1,11 @@
 import console from "node:console";
 import process from "node:process";
-import fs from "fs-extra";
+import fse from "fs-extra";
 import { sortTranslation, translationFilePaths } from "./shared/translation.js";
 
 const results = await Promise.allSettled(
 	translationFilePaths.map(async (filePath) => {
-		const translation = await fs.readJSON(filePath);
+		const translation = await fse.readJSON(filePath);
 		const translationJson = JSON.stringify(translation);
 
 		const sortedTranslation = sortTranslation(translation);

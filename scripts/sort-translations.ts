@@ -1,13 +1,13 @@
-import fs from "fs-extra";
+import fse from "fs-extra";
 import { sortTranslation, translationFilePaths } from "./shared/translation.js";
 
 await Promise.all(
 	translationFilePaths.map(async (filePath) => {
-		const translation = await fs.readJSON(filePath);
+		const translation = await fse.readJSON(filePath);
 
 		const sortedTranslation = sortTranslation(translation);
 
-		await fs.writeJSON(filePath, sortedTranslation, {
+		await fse.writeJSON(filePath, sortedTranslation, {
 			spaces: "\t",
 		});
 	}),

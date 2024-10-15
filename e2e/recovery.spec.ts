@@ -1,7 +1,7 @@
 import path from "node:path";
 import process from "node:process";
 import { expect, test } from "@playwright/test";
-import fs from "fs-extra";
+import fse from "fs-extra";
 import {
 	monthlySubscription,
 	yearlySubscription,
@@ -43,7 +43,7 @@ test.describe("recovery", () => {
 			page.waitForEvent("download"),
 			pom.exportButton.click(),
 		]);
-		const exportedRecoveryRaw = await fs.readJSON(await download.path());
+		const exportedRecoveryRaw = await fse.readJSON(await download.path());
 		const exportedRecovery = recoverySchema.parse(exportedRecoveryRaw);
 
 		const areAllSubscriptionsExported = subscriptionsToExport.every(
@@ -62,7 +62,7 @@ test.describe("recovery", () => {
 			process.cwd(),
 			"e2e/assets/subscriptions.json",
 		);
-		const recoveryToImportRaw = await fs.readJSON(filePathToImport);
+		const recoveryToImportRaw = await fse.readJSON(filePathToImport);
 		const recoveryToImport = recoverySchema.parse(recoveryToImportRaw);
 
 		await pom.goto();

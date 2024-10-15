@@ -1,8 +1,10 @@
 pre-push:
+  only:
+    - run: npm run script scripts/is-non-docs-change.ts
   commands:
+    ts:
+      run: npm run ts:check
     test:
-      only:
-        - run: npm run script scripts/is-non-docs-change.ts
       run: npm run test
 pre-commit:
   commands:

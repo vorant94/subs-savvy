@@ -14,9 +14,37 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node & NPM
+        uses: ./.github/actions/setup
+
+      - name: Lint
+        run: npm run lint:ci
+
+  ts:
+    name: TS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node & NPM
+        uses: ./.github/actions/setup
+
+      - name: TS
+        run: npm run ts:check
+
   are-translations-sorted:
     name: Are Translations Sorted
     runs-on: ubuntu-latest
+    needs:
+      - ts
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -30,6 +58,8 @@ jobs:
   or-docs-or-non-docs:
     name: Or Docs Or Non-Docs
     runs-on: ubuntu-latest
+    needs:
+      - ts
     # TODO should it be run on push to master as well?
     if: github.event_name == 'pull_request'
     steps:
@@ -44,22 +74,11 @@ jobs:
       - name: Or Docs Or Non-Docs
         run: npm run script scripts/or-docs-or-non-docs.ts -- --target origin/${{ github.event.pull_request.base.ref }}
 
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node & NPM
-        uses: ./.github/actions/setup
-
-      - name: Lint
-        run: npm run lint:ci
-
   test:
     name: Test
     runs-on: ubuntu-latest
+    needs:
+      - ts
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -80,6 +99,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    needs:
+      - ts
     outputs:
       bundle-cache-hit: ${{ steps.cache-bundle.outputs.cache-hit }}
     steps:
@@ -135,8 +156,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     needs:
-      - are-translations-sorted
       - lint
+      - ts
+      - are-translations-sorted
       - test
       - e2e
       - build

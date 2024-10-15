@@ -2,7 +2,7 @@ import console from "node:console";
 import path from "node:path";
 import process from "node:process";
 import { parseArgs } from "node:util";
-import fs from "fs-extra";
+import fse from "fs-extra";
 import { z } from "zod";
 
 const argsRaw = parseArgs({
@@ -15,7 +15,7 @@ const argsSchema = z.object({ package: z.string() });
 
 const args = argsSchema.parse(argsRaw.values);
 
-const lockfile = await fs.readJSON(
+const lockfile = await fse.readJSON(
 	path.join(process.cwd(), "package-lock.json"),
 );
 
