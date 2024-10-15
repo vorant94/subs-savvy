@@ -1,12 +1,12 @@
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
+import type { Config } from "postcss-load-config";
 import postcssNested from "postcss-nested";
 import postcssPresetMantine from "postcss-preset-mantine";
 import postcssSimpleVars from "postcss-simple-vars";
 import tailwindcss from "tailwindcss";
 import tailwindcssNesting from "tailwindcss/nesting";
 
-/** @type {import('postcss-load-config').Config} */
 export default {
 	plugins: [
 		tailwindcss,
@@ -24,4 +24,4 @@ export default {
 			},
 		}),
 	],
-};
+} satisfies Config;

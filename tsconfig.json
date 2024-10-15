@@ -43,5 +43,14 @@
 			"@total-typescript/ts-reset"
 		]
 	},
-	"include": ["src", "e2e", "scripts"]
+	"include": [
+		"src",
+		"e2e",
+		"scripts",
+		"playwright.config.ts",
+		"postcss.config.ts",
+		"tailwind.config.ts",
+		"vite.config.ts",
+		"vitest.config.ts"
+	]
 }

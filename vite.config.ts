@@ -5,7 +5,7 @@ import { i18nextHMRPlugin } from "i18next-hmr/vite";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
-import postcss from "./postcss.config.js";
+import postcss from "./postcss.config.ts";
 
 export default defineConfig({
 	plugins: [

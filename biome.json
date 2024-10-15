@@ -101,7 +101,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["*.config.js"],
+			"include": ["*.config.ts"],
 			"linter": {
 				"rules": {
 					"style": {

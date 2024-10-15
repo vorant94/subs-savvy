@@ -32,7 +32,7 @@ export default defineConfig({
 	},
 	webServer:
 		env.NODE_ENV === "production"
-			? null
+			? undefined
 			: {
 					command: "npm run start:dev",
 					url: "http://localhost:5173",
