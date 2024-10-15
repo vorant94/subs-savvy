@@ -2,13 +2,13 @@ pre-push:
   commands:
     test:
       only:
-        - run: node scripts/is-non-docs-change.js
+        - run: npm run script scripts/is-non-docs-change.ts
       run: npm run test
 pre-commit:
   commands:
     are-translations-sorted:
-      run: node scripts/are-translations-sorted.js
+      run: npm run script scripts/are-translations-sorted.ts
     or-docs-or-non-docs:
-      run: node scripts/or-docs-or-non-docs.js
+      run: npm run script scripts/or-docs-or-non-docs.ts
     lint:
       run: npm run lint:ci

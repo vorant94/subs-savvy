@@ -43,5 +43,5 @@
 			"@total-typescript/ts-reset"
 		]
 	},
-	"include": ["src", "e2e"]
+	"include": ["src", "e2e", "scripts"]
 }

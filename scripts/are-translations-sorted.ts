@@ -17,8 +17,9 @@ const results = await Promise.allSettled(
 	}),
 );
 
-/** @type {Array<PromiseRejectedResult>} */
-const rejectedResults = results.filter((r) => r.status === "rejected");
+const rejectedResults = results.filter(
+	(r): r is PromiseRejectedResult => r.status === "rejected",
+);
 if (rejectedResults.length) {
 	for (const result of rejectedResults) {
 		console.error(result.reason);

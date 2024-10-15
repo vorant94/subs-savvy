@@ -15,7 +15,7 @@ runs:
     - name: Define Playwright Version
       id: define-playwright-version
       run: |
-        PLAYWRIGHT_VERSION=$(node scripts/get-package-version.js --package @playwright/test)
+        PLAYWRIGHT_VERSION=$(npm run script scripts/get-package-version.ts --silent -- --package @playwright/test)
         echo "playwright-version=$PLAYWRIGHT_VERSION" >> $GITHUB_OUTPUT
       shell: bash
 

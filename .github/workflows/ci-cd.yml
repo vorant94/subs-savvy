@@ -25,7 +25,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Are Translations Sorted
-        run: node scripts/are-translations-sorted.js
+        run: npm run script scripts/are-translations-sorted.ts
 
   or-docs-or-non-docs:
     name: Or Docs Or Non-Docs
@@ -42,7 +42,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Or Docs Or Non-Docs
-        run: node scripts/or-docs-or-non-docs.js --target origin/${{ github.event.pull_request.base.ref }}
+        run: npm run script scripts/or-docs-or-non-docs.ts -- --target origin/${{ github.event.pull_request.base.ref }}
 
   lint:
     name: Lint

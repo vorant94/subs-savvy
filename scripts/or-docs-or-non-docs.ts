@@ -23,7 +23,7 @@ const [docs, nonDocs] = diffFiles.reduce(
 
 		return prev;
 	},
-	[[], []],
+	[[], []] as [Array<string>, Array<string>],
 );
 
 if (docs.length && nonDocs.length) {
