@@ -5,25 +5,13 @@
 	"type": "module",
 	"scripts": {
 		"start:dev": "vite",
-		"start:prod": "vite preview",
 		"build": "vite build",
-		"ts:check": "tsc",
 		"lint:check": "biome check .",
 		"lint:write": "biome check --write .",
 		"lint:write:unsafe": "biome check --write --unsafe .",
-		"lint:ci": "biome ci .",
-		"prepare": "lefthook install",
-		"test": "vitest run",
-		"test:watch": "vitest watch",
-		"test:coverage": "vitest run --coverage",
-		"e2e": "playwright test",
 		"e2e:ui": "playwright test --ui",
 		"e2e:codegen": "playwright codegen",
-		"e2e:setup": "playwright install",
-		"e2e:setup:ci": "playwright install --with-deps",
-		"bundle:analyze": "vite-bundle-visualizer",
-		"deploy": "wrangler pages deploy",
-		"script": "tsx"
+		"prepare": "lefthook install"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.6.0",

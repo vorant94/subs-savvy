@@ -17,7 +17,7 @@ runs:
     - name: Define Playwright Version
       id: define-playwright-version
       run: |
-        PLAYWRIGHT_VERSION=$(npm run script scripts/get-package-version.ts --silent -- --package @playwright/test)
+        PLAYWRIGHT_VERSION=$(npx tsx scripts/get-package-version.ts --package @playwright/test)
         echo "playwright-version=$PLAYWRIGHT_VERSION" >> $GITHUB_OUTPUT
       shell: bash
 
@@ -28,13 +28,18 @@ runs:
         path: ~/.cache/ms-playwright
         key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-playwright-${{ steps.define-playwright-version.outputs.playwright-version }}-${{hashFiles('playwright.config.js')}}
 
-    - name: Install Playwright Browsers
-      if: steps.cache-playwright.outputs.cache-hit != 'true'
-      run: npm run e2e:setup:ci
+    - name: Install Playwright with it's dependencies
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      run: npx playwright install --with-deps
+      shell: bash
+
+    - name: Install Playwright's dependencies
+      if: steps.playwright-cache.outputs.cache-hit == 'true'
+      run: npx playwright install-deps
       shell: bash
 
     - name: Run E2E
-      run: npm run e2e -- --shard=${{ inputs.shard }}/${{ inputs.total_shards }}
+      run: npx playwright test --shard=${{ inputs.shard }}/${{ inputs.total_shards }}
       env:
         NODE_ENV: ${{ inputs.env }}
       shell: bash

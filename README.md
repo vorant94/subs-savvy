@@ -25,7 +25,7 @@ install dependencies
 
 ```bash
 npm i
-npm run e2e:setup
+npx playwright install
 ```
 
 ## Push Changes
