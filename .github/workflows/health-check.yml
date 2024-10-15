@@ -7,9 +7,12 @@ on:
 
 jobs:
   health-check:
-    name: Health Check
+    name: Health Check (${{ matrix.shard }}/${{ strategy.job-total }})
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -21,3 +24,5 @@ jobs:
         uses: ./.github/actions/e2e
         with:
           env: 'production'
+          shard: ${{ matrix.shard }}
+          total_shards: ${{ strategy.job-total }}
