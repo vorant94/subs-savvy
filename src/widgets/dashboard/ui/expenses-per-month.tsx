@@ -206,7 +206,7 @@ const LegendContent = memo(
 		const percentageFormatter = usePercentageFormatter();
 
 		return (
-			<ul className={cn("mt-2 flex items-center gap-6")}>
+			<ul className={cn("mt-2 flex items-center gap-6 overflow-auto")}>
 				{aggregatedSubscriptions.map((c) => (
 					<li
 						key={c.category.id}
@@ -218,7 +218,10 @@ const LegendContent = memo(
 							className={cn("mr-2")}
 							size="0.5em"
 						/>
-						<Text size="xs">
+						<Text
+							size="xs"
+							className={cn("whitespace-nowrap")}
+						>
 							{c.category.id === -1
 								? t(noCategoryPlaceholder.name)
 								: c.category.name}
