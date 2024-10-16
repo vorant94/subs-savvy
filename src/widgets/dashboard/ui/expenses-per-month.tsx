@@ -28,6 +28,7 @@ import type { CategoryModel } from "../../../shared/api/category.model.ts";
 import { startOfMonth } from "../../../shared/lib/dates.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
+import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
 
 export const ExpensesPerMonth = memo(() => {
 	const [monthDate, setMonthDate] = useState(startOfMonth);
@@ -90,8 +91,10 @@ export const ExpensesPerMonth = memo(() => {
 
 	const currencyFormatter = useCurrencyFormatter();
 
+	const isMd = useBreakpoint("md");
+
 	return (
-		<Card className={cn("flex shrink-0 flex-col gap-6")}>
+		<Card className={cn("flex shrink-0 flex-col gap-4 md:gap-8")}>
 			<div className={cn("flex items-center")}>
 				<Text
 					className={cn("font-medium")}
@@ -124,8 +127,12 @@ export const ExpensesPerMonth = memo(() => {
 				</ActionIcon>
 			</div>
 
-			<div className={cn("flex items-center gap-8")}>
-				<div className={cn("flex flex-col gap-4")}>
+			<div
+				className={cn(
+					"flex flex-col gap-4 md:flex-row md:items-center md:gap-8",
+				)}
+			>
+				<div className={cn("flex flex-col gap-2 md:gap-4")}>
 					<Title order={2}>{currencyFormatter.format(totalExpenses)}</Title>
 					<Text
 						size="xs"
@@ -137,7 +144,7 @@ export const ExpensesPerMonth = memo(() => {
 					</Text>
 				</div>
 
-				<Divider orientation="vertical" />
+				<Divider orientation={isMd ? "vertical" : "horizontal"} />
 
 				<ResponsiveContainer
 					width={"100%"}

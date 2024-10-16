@@ -25,7 +25,7 @@ export const BreakpointsProvider = memo(({ children }: PropsWithChildren) => {
 	}, [isSmFromMediaQuery, isSm]);
 
 	const [isMd, setIsMd] = useState(false);
-	const isMdFromMediaQuery = useMediaQuery(breakpointToMediaQuery.sm);
+	const isMdFromMediaQuery = useMediaQuery(breakpointToMediaQuery.md);
 	useEffect(() => {
 		if (
 			typeof isMdFromMediaQuery !== "undefined" &&
@@ -36,7 +36,7 @@ export const BreakpointsProvider = memo(({ children }: PropsWithChildren) => {
 	}, [isMdFromMediaQuery, isMd]);
 
 	const [isLg, setIsLg] = useState(false);
-	const isLgFromMediaQuery = useMediaQuery(breakpointToMediaQuery.sm);
+	const isLgFromMediaQuery = useMediaQuery(breakpointToMediaQuery.lg);
 	useEffect(() => {
 		if (
 			typeof isLgFromMediaQuery !== "undefined" &&
@@ -47,7 +47,7 @@ export const BreakpointsProvider = memo(({ children }: PropsWithChildren) => {
 	}, [isLgFromMediaQuery, isLg]);
 
 	const [isXl, setIsXl] = useState(false);
-	const isXlFromMediaQuery = useMediaQuery(breakpointToMediaQuery.sm);
+	const isXlFromMediaQuery = useMediaQuery(breakpointToMediaQuery.xl);
 	useEffect(() => {
 		if (
 			typeof isXlFromMediaQuery !== "undefined" &&
@@ -58,7 +58,7 @@ export const BreakpointsProvider = memo(({ children }: PropsWithChildren) => {
 	}, [isXlFromMediaQuery, isXl]);
 
 	const [is2xl, setIs2xl] = useState(false);
-	const is2xlFromMediaQuery = useMediaQuery(breakpointToMediaQuery.sm);
+	const is2xlFromMediaQuery = useMediaQuery(breakpointToMediaQuery["2xl"]);
 	useEffect(() => {
 		if (
 			typeof is2xlFromMediaQuery !== "undefined" &&

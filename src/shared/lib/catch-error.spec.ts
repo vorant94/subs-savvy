@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { catchError, catchErrorAsync } from "./catch-error.ts";
 
 describe("catchError", () => {
@@ -23,7 +23,10 @@ describe("catchError", () => {
 			throw error;
 		};
 
+		const consoleSpy = vi.spyOn(console, "error");
+
 		expect(catchError(callback, [CustomError])).toEqual([error]);
+		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
 	});
 
 	it("should return error if no known errors were passed", () => {
@@ -32,7 +35,10 @@ describe("catchError", () => {
 			throw error;
 		};
 
+		const consoleSpy = vi.spyOn(console, "error");
+
 		expect(catchError(callback)).toEqual([error]);
+		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
 	});
 });
 
@@ -56,14 +62,20 @@ describe("catchErrorAsync", () => {
 		const error = new CustomError();
 		const promise = Promise.reject(error);
 
+		const consoleSpy = vi.spyOn(console, "error");
+
 		expect(await catchErrorAsync(promise, [CustomError])).toEqual([error]);
+		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
 	});
 
 	it("should return error if no known errors were passed", async () => {
 		const error = new CustomError();
 		const promise = Promise.reject(error);
 
+		const consoleSpy = vi.spyOn(console, "error");
+
 		expect(await catchErrorAsync(promise)).toEqual([error]);
+		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
 	});
 });
 

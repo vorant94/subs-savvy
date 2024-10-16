@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { type NavLink, useNavLinks } from "../lib/use-nav-links.tsx";
 import { cn } from "./cn.ts";
+import { Logo } from "./logo.tsx";
 import { useBreakpoint } from "./use-breakpoint.tsx";
 import type { Disclosure } from "./use-disclosure.ts";
 
@@ -107,7 +108,7 @@ export const DefaultLayoutHeader = memo(
 
 		return (
 			<>
-				<h1 className={cn("w-[192px]")}>Subs Savvy</h1>
+				<Logo />
 				{children ? <div>{children}</div> : null}
 				<div className={cn("flex-1")} />
 				{actions ? (

@@ -15,19 +15,26 @@ import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscr
 import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
+import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
 
 export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 	({ className }) => {
 		const subscriptions = useSubscriptions();
 
-		const subscriptionsWithNextPaymentAt = useMemo(
+		const sortedSubsWithNextPaymentAt = useMemo(
 			() =>
-				filterSubscriptionsWithNextPaymentAt(subscriptions)
-					.toSorted((a, b) =>
-						dayjs(a.nextPaymentAt).diff(b.nextPaymentAt, "days"),
-					)
-					.slice(0, 4),
+				filterSubscriptionsWithNextPaymentAt(subscriptions).toSorted((a, b) =>
+					dayjs(a.nextPaymentAt).diff(b.nextPaymentAt, "days"),
+				),
 			[subscriptions],
+		);
+
+		const isLg = useBreakpoint("lg");
+		const isXl = useBreakpoint("xl");
+
+		const subsToShow = useMemo(
+			() => sortedSubsWithNextPaymentAt.slice(0, isXl ? 4 : isLg ? 3 : 2),
+			[sortedSubsWithNextPaymentAt, isXl, isLg],
 		);
 
 		const { open } = useUpsertSubscriptionActions();
@@ -50,7 +57,7 @@ export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 				</Text>
 
 				<SubscriptionGrid
-					subscriptions={subscriptionsWithNextPaymentAt}
+					subscriptions={subsToShow}
 					noSubscriptionsPlaceholder={"No Upcoming Subscriptions"}
 				>
 					{({ subscription }) => (

@@ -34,9 +34,7 @@ export const DashboardPage = memo(() => {
 
 				<UpcomingPayments />
 
-				<div className={cn("flex gap-8")}>
-					<ExpensesByCategory />
-				</div>
+				<ExpensesByCategory />
 			</div>
 		</DefaultLayout>
 	);

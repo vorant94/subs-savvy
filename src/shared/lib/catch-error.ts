@@ -8,10 +8,12 @@ export function catchError<T, E extends Constructor<Error>>(
 		return [undefined, callback()];
 	} catch (e) {
 		if (!errorsTypesToCatch) {
+			console.error(e);
 			return [e as InstanceType<E>];
 		}
 
 		if (errorsTypesToCatch.some((errorType) => e instanceof errorType)) {
+			console.error(e);
 			return [e as InstanceType<E>];
 		}
 
@@ -27,10 +29,12 @@ export async function catchErrorAsync<T, E extends Constructor<Error>>(
 		return [undefined, await promise];
 	} catch (e) {
 		if (!errorsTypesToCatch) {
+			console.error(e);
 			return [e as InstanceType<E>];
 		}
 
 		if (errorsTypesToCatch.some((errorType) => e instanceof errorType)) {
+			console.error(e);
 			return [e as InstanceType<E>];
 		}
 

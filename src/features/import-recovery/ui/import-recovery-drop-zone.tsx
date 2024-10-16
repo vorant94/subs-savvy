@@ -48,7 +48,6 @@ export const ImportRecoveryDropZone = memo(
 						recoverySchema.parse(JSON.parse(result)),
 					);
 					if (error) {
-						console.error(error);
 						notifications.show({
 							color: notificationColor.error,
 							title: "Recovery is malformed",
@@ -77,7 +76,7 @@ export const ImportRecoveryDropZone = memo(
 				<input {...getInputProps()} />
 				<div
 					className={cn(
-						"grid grid-flow-row auto-rows-auto gap-x-4 lg:auto-cols-auto lg:grid-flow-col",
+						"grid grid-flow-row auto-rows-auto gap-x-4 p-2 lg:auto-cols-auto lg:grid-flow-col",
 					)}
 				>
 					<Icon
@@ -85,7 +84,12 @@ export const ImportRecoveryDropZone = memo(
 						className={cn("justify-self-center text-gray-400 lg:row-span-2")}
 						size="4em"
 					/>
-					<Text size="xl">Drag file here or click to select it</Text>
+					<Text
+						size="xl"
+						className={cn("text-balance")}
+					>
+						Drag file here or click to select it
+					</Text>
 					<Text
 						size="sm"
 						c="dimmed"

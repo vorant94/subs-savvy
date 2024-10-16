@@ -22,6 +22,7 @@ import { useCurrencyFormatter } from "../../../features/i18n/model/use-currency-
 import { startOfYear } from "../../../shared/lib/dates.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
+import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
 
 export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 	({ className }) => {
@@ -44,8 +45,10 @@ export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 
 		const currencyFormatter = useCurrencyFormatter();
 
+		const isMd = useBreakpoint("md");
+
 		return (
-			<div className={cn("flex flex-col gap-4", className)}>
+			<div className={cn("flex flex-col gap-4 md:items-start", className)}>
 				<Text
 					className={cn("font-medium")}
 					size="sm"
@@ -55,7 +58,7 @@ export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 				</Text>
 
 				<Card>
-					<div className={cn("flex h-[177px] flex-row items-center gap-8")}>
+					<div className={cn("flex flex-col items-center gap-8 md:flex-row")}>
 						<PieChart
 							width={180}
 							height={180}
@@ -87,7 +90,10 @@ export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 							</Pie>
 						</PieChart>
 
-						<Divider orientation="vertical" />
+						<Divider
+							className={cn("self-stretch")}
+							orientation={isMd ? "vertical" : "horizontal"}
+						/>
 
 						<ul
 							className={cn("flex max-h-full flex-col gap-4 overflow-y-auto")}
