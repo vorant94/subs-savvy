@@ -1,21 +1,18 @@
 import { Text } from "@mantine/core";
 import { type FC, type HTMLAttributes, memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
 import { SubscriptionGridItem } from "../../../features/list-subscriptions/ui/subscription-grid-item.tsx";
 import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
-import { useUpcomingPayments } from "../../../features/upcoming-payments/model/use-upcoming-payments.ts";
 import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
+import { useUpcomingPayments } from "../model/use-upcoming-payments.ts";
 
 export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 	({ className }) => {
 		const { t } = useTranslation();
 
-		const subscriptions = useSubscriptions();
-
-		const upcomingPayments = useUpcomingPayments(subscriptions);
+		const upcomingPayments = useUpcomingPayments();
 
 		const { open } = useUpsertSubscriptionActions();
 

@@ -1,16 +1,21 @@
 import { Button, Modal } from "@mantine/core";
 import { memo, useCallback, useEffect, useState } from "react";
-import { cn } from "../../../shared/ui/cn.ts";
+import { useCategories } from "../../../entities/category/model/categories.store.tsx";
+import { CategoryList } from "../../../features/list-categories/ui/category-list.tsx";
 import {
 	useUpsertCategoryActions,
 	useUpsertCategoryMode,
-} from "../model/upsert-category.store.tsx";
-import { CategoryForm } from "./category-form.tsx";
-import { CategoryList } from "./category-list.tsx";
+} from "../../../features/upsert-category/model/upsert-category.store.tsx";
+import { CategoryForm } from "../../../features/upsert-category/ui/category-form.tsx";
+import type { CategoryModel } from "../../../shared/api/category.model.ts";
+import { deleteCategory } from "../../../shared/api/category.table.ts";
+import { cn } from "../../../shared/ui/cn.ts";
 
 export const ManageCategoriesModal = memo(
 	({ isOpen, close }: ManageCategoriesModalProps) => {
 		const [mode, setMode] = useState<"view" | "upsert">("view");
+
+		const categories = useCategories();
 
 		const upsertMode = useUpsertCategoryMode();
 		const upsertActions = useUpsertCategoryActions();
@@ -49,6 +54,17 @@ export const ManageCategoriesModal = memo(
 			}
 		}, [isOpen, mode, upsertActions.close, upsertMode]);
 
+		const { open } = useUpsertCategoryActions();
+		const openCategoryUpdate = useCallback(
+			(category: CategoryModel) => open(category),
+			[open],
+		);
+
+		const handleDeleteCategory = useCallback(
+			(category: CategoryModel) => deleteCategory(category.id),
+			[],
+		);
+
 		return (
 			<Modal
 				opened={isOpen}
@@ -57,7 +73,11 @@ export const ManageCategoriesModal = memo(
 			>
 				<div className={cn("flex flex-col gap-2")}>
 					{mode === "view" ? (
-						<CategoryList />
+						<CategoryList
+							categories={categories}
+							onEditClick={openCategoryUpdate}
+							onDeleteClick={handleDeleteCategory}
+						/>
 					) : (
 						<CategoryForm ref={updateFormId} />
 					)}

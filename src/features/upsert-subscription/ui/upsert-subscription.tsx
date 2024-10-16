@@ -12,10 +12,6 @@ import { DatePickerInput } from "@mantine/dates";
 import { memo, useMemo } from "react";
 import { Controller, type DefaultValues, useForm } from "react-hook-form";
 import { useCategories } from "../../../entities/category/model/categories.store.tsx";
-import {
-	useUpsertSubscription,
-	useUpsertSubscriptionActions,
-} from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import { subscriptionCyclePeriodsComboboxData } from "../../../shared/api/subscription-cycle-period.model.ts";
 import { subscriptionIconsComboboxData } from "../../../shared/api/subscription-icon.model.ts";
 import {
@@ -25,6 +21,10 @@ import {
 } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { createDatePickerInputAriaLabels } from "../../../shared/ui/create-date-picker-input-aria-labels.ts";
+import {
+	useUpsertSubscription,
+	useUpsertSubscriptionActions,
+} from "../model/upsert-subscription.store.tsx";
 
 export const UpsertSubscription = memo(() => {
 	const state = useUpsertSubscription();

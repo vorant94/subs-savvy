@@ -1,9 +1,5 @@
 import { ActionIcon, Card, Divider, Text, Title } from "@mantine/core";
-import {
-	IconChevronLeft,
-	IconChevronRight,
-	IconCircleFilled,
-} from "@tabler/icons-react";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,12 +19,12 @@ import {
 import { calculateSubscriptionPriceForMonth } from "../../../entities/subscription/lib/calculate-subscription-price-for-month.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
 import { useCurrencyFormatter } from "../../../features/i18n/model/use-currency-formatter.ts";
-import { usePercentageFormatter } from "../../../features/i18n/model/use-percentage-formatter.ts";
 import type { CategoryModel } from "../../../shared/api/category.model.ts";
 import { startOfMonth } from "../../../shared/lib/dates.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
 import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
+import { ExpensesPerMonthLegendContent } from "./expenses-per-month-legend-content.tsx";
 
 export const ExpensesPerMonth = memo(() => {
 	const [monthDate, setMonthDate] = useState(startOfMonth);
@@ -181,7 +177,7 @@ export const ExpensesPerMonth = memo(() => {
 							iconType="circle"
 							align="left"
 							content={
-								<LegendContent
+								<ExpensesPerMonthLegendContent
 									aggregatedSubscriptions={aggregatedByCategory}
 									totalExpenses={totalExpenses}
 								/>
@@ -198,56 +194,3 @@ type SubscriptionsAggregatedByCategoryPerMonth = Record<
 	CategoryModel["id"],
 	SubscriptionsAggregatedByCategory
 >;
-
-const LegendContent = memo(
-	({ aggregatedSubscriptions, totalExpenses }: LegendContentPros) => {
-		const { t } = useTranslation();
-
-		const percentageFormatter = usePercentageFormatter();
-
-		return (
-			<ul className={cn("mt-2 flex items-center gap-6 overflow-auto")}>
-				{aggregatedSubscriptions.map((c) => (
-					<li
-						key={c.category.id}
-						className={cn("flex items-center")}
-					>
-						<Icon
-							icon={IconCircleFilled}
-							color={c.category.color}
-							className={cn("mr-2")}
-							size="0.5em"
-						/>
-						<Text
-							size="xs"
-							className={cn("whitespace-nowrap")}
-						>
-							{c.category.id === -1
-								? t(noCategoryPlaceholder.name)
-								: c.category.name}
-						</Text>
-						&nbsp;
-						<Text
-							c="dimmed"
-							size="xs"
-						>
-							•
-						</Text>
-						&nbsp;
-						<Text
-							size="xs"
-							c="dimmed"
-						>
-							{percentageFormatter.format(c.totalExpenses / totalExpenses)}
-						</Text>
-					</li>
-				))}
-			</ul>
-		);
-	},
-);
-
-interface LegendContentPros {
-	aggregatedSubscriptions: Array<SubscriptionsAggregatedByCategory>;
-	totalExpenses: number;
-}

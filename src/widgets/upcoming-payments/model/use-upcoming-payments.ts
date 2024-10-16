@@ -4,12 +4,14 @@ import {
 	type SubscriptionWithNextPaymentAt,
 	getSubscriptionNextPaymentAt,
 } from "../../../entities/subscription/lib/get-subscription-next-payment-at.ts";
-import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
+import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
 import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
 
-export function useUpcomingPayments(
-	subscriptions: ReadonlyArray<SubscriptionModel>,
-): Array<SubscriptionWithNextPaymentAt> {
+// TODO do so if subA has two payment dates before subB, so the upcoming payments
+// 	will look like "subA, subA, subB"
+export function useUpcomingPayments(): Array<SubscriptionWithNextPaymentAt> {
+	const subscriptions = useSubscriptions();
+
 	const isLg = useBreakpoint("lg");
 	const isXl = useBreakpoint("xl");
 

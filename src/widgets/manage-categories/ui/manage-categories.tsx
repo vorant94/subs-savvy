@@ -1,11 +1,11 @@
 import { ActionIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
-import { type FC, memo } from "react";
-import { ManageCategoriesModal } from "../../../features/upsert-category/ui/manage-categories-modal.tsx";
+import { memo } from "react";
 import { Icon } from "../../../shared/ui/icon.tsx";
+import { ManageCategoriesModal } from "./manage-categories-modal.tsx";
 
-export const ManageCategories: FC = memo(() => {
+export const ManageCategories = memo(() => {
 	const [isManageCategoriesOpen, manageCategories] = useDisclosure(false);
 
 	return (

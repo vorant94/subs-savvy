@@ -18,8 +18,7 @@ import {
 } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Cell, Label, type LabelProps, Pie, PieChart } from "recharts";
-import type { PolarViewBox } from "recharts/types/util/types";
+import { Cell, Label, Pie, PieChart } from "recharts";
 import { z } from "zod";
 import {
 	type SubscriptionsAggregatedByCategory,
@@ -34,6 +33,7 @@ import { startOfMonth } from "../../../shared/lib/dates.ts";
 import { cn } from "../../../shared/ui/cn.ts";
 import { Icon } from "../../../shared/ui/icon.tsx";
 import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
+import { ExpensesByCategoryLabelContent } from "./expenses-by-category-label-content.tsx";
 
 export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 	({ className }) => {
@@ -154,7 +154,7 @@ export const ExpensesByCategory: FC<ExpensesByCategoryProps> = memo(
 								))}
 								<Label
 									content={(props) => (
-										<LabelContent
+										<ExpensesByCategoryLabelContent
 											aggregatedSubscriptions={subsToShow}
 											activeIndex={activeIndex}
 											{...props}
@@ -222,61 +222,3 @@ type FormValue = z.infer<typeof formValueSchema>;
 const defaultValues: FormValue = {
 	period: "year",
 };
-
-// TODO rewrite with foreignObject
-const LabelContent = ({
-	viewBox,
-	aggregatedSubscriptions,
-	activeIndex,
-}: LabelContentPros) => {
-	const { cx, cy } = viewBox as PolarViewBox;
-
-	const totalExpenses = useMemo(
-		() =>
-			aggregatedSubscriptions.reduce(
-				(prev, { totalExpenses }) => prev + totalExpenses,
-				0,
-			),
-		[aggregatedSubscriptions],
-	);
-
-	const { t } = useTranslation();
-
-	const currencyFormatter = useCurrencyFormatter();
-
-	return (
-		<>
-			<text
-				x={cx}
-				y={(cy ?? 0) - 10}
-				textAnchor="middle"
-				dominantBaseline="central"
-			>
-				<tspan alignmentBaseline="middle">
-					{aggregatedSubscriptions[activeIndex]?.category.id === -1
-						? t(noCategoryPlaceholder.name)
-						: (aggregatedSubscriptions[activeIndex]?.category.name ??
-							t("total"))}
-				</tspan>
-			</text>
-			<text
-				x={cx}
-				y={(cy ?? 0) + 10}
-				textAnchor="middle"
-				dominantBaseline="central"
-			>
-				<tspan>
-					{currencyFormatter.format(
-						aggregatedSubscriptions[activeIndex]?.totalExpenses ??
-							totalExpenses,
-					)}
-				</tspan>
-			</text>
-		</>
-	);
-};
-
-interface LabelContentPros extends LabelProps {
-	activeIndex: number;
-	aggregatedSubscriptions: Array<SubscriptionsAggregatedByCategory>;
-}
