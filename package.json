@@ -6,6 +6,7 @@
 	"scripts": {
 		"start:dev": "vite",
 		"build": "vite build",
+		"tsc": "tsc",
 		"lint:check": "biome check .",
 		"lint:write": "biome check --write .",
 		"lint:write:unsafe": "biome check --write --unsafe .",

@@ -40,3 +40,7 @@ export function getSubscriptionNextPaymentAt(
 
 	return nextPaymentAtDayJs.toDate();
 }
+
+export interface SubscriptionWithNextPaymentAt extends SubscriptionModel {
+	nextPaymentAt: Date;
+}

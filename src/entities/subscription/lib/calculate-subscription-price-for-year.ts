@@ -14,7 +14,7 @@ export function calculateSubscriptionPriceForYear(
 
 	switch (subscription.cycle.period) {
 		case "yearly": {
-			if (isSubscriptionExpired(subscription, now, "year")) {
+			if (isSubscriptionExpired(subscription, now)) {
 				return 0;
 			}
 
@@ -57,7 +57,7 @@ export function calculateSubscriptionPriceForYear(
 				);
 			}
 
-			if (isSubscriptionExpired(subscription, now, "year")) {
+			if (isSubscriptionExpired(subscription, now)) {
 				return 0;
 			}
 

@@ -25,7 +25,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 3).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth < month && startedAtYear = year", () => {
@@ -39,7 +39,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 3).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth = month && startedAtYear = year", () => {
@@ -53,7 +53,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("month < startedAtMonth && startedAtYear = year", () => {
@@ -67,7 +67,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 1).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("month < startedAtMonth && year < startedAtYear", () => {
@@ -84,7 +84,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 1).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < endedAtMonth < month && startedAtYear < endedAtYear < year", () => {
@@ -105,7 +105,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 9).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < endedAtMonth < month && startedAtYear < year = endedAtYear", () => {
@@ -123,7 +123,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 9).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < month = endedAtMonth && startedAtYear < year = endedAtYear", () => {
@@ -141,7 +141,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 9).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < month < endedAtMonth && startedAtYear < year = endedAtYear", () => {
@@ -159,7 +159,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 6).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth < month < endedAtMonth && startedAtYear < year < endedAtYear", () => {
@@ -180,7 +180,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 6).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth < endedAtMonth < month && startedAtYear < year < endedAtYear", () => {
@@ -201,7 +201,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 9).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("each = 2 && startedAtMonth % month = 0 && startedAtYear < year", () => {
@@ -218,7 +218,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 4).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("each = 2 && startedAtMonth % month = 1 && startedAtYear < year", () => {
@@ -235,7 +235,7 @@ describe("monthly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 3).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 });
 
@@ -254,7 +254,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 3).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < month && startedAtYear = year", () => {
@@ -268,7 +268,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 3).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth = month && startedAtYear = year", () => {
@@ -282,7 +282,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth = month && startedAtYear < year", () => {
@@ -299,7 +299,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("month < startedAtMonth && startedAtYear = year", () => {
@@ -313,7 +313,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("month < startedAtMonth && year < startedAtYear", () => {
@@ -330,7 +330,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < endedAtMonth < month && startedAtYear < endedAtYear < year", () => {
@@ -351,7 +351,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 6).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < endedAtMonth < month && startedAtYear < year = endedAtYear", () => {
@@ -369,7 +369,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 6).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < month = endedAtMonth && startedAtYear < year = endedAtYear", () => {
@@ -387,7 +387,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 4).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth < month = endedAtMonth && startedAtYear = year < endedAtYear", () => {
@@ -405,7 +405,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 4).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("startedAtMonth = month < endedAtMonth && startedAtYear < year < endedAtYear", () => {
@@ -426,7 +426,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 
 	it("startedAtMonth = month < endedAtMonth && year < startedAtYear < endedAtYear", () => {
@@ -447,7 +447,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("month < startedAtMonth < endedAtMonth && year < startedAtYear < endedAtYear", () => {
@@ -468,7 +468,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 1).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("each = 2 && startedAtMonth = month && startedAtYear % year = 1", () => {
@@ -485,7 +485,7 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(0);
 	});
 
 	it("each = 2 && startedAtMonth = month && startedAtYear % year = 0", () => {
@@ -502,6 +502,6 @@ describe("yearly", () => {
 				subscription,
 				dayjs(startOfYear).set("month", 2).toDate(),
 			),
-		).toMatchSnapshot();
+		).toEqual(subscription.price);
 	});
 });

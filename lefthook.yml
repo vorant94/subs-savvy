@@ -3,7 +3,7 @@ pre-push:
     - run: npx tsx scripts/is-non-docs-change.ts
   commands:
     ts:
-      run: npx tsc
+      run: npm run tsc
     test:
       run: npx vitest run
 pre-commit:

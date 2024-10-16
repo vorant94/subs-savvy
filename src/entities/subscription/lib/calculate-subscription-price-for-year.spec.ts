@@ -22,11 +22,8 @@ describe("calculateSubscriptionPriceForYear", () => {
 			} satisfies SubscriptionModel;
 
 			expect(
-				calculateSubscriptionPriceForYear(
-					subscription,
-					dayjs(startOfYear).set("month", 3).toDate(),
-				),
-			).toMatchSnapshot();
+				calculateSubscriptionPriceForYear(subscription, startOfYear),
+			).toEqual(subscription.price * 12);
 		});
 
 		it("startedAtYear = year", () => {
@@ -39,7 +36,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 10);
 		});
 
 		it("year < startedAtYear", () => {
@@ -50,7 +47,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("startedAtYear < endedAtYear < year", () => {
@@ -66,7 +63,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("startedAtYear < year = endedAtYear", () => {
@@ -81,7 +78,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 6);
 		});
 
 		it("startedAtYear < year < endedAtYear", () => {
@@ -95,7 +92,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 12);
 		});
 
 		it("startedAtYear = year = endedAtYear", () => {
@@ -109,7 +106,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 2);
 		});
 
 		it("each = 2 && startedAtYear < year", () => {
@@ -122,7 +119,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 6);
 		});
 
 		it("each = 2 && startedAtYear = year", () => {
@@ -135,7 +132,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 5);
 		});
 
 		it("each = 2 && year = endedAtYear", () => {
@@ -150,7 +147,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price * 3);
 		});
 	});
 
@@ -165,7 +162,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price);
 		});
 
 		it("startedAtYear = year", () => {
@@ -175,7 +172,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price);
 		});
 
 		it("year < startedAtYear", () => {
@@ -186,7 +183,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("startedAtYear < endedAtYear < year", () => {
@@ -202,7 +199,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("startedAtYear < year = endedAtYear", () => {
@@ -216,7 +213,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("startedAtYear < year < endedAtYear", () => {
@@ -230,7 +227,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price);
 		});
 
 		it("startedAtYear = year < endedAtYear", () => {
@@ -242,7 +239,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price);
 		});
 
 		it("year < startedAtYear < endedAtYear", () => {
@@ -254,7 +251,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("each = 2 && && startedAtYear % year = 1", () => {
@@ -267,7 +264,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(0);
 		});
 
 		it("each = 2 && startedAtYear % year = 0", () => {
@@ -280,7 +277,7 @@ describe("calculateSubscriptionPriceForYear", () => {
 
 			expect(
 				calculateSubscriptionPriceForYear(subscription, startOfYear),
-			).toMatchSnapshot();
+			).toEqual(subscription.price);
 		});
 	});
 });

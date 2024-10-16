@@ -15,7 +15,7 @@ export function calculateSubscriptionPriceForMonth(
 		return 0;
 	}
 
-	if (isSubscriptionExpired(subscription, now, manipulateUnit)) {
+	if (isSubscriptionExpired(subscription, now)) {
 		return 0;
 	}
 

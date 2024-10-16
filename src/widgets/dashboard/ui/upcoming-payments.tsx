@@ -1,41 +1,21 @@
 import { Text } from "@mantine/core";
-import dayjs from "dayjs";
-import {
-	type FC,
-	type HTMLAttributes,
-	memo,
-	useCallback,
-	useMemo,
-} from "react";
+import { type FC, type HTMLAttributes, memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { getSubscriptionNextPaymentAt } from "../../../entities/subscription/lib/get-subscription-next-payment-at.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
 import { SubscriptionGridItem } from "../../../features/list-subscriptions/ui/subscription-grid-item.tsx";
 import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
+import { useUpcomingPayments } from "../../../features/upcoming-payments/model/use-upcoming-payments.ts";
 import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
-import { useBreakpoint } from "../../../shared/ui/use-breakpoint.tsx";
 
 export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 	({ className }) => {
+		const { t } = useTranslation();
+
 		const subscriptions = useSubscriptions();
 
-		const sortedSubsWithNextPaymentAt = useMemo(
-			() =>
-				filterSubscriptionsWithNextPaymentAt(subscriptions).toSorted((a, b) =>
-					dayjs(a.nextPaymentAt).diff(b.nextPaymentAt, "days"),
-				),
-			[subscriptions],
-		);
-
-		const isLg = useBreakpoint("lg");
-		const isXl = useBreakpoint("xl");
-
-		const subsToShow = useMemo(
-			() => sortedSubsWithNextPaymentAt.slice(0, isXl ? 4 : isLg ? 3 : 2),
-			[sortedSubsWithNextPaymentAt, isXl, isLg],
-		);
+		const upcomingPayments = useUpcomingPayments(subscriptions);
 
 		const { open } = useUpsertSubscriptionActions();
 
@@ -43,8 +23,6 @@ export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 			(subscription: SubscriptionModel) => open(subscription),
 			[open],
 		);
-
-		const { t } = useTranslation();
 
 		return (
 			<div className={cn("flex flex-col gap-4", className)}>
@@ -57,7 +35,7 @@ export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 				</Text>
 
 				<SubscriptionGrid
-					subscriptions={subsToShow}
+					subscriptions={upcomingPayments}
 					noSubscriptionsPlaceholder={"No Upcoming Subscriptions"}
 				>
 					{({ subscription }) => (
@@ -76,24 +54,3 @@ export const UpcomingPayments: FC<UpcomingPaymentsProps> = memo(
 
 export interface UpcomingPaymentsProps
 	extends Pick<HTMLAttributes<HTMLDivElement>, "className"> {}
-
-interface SubscriptionWithNextPaymentAt extends SubscriptionModel {
-	nextPaymentAt: Date;
-}
-
-function filterSubscriptionsWithNextPaymentAt(
-	subscriptions: ReadonlyArray<SubscriptionModel>,
-): ReadonlyArray<SubscriptionWithNextPaymentAt> {
-	return subscriptions
-		.map((subscription) => ({
-			...subscription,
-			nextPaymentAt: getSubscriptionNextPaymentAt(subscription),
-		}))
-		.filter(
-			(subscription): subscription is SubscriptionWithNextPaymentAt =>
-				!!subscription.nextPaymentAt,
-		)
-		.toSorted((a, b) =>
-			dayjs(a.nextPaymentAt).isBefore(b.nextPaymentAt) ? -1 : 1,
-		);
-}

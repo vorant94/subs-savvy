@@ -9,6 +9,7 @@
 	"expenses-by-category": "Expenses by Category",
 	"expenses-in": "Expenses in",
 	"icon": "Icon",
+	"n-months": "{{n}} months",
 	"name": "Name",
 	"next-month": "Next month",
 	"no-category": "No Category",
@@ -25,5 +26,6 @@
 	"subscriptions": "Subscriptions",
 	"total": "Total",
 	"upcoming-payments": "Upcoming Payments",
-	"upload-recovery": "Upload Recovery"
+	"upload-recovery": "Upload Recovery",
+	"year": "Year"
 }
