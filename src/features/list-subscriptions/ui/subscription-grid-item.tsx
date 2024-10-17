@@ -66,6 +66,7 @@ export const SubscriptionGridItem = memo(
 
 							{subscription.category && (
 								<Icon
+									className={cn("flex-shrink-0")}
 									icon={IconCircleFilled}
 									color={subscription.category.color}
 								/>

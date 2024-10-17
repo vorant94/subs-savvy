@@ -1,18 +1,18 @@
 import { Button, Stepper } from "@mantine/core";
 import { memo, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { cn } from "../../../shared/ui/cn.ts";
 import {
 	type ImportRecoveryStateStage,
 	useImportRecovery,
 	useImportRecoveryActions,
-} from "../../../features/import-recovery/model/import-recovery.store.tsx";
-import { ImportRecoveryDropZone } from "../../../features/import-recovery/ui/import-recovery-drop-zone.tsx";
-import { InsertCategoriesTable } from "../../../features/import-recovery/ui/insert-categories-table.tsx";
-import { InsertSubscriptionsTable } from "../../../features/import-recovery/ui/insert-subscriptions-table.tsx";
-import { cn } from "../../../shared/ui/cn.ts";
+} from "../model/import-recovery.store.tsx";
+import { ImportRecoveryDropZone } from "./import-recovery-drop-zone.tsx";
+import { InsertCategoriesTable } from "./insert-categories-table.tsx";
+import { InsertSubscriptionsTable } from "./insert-subscriptions-table.tsx";
 
 // TODO improve performance (parsing a lot of sub makes UI lag)
-export const ImportRecoveryPage = memo(() => {
+export const ImportRecovery = memo(() => {
 	const { stage, subscriptions, categories } = useImportRecovery();
 	const {
 		goNextFromUploadRecovery,

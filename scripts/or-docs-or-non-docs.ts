@@ -1,6 +1,6 @@
 import { parseArgs } from "node:util";
 import { z } from "zod";
-import { exec } from "./shared/promisified.js";
+import { exec } from "./utils/promisified.js";
 
 const argsRaw = parseArgs({
 	options: {

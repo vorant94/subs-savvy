@@ -14,9 +14,9 @@ export class SubscriptionsPom {
 	readonly namePrefixControl: InputCom;
 	readonly clearNamePrefixButton: Locator;
 
-	readonly subscriptionUpsert: UpsertSubscriptionCom;
+	readonly upsertSubscription: UpsertSubscriptionCom;
 
-	readonly categorySelect: SelectCategoryCom;
+	readonly selectCategory: SelectCategoryCom;
 
 	readonly subscriptionsNavLink: Locator;
 
@@ -32,9 +32,9 @@ export class SubscriptionsPom {
 		this.namePrefixControl = new InputCom(this.#page.getByLabel("name prefix"));
 		this.clearNamePrefixButton = this.#page.getByLabel("clear name prefix");
 
-		this.subscriptionUpsert = new UpsertSubscriptionCom(this.#page);
+		this.upsertSubscription = new UpsertSubscriptionCom(this.#page);
 
-		this.categorySelect = new SelectCategoryCom(this.#page);
+		this.selectCategory = new SelectCategoryCom(this.#page);
 
 		this.subscriptionsNavLink = this.#page.getByRole("link", {
 			name: "subscriptions",

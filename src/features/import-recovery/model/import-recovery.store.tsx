@@ -8,7 +8,6 @@ import { CategoryNotFound } from "../../../shared/api/category.table.ts";
 import type { RecoveryModel } from "../../../shared/api/recovery.model.ts";
 import { upsertCategoriesAndSubscriptions } from "../../../shared/api/recovery.table.ts";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
-import { recoveryRoute } from "../../../shared/lib/route.ts";
 import { rootRoute } from "../../../shared/lib/route.ts";
 
 export function useImportRecovery(): ImportRecoveryState {
@@ -60,7 +59,7 @@ export const ImportRecoveryProvider = memo(
 			() => () => {
 				if (
 					stage !== "upload-recovery" &&
-					pathname !== `/${rootRoute.recovery}/${recoveryRoute.import}`
+					pathname !== `/${rootRoute.recovery}`
 				) {
 					reset();
 				}

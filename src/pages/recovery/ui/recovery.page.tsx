@@ -1,9 +1,9 @@
 import { Card, Tabs } from "@mantine/core";
 import { IconDownload, IconUpload } from "@tabler/icons-react";
-import { memo, useCallback, useMemo } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { recoveryRoute } from "../../../shared/lib/route.ts";
-import { rootRoute } from "../../../shared/lib/route.ts";
+import { memo } from "react";
+import { useTranslation } from "react-i18next";
+import { ExportRecovery } from "../../../features/export-recovery/ui/export-recovery.tsx";
+import { ImportRecovery } from "../../../features/import-recovery/ui/import-recovery.tsx";
 import { cn } from "../../../shared/ui/cn.ts";
 import {
 	DefaultLayout,
@@ -12,44 +12,44 @@ import {
 import { Icon } from "../../../shared/ui/icon.tsx";
 
 export const RecoveryPage = memo(() => {
-	const { pathname } = useLocation();
-	const activeTab = useMemo(() => {
-		return pathname.split("/").at(-1);
-	}, [pathname]);
-
-	const navigate = useNavigate();
-	const navigateToTab = useCallback(
-		(tab: string | null) => navigate(`/${rootRoute.recovery}/${tab}`),
-		[navigate],
-	);
+	const { t } = useTranslation();
 
 	return (
 		<DefaultLayout header={<DefaultLayoutHeader />}>
 			<Card>
-				<div className={cn("flex flex-col gap-2")}>
-					<Tabs
-						value={activeTab}
-						onChange={navigateToTab}
-					>
-						<Tabs.List>
-							<Tabs.Tab
-								value={recoveryRoute.import}
-								leftSection={<Icon icon={IconUpload} />}
-							>
-								Import
-							</Tabs.Tab>
-							<Tabs.Tab
-								value={recoveryRoute.export}
-								leftSection={<Icon icon={IconDownload} />}
-							>
-								Export
-							</Tabs.Tab>
-						</Tabs.List>
-					</Tabs>
+				<Tabs
+					className={cn("flex flex-col gap-2")}
+					defaultValue={tab.import}
+				>
+					<Tabs.List>
+						<Tabs.Tab
+							value={tab.import}
+							leftSection={<Icon icon={IconUpload} />}
+						>
+							{t("import")}
+						</Tabs.Tab>
+						<Tabs.Tab
+							value={tab.export}
+							leftSection={<Icon icon={IconDownload} />}
+						>
+							{t("export")}
+						</Tabs.Tab>
+					</Tabs.List>
 
-					<Outlet />
-				</div>
+					<Tabs.Panel value={tab.import}>
+						<ImportRecovery />
+					</Tabs.Panel>
+
+					<Tabs.Panel value={tab.export}>
+						<ExportRecovery />
+					</Tabs.Panel>
+				</Tabs>
 			</Card>
 		</DefaultLayout>
 	);
 });
+
+const tab = {
+	import: "import",
+	export: "export",
+} as const;

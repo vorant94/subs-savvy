@@ -4,8 +4,3 @@ export const rootRoute = {
 	recovery: "recovery",
 	devOnly: "dev-only",
 } as const;
-
-export const recoveryRoute = {
-	import: "import",
-	export: "export",
-} as const;

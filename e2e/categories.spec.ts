@@ -13,9 +13,9 @@ test.describe("categories", () => {
 
 		await pom.goto();
 
-		await pom.categorySelect.manageButton.click();
+		await pom.selectCategory.manageButton.click();
 
-		await expect(pom.categorySelect.noCategoriesPlaceholder).toBeVisible();
+		await expect(pom.selectCategory.noCategoriesPlaceholder).toBeVisible();
 	});
 
 	test("should find existing categories", async ({ page }) => {
@@ -25,10 +25,10 @@ test.describe("categories", () => {
 		await pom.goto();
 		await populateDb(page, undefined, categories);
 
-		await pom.categorySelect.manageButton.click();
+		await pom.selectCategory.manageButton.click();
 
 		for (const category of categories) {
-			await expect(pom.categorySelect.category(category)).toBeVisible();
+			await expect(pom.selectCategory.category(category)).toBeVisible();
 		}
 	});
 
@@ -40,12 +40,12 @@ test.describe("categories", () => {
 
 		await pom.goto();
 
-		await pom.categorySelect.manageButton.click();
-		await pom.categorySelect.addButton.click();
-		await pom.categorySelect.form.fill(categoryToCreate);
-		await pom.categorySelect.insertButton.click();
+		await pom.selectCategory.manageButton.click();
+		await pom.selectCategory.addButton.click();
+		await pom.selectCategory.form.fill(categoryToCreate);
+		await pom.selectCategory.insertButton.click();
 
-		await expect(pom.categorySelect.category(categoryToCreate)).toBeVisible();
+		await expect(pom.selectCategory.category(categoryToCreate)).toBeVisible();
 	});
 
 	test("should update category", async ({ page }) => {
@@ -61,15 +61,15 @@ test.describe("categories", () => {
 		await pom.goto();
 		await populateDb(page, undefined, [categoryToUpdate]);
 
-		await pom.categorySelect.manageButton.click();
-		await pom.categorySelect.editButton(categoryToUpdate).click();
-		await pom.categorySelect.form.fill(updatedCategory);
-		await pom.categorySelect.updateButton.click();
+		await pom.selectCategory.manageButton.click();
+		await pom.selectCategory.editButton(categoryToUpdate).click();
+		await pom.selectCategory.form.fill(updatedCategory);
+		await pom.selectCategory.updateButton.click();
 
 		await expect(
-			pom.categorySelect.category(categoryToUpdate),
+			pom.selectCategory.category(categoryToUpdate),
 		).not.toBeVisible();
-		await expect(pom.categorySelect.category(updatedCategory)).toBeVisible();
+		await expect(pom.selectCategory.category(updatedCategory)).toBeVisible();
 	});
 
 	test("should delete category", async ({ page }) => {
@@ -81,11 +81,11 @@ test.describe("categories", () => {
 		await pom.goto();
 		await populateDb(page, undefined, [categoryToDelete]);
 
-		await pom.categorySelect.manageButton.click();
-		await pom.categorySelect.deleteButton(categoryToDelete).click();
+		await pom.selectCategory.manageButton.click();
+		await pom.selectCategory.deleteButton(categoryToDelete).click();
 
 		await expect(
-			pom.categorySelect.category(categoryToDelete),
+			pom.selectCategory.category(categoryToDelete),
 		).not.toBeVisible();
 	});
 });

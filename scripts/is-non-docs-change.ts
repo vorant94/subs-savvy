@@ -1,5 +1,5 @@
 import process from "node:process";
-import { exec } from "./shared/promisified.js";
+import { exec } from "./utils/promisified.js";
 
 const diffRaw = await exec("git diff --name-only HEAD^");
 const diffFiles = diffRaw.stdout.split("\n").filter(Boolean);

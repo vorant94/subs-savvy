@@ -19,7 +19,7 @@ test.describe("subscriptions", () => {
 
 		await pom.goto();
 
-		await pom.categorySelect.manageButton.click();
+		await pom.selectCategory.manageButton.click();
 
 		await expect(pom.noSubscriptionsPlaceholder).toBeVisible();
 	});
@@ -74,8 +74,8 @@ test.describe("subscriptions", () => {
 		await populateDb(page, [], [categoryMock]);
 
 		await pom.addSubscriptionButton.click();
-		await pom.subscriptionUpsert.fill(subscriptionToCreate);
-		await pom.subscriptionUpsert.insertButton.click();
+		await pom.upsertSubscription.fill(subscriptionToCreate);
+		await pom.upsertSubscription.insertButton.click();
 
 		await expect(pom.subscriptionListItem(subscriptionToCreate)).toBeVisible();
 	});
@@ -94,8 +94,8 @@ test.describe("subscriptions", () => {
 		await populateDb(page, [subscriptionToUpdate]);
 
 		await pom.subscriptionListItem(subscriptionToUpdate).click();
-		await pom.subscriptionUpsert.fill(updatedSubscription);
-		await pom.subscriptionUpsert.updateButton.click();
+		await pom.upsertSubscription.fill(updatedSubscription);
+		await pom.upsertSubscription.updateButton.click();
 
 		await expect(
 			pom.subscriptionListItem(subscriptionToUpdate),
@@ -113,7 +113,7 @@ test.describe("subscriptions", () => {
 		await populateDb(page, [subscriptionToDelete]);
 
 		await pom.subscriptionListItem(subscriptionToDelete).click();
-		await pom.subscriptionUpsert.deleteButton.click();
+		await pom.upsertSubscription.deleteButton.click();
 
 		await expect(
 			pom.subscriptionListItem(subscriptionToDelete),
