@@ -3,7 +3,10 @@ import { memo, useCallback, useMemo, useState } from "react";
 import { isSubscriptionExpired } from "../../../entities/subscription/lib/is-subscription-expired.ts";
 import { useSubscriptions } from "../../../entities/subscription/model/subscriptions.store.tsx";
 import { SubscriptionGridItem } from "../../../features/list-subscriptions/ui/subscription-grid-item.tsx";
-import { SubscriptionGrid } from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
+import {
+	SubscriptionGrid,
+	type SubscriptionGridChildrenProps,
+} from "../../../features/list-subscriptions/ui/subscription-grid.tsx";
 import { useUpsertSubscriptionActions } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { cn } from "../../../shared/ui/cn.ts";
@@ -47,6 +50,18 @@ export const SubscriptionList = memo(() => {
 		[open],
 	);
 
+	const subscriptionGridChildren = useCallback(
+		({ subscription }: SubscriptionGridChildrenProps) => (
+			<SubscriptionGridItem
+				key={subscription.id}
+				subscription={subscription}
+				onClick={openSubscriptionUpdate}
+				hideNextPaymentAt={true}
+			/>
+		),
+		[openSubscriptionUpdate],
+	);
+
 	return (
 		<div className={cn("flex flex-col gap-4")}>
 			<TextInput
@@ -74,14 +89,7 @@ export const SubscriptionList = memo(() => {
 						subscriptions={activeSubscriptions}
 						noSubscriptionsPlaceholder={"No Active Subscriptions"}
 					>
-						{({ subscription }) => (
-							<SubscriptionGridItem
-								key={subscription.id}
-								subscription={subscription}
-								onClick={openSubscriptionUpdate}
-								hideNextPaymentAt={true}
-							/>
-						)}
+						{subscriptionGridChildren}
 					</SubscriptionGrid>
 
 					<Divider />
@@ -90,14 +98,7 @@ export const SubscriptionList = memo(() => {
 						subscriptions={expiredSubscriptions}
 						noSubscriptionsPlaceholder={"No Expired Subscriptions"}
 					>
-						{({ subscription }) => (
-							<SubscriptionGridItem
-								key={subscription.id}
-								subscription={subscription}
-								onClick={openSubscriptionUpdate}
-								hideNextPaymentAt={true}
-							/>
-						)}
+						{subscriptionGridChildren}
 					</SubscriptionGrid>
 				</>
 			) : (
