@@ -25,7 +25,7 @@ export default defineConfig({
 		// biome-ignore lint/style/useNamingConvention: 3-rd party type
 		baseURL:
 			env.NODE_ENV === "production"
-				? "https://subs-savvy.vorant94.io"
+				? "https://subs-savvy.pages.dev"
 				: "http://localhost:5173",
 		trace: "retain-on-failure",
 		...devices["Desktop Chrome"],
