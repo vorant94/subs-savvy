@@ -98,7 +98,8 @@
 			"coverage",
 			".vercel",
 			".husky/_/*",
-			".wrangler"
+			".wrangler",
+			".env"
 		]
 	},
 	"overrides": [

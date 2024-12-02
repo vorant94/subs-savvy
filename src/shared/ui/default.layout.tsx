@@ -15,7 +15,7 @@ import {
 	useEffect,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import { type NavLink, useNavLinks } from "../lib/use-nav-links.tsx";
 import { cn } from "./cn.ts";
 import { Logo } from "./logo.tsx";

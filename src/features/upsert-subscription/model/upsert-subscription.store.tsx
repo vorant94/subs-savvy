@@ -1,6 +1,6 @@
 import { usePrevious } from "@mantine/hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { useShallow } from "zustand/react/shallow";

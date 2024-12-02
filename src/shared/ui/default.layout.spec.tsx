@@ -1,6 +1,5 @@
 import { type RenderHookResult, act, renderHook } from "@testing-library/react";
-import { MemoryRouter, useNavigate } from "react-router-dom";
-import type { NavigateFunction } from "react-router/dist/lib/hooks";
+import { MemoryRouter, type NavigateFunction, useNavigate } from "react-router";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
 	DefaultLayoutProvider,

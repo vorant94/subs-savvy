@@ -1,5 +1,5 @@
 import { type RenderHookResult, act, renderHook } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
 	DefaultLayoutProvider,

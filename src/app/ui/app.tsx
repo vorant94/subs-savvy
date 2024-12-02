@@ -4,7 +4,7 @@ import {
 	IconDatabase,
 } from "@tabler/icons-react";
 import { memo } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { CategoriesProvider } from "../../entities/category/model/categories.store.tsx";
 import { SubscriptionsProvider } from "../../entities/subscription/model/subscriptions.store.tsx";
 import { ImportRecoveryProvider } from "../../features/import-recovery/model/import-recovery.store.tsx";

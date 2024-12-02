@@ -1,7 +1,7 @@
 import { MantineProvider } from "@mantine/core";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router/dom";
 import { db } from "./shared/lib/db.ts";
 import "./style.css";
 import { Notifications } from "@mantine/notifications";
