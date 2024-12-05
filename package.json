@@ -80,5 +80,10 @@
 	"os": [
 		"darwin",
 		"linux"
-	]
+	],
+	"overrides": {
+		"vitest": {
+			"vite": "$vite"
+		}
+	}
 }
