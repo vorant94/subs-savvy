@@ -82,7 +82,7 @@
 		"linux"
 	],
 	"overrides": {
-		"vitest": {
+		"@vitest/mocker": {
 			"vite": "$vite"
 		}
 	}
