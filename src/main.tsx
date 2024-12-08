@@ -9,8 +9,8 @@ import i18next from "i18next";
 import I18NextFetchBackend from "i18next-fetch-backend";
 import { HMRPlugin } from "i18next-hmr/plugin";
 import { initReactI18next } from "react-i18next";
-import { router } from "./app/router/router.tsx";
-import { theme } from "./app/theme/theme.ts";
+import { router } from "./app/providers/router.tsx";
+import { theme } from "./app/providers/theme.ts";
 import { supportedLanguages } from "./features/i18n/model/use-language.ts";
 
 if (import.meta.env.DEV) {
