@@ -27,12 +27,19 @@ runs:
       run: npm ci --ignore-scripts --no-audit
       shell: bash
 
+    - name: Define RR Version
+      id: define-rr-version
+      run: |
+        RR_VERSION=$(npx tsx scripts/get-package-version.ts --package @react-router/dev)
+        echo "rr-version=RR_VERSION" >> $GITHUB_OUTPUT
+      shell: bash
+
     - name: Cache Typegen
       id: cache-typegen
       uses: actions/cache@v4
       with:
         path: .react-router
-        key: ${{ runner.os }}-${{steps.setup-node.outputs.node-version}}-typegen-${{hashFiles('src/routes.ts')}}
+        key: ${{ runner.os }}-${{steps.setup-node.outputs.node-version}}-typegen-${{steps.define-rr-version.outputs.rr-version}}-${{hashFiles('src/routes.ts')}}
 
     - name: Run Typegen
       if: steps.cache-typegen.outputs.cache-hit != 'true'
