@@ -122,11 +122,12 @@ jobs:
           key: ${{ runner.os }}-${{steps.setup.outputs.node-version}}-bundle-${{hashFiles('dist/**')}}
 
       - name: Upload App Bundle
-        if: steps.cache-bundle.outputs.cache-hit != 'true'
+# see comment below on row 173
+#        if: steps.cache-bundle.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: bundle
-          path: dist/
+          path: dist/client
           retention-days: 30
 
   e2e:
@@ -189,7 +190,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bundle
-          path: dist/
+          path: dist/client
 
       - name: Deploy Bundle
         run: npx wrangler pages deploy
