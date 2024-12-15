@@ -165,10 +165,15 @@ jobs:
       - ts
       - are-translations-sorted
       - e2e
+#    if: |
+#      github.event_name == 'push' &&
+#      github.ref == 'refs/heads/master' &&
+#      needs.build.outputs.bundle-cache-hit != 'true'
+# cannot avoid re-deploys, because if e2e failed in CI/CD and the fix is in e2e
+# files only, then it is considered cache hit of bundle despite there was no deployment
     if: |
       github.event_name == 'push' &&
-      github.ref == 'refs/heads/master' &&
-      needs.build.outputs.bundle-cache-hit != 'true'
+      github.ref == 'refs/heads/master'
     concurrency:
       group: deploy
       cancel-in-progress: false
