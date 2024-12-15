@@ -3,7 +3,6 @@ import process from "node:process";
 import { reactRouter } from "@react-router/dev/vite";
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
-import dotenv from "dotenv";
 import { i18nextHMRPlugin } from "i18next-hmr/vite";
 import postcssNested from "postcss-nested";
 import postcssPresetMantine from "postcss-preset-mantine";
@@ -13,20 +12,7 @@ import tailwindcssNesting from "tailwindcss/nesting";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
-import { z } from "zod";
-
-const { error, parsed } = dotenv.config();
-
-export const config = z
-	.object({
-		// biome-ignore lint/style/useNamingConvention: env variables have different convention
-		NODE_ENV: z
-			.enum(["development", "production", "test"])
-			.default("development"),
-		// biome-ignore lint/style/useNamingConvention: env variables have different convention
-		CI: z.coerce.boolean().default(false),
-	})
-	.parse(error ? process.env : parsed);
+import dotenvConfig from "./dotenv.config.ts";
 
 export default defineConfig({
 	// inlining PostCSS config instead of separate file, because of this
@@ -53,7 +39,7 @@ export default defineConfig({
 		},
 	},
 	plugins: [
-		config.NODE_ENV !== "test" && reactRouter(),
+		dotenvConfig.NODE_ENV !== "test" && reactRouter(),
 		svgr(),
 		i18nextHMRPlugin({
 			localesDir: path.resolve(process.cwd(), "public/locales"),
