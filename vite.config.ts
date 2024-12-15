@@ -10,7 +10,6 @@ import postcssSimpleVars from "postcss-simple-vars";
 import tailwindcss from "tailwindcss";
 import tailwindcssNesting from "tailwindcss/nesting";
 import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
 import svgr from "vite-plugin-svgr";
 import dotenvConfig from "./dotenv.config.ts";
 
@@ -41,15 +40,9 @@ export default defineConfig({
 	plugins: [
 		dotenvConfig.NODE_ENV !== "test" && reactRouter(),
 		svgr(),
-		i18nextHMRPlugin({
-			localesDir: path.resolve(process.cwd(), "public/locales"),
-		}),
-		VitePWA({
-			registerType: "autoUpdate",
-			manifest: {
-				// biome-ignore lint/style/useNamingConvention: 3-rd party type
-				theme_color: "white",
-			},
-		}),
+		dotenvConfig.NODE_ENV !== "production" &&
+			i18nextHMRPlugin({
+				localesDir: path.resolve(process.cwd(), "public/locales"),
+			}),
 	],
 });
