@@ -2,7 +2,7 @@ import { Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconFileCode } from "@tabler/icons-react";
 import { memo, useCallback, useEffect, useState } from "react";
-import { type FileWithPath, useDropzone } from "react-dropzone";
+import { type FileWithPath, useDropzone } from "react-dropzone-esm";
 import {
 	type RecoveryModel,
 	recoverySchema,

@@ -1,6 +1,6 @@
 import { Card, Tabs } from "@mantine/core";
 import { IconDownload, IconUpload } from "@tabler/icons-react";
-import { memo } from "react";
+import { type FC, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { ExportRecovery } from "../../../features/export-recovery/ui/export-recovery.tsx";
 import { ImportRecovery } from "../../../features/import-recovery/ui/import-recovery.tsx";
@@ -10,8 +10,9 @@ import {
 	DefaultLayoutHeader,
 } from "../../../shared/ui/default.layout.tsx";
 import { Icon } from "../../../shared/ui/icon.tsx";
+import type { Route } from "./+types/recovery.page.ts";
 
-export const RecoveryPage = memo(() => {
+export default memo(() => {
 	const { t } = useTranslation();
 
 	return (
@@ -47,7 +48,7 @@ export const RecoveryPage = memo(() => {
 			</Card>
 		</DefaultLayout>
 	);
-});
+}) satisfies FC<Route.ComponentProps>;
 
 const tab = {
 	import: "import",

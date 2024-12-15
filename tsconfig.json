@@ -8,6 +8,7 @@
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
 		"isolatedModules": true,
+		"rootDirs": [".", "./.react-router/types"],
 
 		/* Strictness */
 		"strict": true,
@@ -50,5 +51,11 @@
 	//		2. although e2e is ran in node env, it has pieces like page.evaluate
 	//			callback, that is run in browser, so dedicated node config still
 	//			needs to include browser env as well
-	"include": ["src", "e2e", "scripts", "*.config.ts"]
+	"include": [
+		"src",
+		"e2e",
+		"scripts",
+		"*.config.ts",
+		".react-router/types/**/*"
+	]
 }

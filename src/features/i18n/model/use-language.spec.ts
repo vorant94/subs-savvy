@@ -13,7 +13,7 @@ describe("useLanguage", () => {
 	});
 
 	it("should return default language", () => {
-		expect(hooks.current).toEqual("en-US");
+		expect(hooks.current).toEqual("en");
 	});
 
 	it.todo(

@@ -89,7 +89,10 @@
 			"include": [
 				"*.config.ts", // root level configs use default exports
 				"packages/*/*.config.ts", // root level config for workspaces
-				"src/main.ts" // some engines and frameworks use default exports
+				"src/main.ts", // some engines and frameworks use default exports
+				"src/routes.ts", // react router
+				"src/root.tsx", // react router
+				"*.page.tsx" // react router
 			],
 			"linter": {
 				"rules": {

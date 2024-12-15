@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { type FC, memo } from "react";
 import { useUpsertSubscriptionMode } from "../../../features/upsert-subscription/model/upsert-subscription.store.tsx";
 import { AddSubscriptionButton } from "../../../features/upsert-subscription/ui/add-subscription-button.tsx";
 import { UpsertSubscription } from "../../../features/upsert-subscription/ui/upsert-subscription.tsx";
@@ -12,8 +12,9 @@ import { ExpensesPerMonth } from "../../../widgets/expenses-per-month/ui/expense
 import { ManageCategories } from "../../../widgets/manage-categories/ui/manage-categories.tsx";
 import { SelectCategory } from "../../../widgets/select-category/ui/select-category.tsx";
 import { UpcomingPayments } from "../../../widgets/upcoming-payments/ui/upcoming-payments.tsx";
+import type { Route } from "./+types/dashboard.page.ts";
 
-export const DashboardPage = memo(() => {
+export default memo(() => {
 	const mode = useUpsertSubscriptionMode();
 
 	return (
@@ -38,4 +39,4 @@ export const DashboardPage = memo(() => {
 			</div>
 		</DefaultLayout>
 	);
-});
+}) satisfies FC<Route.ComponentProps>;

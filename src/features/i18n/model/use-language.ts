@@ -1,35 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function useLanguage(): SupportedLanguage {
 	// TODO connect to user settings language once it is available
 
-	const [languageFromBrowser, setLanguageFromBrowser] = useState<
-		string | null
-	>();
-	useEffect(() => setLanguageFromBrowser(navigator.language), []);
-	useEffect(() => {
-		const controller = new AbortController();
+	const { i18n } = useTranslation();
 
-		window.addEventListener(
-			"languagechange",
-			() => setLanguageFromBrowser(navigator.language),
-			{ signal: controller.signal },
-		);
-
-		return () => controller.abort();
-	});
-
-	return useMemo(
-		() =>
-			languageFromBrowser && supportedLanguages.includes(languageFromBrowser)
-				? (languageFromBrowser as SupportedLanguage)
-				: defaultLanguage,
-		[languageFromBrowser],
-	);
+	return i18n.language as SupportedLanguage;
 }
 
-export const supportedLanguages = ["en-US"] as const;
+export const supportedLanguages = ["en"] as const;
 
 export type SupportedLanguage = (typeof supportedLanguages)[number];
 
-const defaultLanguage: SupportedLanguage = "en-US" as const;
+export const defaultLanguage: SupportedLanguage = "en" as const;

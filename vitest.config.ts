@@ -23,8 +23,6 @@ export default mergeConfig(
 					"shared/test/**",
 					"shared/ui/cn.ts",
 					"main.tsx",
-					"app/router/router.tsx",
-					"app/ui/app.tsx",
 				],
 			},
 		},
