@@ -34,7 +34,7 @@ describe("with data", () => {
 	it("should throw if there are subscriptions with non-existing categories", async () => {
 		await db.categories.delete(categoryMock.id);
 
-		expect(async () => await findSubscriptions()).rejects.toThrowError(
+		await expect(() => findSubscriptions()).rejects.toThrowError(
 			/Category with id 5 not found!/,
 		);
 	});

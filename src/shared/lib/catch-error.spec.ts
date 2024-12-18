@@ -23,7 +23,9 @@ describe("catchError", () => {
 			throw error;
 		};
 
-		const consoleSpy = vi.spyOn(console, "error");
+		const consoleSpy = vi
+			.spyOn(console, "error")
+			.mockImplementationOnce(() => {});
 
 		expect(catchError(callback, [CustomError])).toEqual([error]);
 		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
@@ -35,7 +37,9 @@ describe("catchError", () => {
 			throw error;
 		};
 
-		const consoleSpy = vi.spyOn(console, "error");
+		const consoleSpy = vi
+			.spyOn(console, "error")
+			.mockImplementationOnce(() => {});
 
 		expect(catchError(callback)).toEqual([error]);
 		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
@@ -62,7 +66,9 @@ describe("catchErrorAsync", () => {
 		const error = new CustomError();
 		const promise = Promise.reject(error);
 
-		const consoleSpy = vi.spyOn(console, "error");
+		const consoleSpy = vi
+			.spyOn(console, "error")
+			.mockImplementationOnce(() => {});
 
 		expect(await catchErrorAsync(promise, [CustomError])).toEqual([error]);
 		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
@@ -72,7 +78,9 @@ describe("catchErrorAsync", () => {
 		const error = new CustomError();
 		const promise = Promise.reject(error);
 
-		const consoleSpy = vi.spyOn(console, "error");
+		const consoleSpy = vi
+			.spyOn(console, "error")
+			.mockImplementationOnce(() => {});
 
 		expect(await catchErrorAsync(promise)).toEqual([error]);
 		expect(consoleSpy, "should log error to console").toBeCalledWith(error);
