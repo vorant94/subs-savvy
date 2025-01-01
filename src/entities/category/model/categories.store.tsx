@@ -1,7 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { type PropsWithChildren, memo, useEffect } from "react";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { combine, devtools } from "zustand/middleware";
 import { useShallow } from "zustand/react/shallow";
 import type { CategoryModel } from "../../../shared/api/category.model.ts";
 import {
@@ -30,48 +30,49 @@ export const CategoriesProvider = memo(({ children }: PropsWithChildren) => {
 	return <>{children}</>;
 });
 
-const useStore = create<Store>()(
+const useStore = create(
 	devtools(
-		(set) => ({
-			categories: [],
-			setCategories: (categories) =>
-				set({ categories }, undefined, { type: "setCategories", categories }),
-			selectedCategory: null,
-			selectCategory: (categoryId) =>
-				set(
-					({ categories }) => {
-						if (categoryId) {
-							const categoryToSelect = categories.find(
-								(category) => `${category.id}` === categoryId,
-							);
+		combine(
+			{
+				categories: [] as ReadonlyArray<CategoryModel>,
+				selectedCategory: null as CategoryModel | null,
+			},
+			(set) => ({
+				setCategories(categories: ReadonlyArray<CategoryModel>): void {
+					set({ categories }, undefined, { type: "setCategories", categories });
+				},
+				selectCategory(categoryId: string | null): void {
+					set(
+						({ categories }) => {
+							if (categoryId) {
+								const categoryToSelect = categories.find(
+									(category) => `${category.id}` === categoryId,
+								);
 
-							if (!categoryToSelect) {
-								throw new CategoryNotFound(+categoryId);
+								if (!categoryToSelect) {
+									throw new CategoryNotFound(+categoryId);
+								}
+
+								return {
+									selectedCategory: categoryToSelect,
+								};
 							}
 
 							return {
-								selectedCategory: categoryToSelect,
+								selectedCategory: null,
 							};
-						}
-
-						return {
-							selectedCategory: null,
-						};
-					},
-					undefined,
-					{ type: "selectCategory", categoryId },
-				),
-		}),
+						},
+						undefined,
+						{ type: "selectCategory", categoryId },
+					);
+				},
+			}),
+		),
 		{ name: "Categories", enabled: import.meta.env.DEV },
 	),
 );
 
-interface Store {
-	categories: ReadonlyArray<CategoryModel>;
-	setCategories(categories: ReadonlyArray<CategoryModel>): void;
-	selectedCategory: CategoryModel | null;
-	selectCategory(categoryId: string | null): void;
-}
+type Store = ReturnType<(typeof useStore)["getState"]>;
 
 function selectCategories({ categories }: Store): ReadonlyArray<CategoryModel> {
 	return categories;

@@ -99,6 +99,8 @@ export const UpsertSubscriptionProvider = memo(
 	},
 );
 
+// not using combine middleware to then infer the type of the store
+// because state should be discriminated union
 const useStore = create<Store>()(
 	devtools(
 		(set, get) => ({

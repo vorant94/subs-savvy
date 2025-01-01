@@ -1,7 +1,7 @@
 import { type PropsWithChildren, memo, useEffect } from "react";
 import { useLocation } from "react-router";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { combine, devtools } from "zustand/middleware";
 import { useShallow } from "zustand/react/shallow";
 import type { CategoryModel } from "../../../shared/api/category.model.ts";
 import { CategoryNotFound } from "../../../shared/api/category.table.ts";
@@ -28,26 +28,24 @@ export const importRecoveryStateStages = [
 export type ImportRecoveryStateStage =
 	(typeof importRecoveryStateStages)[number];
 
-export interface ImportRecoveryState {
-	stage: ImportRecoveryStateStage;
-	categories: Array<CategoryModel>;
-	subscriptions: Array<SubscriptionModel>;
-}
+export type ImportRecoveryState = Pick<
+	Store,
+	"stage" | "categories" | "subscriptions"
+>;
 
 export function useImportRecoveryActions(): ImportRecoveryActions {
 	return useStore(useShallow(selectActions));
 }
 
-export interface ImportRecoveryActions {
-	goNextFromUploadRecovery(recovery: RecoveryModel): void;
-	goPrevFromSubmitCategories(): void;
-	goNextFromSubmitCategories(categories: Array<CategoryModel>): void;
-	goPrevFromSubmitSubscriptions(subscriptions: Array<SubscriptionModel>): void;
-	goNextFromSubmitSubscriptions(
-		subscriptions: Array<SubscriptionModel>,
-	): Promise<void>;
-	reset(): void;
-}
+export type ImportRecoveryActions = Pick<
+	Store,
+	| "goNextFromUploadRecovery"
+	| "goPrevFromSubmitCategories"
+	| "goNextFromSubmitCategories"
+	| "goPrevFromSubmitSubscriptions"
+	| "goNextFromSubmitSubscriptions"
+	| "reset"
+>;
 
 export const ImportRecoveryProvider = memo(
 	({ children }: PropsWithChildren) => {
@@ -80,147 +78,162 @@ export class IllegalTransitionError extends Error {
 /**
  * @internal should not be used outside of its own unit tests
  */
-export const useStore = create<Store>()(
+export const useStore = create(
 	devtools(
-		(set, get) => ({
-			stage: "upload-recovery",
-			categories: [],
-			subscriptions: [],
-			goNextFromUploadRecovery({ categories, subscriptions }) {
-				const state = get();
-				if (state.stage !== "upload-recovery") {
-					throw new IllegalTransitionError(state.stage, "submit-categories");
-				}
-
-				const categoryIds = new Set(categories.map(({ id }) => id));
-				for (const subscription of subscriptions) {
-					if (!subscription.category) {
-						continue;
+		combine(
+			{
+				stage: "upload-recovery" as ImportRecoveryStateStage,
+				categories: [] as Array<CategoryModel>,
+				subscriptions: [] as Array<SubscriptionModel>,
+			},
+			(set, get) => ({
+				goNextFromUploadRecovery({
+					categories,
+					subscriptions,
+				}: RecoveryModel): void {
+					const state = get();
+					if (state.stage !== "upload-recovery") {
+						throw new IllegalTransitionError(state.stage, "submit-categories");
 					}
 
-					if (categoryIds.has(subscription.category.id)) {
-						continue;
+					const categoryIds = new Set(categories.map(({ id }) => id));
+					for (const subscription of subscriptions) {
+						if (!subscription.category) {
+							continue;
+						}
+
+						if (categoryIds.has(subscription.category.id)) {
+							continue;
+						}
+
+						categories.push(subscription.category);
+						categoryIds.add(subscription.category.id);
 					}
 
-					categories.push(subscription.category);
-					categoryIds.add(subscription.category.id);
-				}
+					set(
+						() => ({ stage: "submit-categories", categories, subscriptions }),
+						undefined,
+						"goNextFromUploadRecovery",
+					);
+				},
+				goPrevFromSubmitCategories(): void {
+					const state = get();
+					if (state.stage !== "submit-categories") {
+						throw new IllegalTransitionError(state.stage, "upload-recovery");
+					}
 
-				set(
-					() => ({ stage: "submit-categories", categories, subscriptions }),
-					undefined,
-					"goNextFromUploadRecovery",
-				);
-			},
-			goPrevFromSubmitCategories() {
-				const state = get();
-				if (state.stage !== "submit-categories") {
-					throw new IllegalTransitionError(state.stage, "upload-recovery");
-				}
+					set(
+						() => ({
+							stage: "upload-recovery",
+							categories: [],
+							subscriptions: [],
+						}),
+						undefined,
+						"goPrevFromSubmitCategories",
+					);
+				},
+				goNextFromSubmitCategories(categories: Array<CategoryModel>): void {
+					const state = get();
+					if (state.stage !== "submit-categories") {
+						throw new IllegalTransitionError(
+							state.stage,
+							"submit-subscriptions",
+						);
+					}
 
-				set(
-					() => ({
-						stage: "upload-recovery",
-						categories: [],
-						subscriptions: [],
-					}),
-					undefined,
-					"goPrevFromSubmitCategories",
-				);
-			},
-			goNextFromSubmitCategories(categories) {
-				const state = get();
-				if (state.stage !== "submit-categories") {
-					throw new IllegalTransitionError(state.stage, "submit-subscriptions");
-				}
+					const categoryIdToCategory = new Map(
+						categories.map((category) => [category.id, category]),
+					);
+					const subscriptions = state.subscriptions.map((subscription) => {
+						if (!subscription.category) {
+							return subscription;
+						}
 
-				const categoryIdToCategory = new Map(
-					categories.map((category) => [category.id, category]),
-				);
-				const subscriptions = state.subscriptions.map((subscription) => {
-					if (!subscription.category) {
+						if (!categoryIdToCategory.has(subscription.category.id)) {
+							throw new CategoryNotFound(subscription.category.id);
+						}
+
+						subscription.category = categoryIdToCategory.get(
+							subscription.category.id,
+						);
 						return subscription;
-					}
-
-					if (!categoryIdToCategory.has(subscription.category.id)) {
-						throw new CategoryNotFound(subscription.category.id);
-					}
-
-					subscription.category = categoryIdToCategory.get(
-						subscription.category.id,
-					);
-					return subscription;
-				});
-
-				set(
-					() => ({
-						stage: "submit-subscriptions",
-						categories,
-						subscriptions,
-					}),
-					undefined,
-					"goNextFromSubmitCategories",
-				);
-			},
-			goPrevFromSubmitSubscriptions(subscriptions) {
-				const state = get();
-				if (state.stage !== "submit-subscriptions") {
-					throw new IllegalTransitionError(state.stage, "submit-categories");
-				}
-
-				set(
-					() => ({
-						stage: "submit-categories",
-						subscriptions,
-					}),
-					undefined,
-					"goPrevFromSubmitSubscriptions",
-				);
-			},
-			async goNextFromSubmitSubscriptions(
-				subscriptions: Array<SubscriptionModel>,
-			) {
-				const state = get();
-				if (state.stage !== "submit-subscriptions") {
-					throw new IllegalTransitionError(state.stage, "submit-subscriptions");
-				}
-
-				try {
-					await upsertCategoriesAndSubscriptions(
-						state.categories,
-						subscriptions,
-					);
+					});
 
 					set(
-						() => ({ stage: "completed" }),
+						() => ({
+							stage: "submit-subscriptions",
+							categories,
+							subscriptions,
+						}),
 						undefined,
-						"goNextFromSubmitSubscriptions",
+						"goNextFromSubmitCategories",
 					);
-				} catch (_e) {
+				},
+				goPrevFromSubmitSubscriptions(
+					subscriptions: Array<SubscriptionModel>,
+				): void {
+					const state = get();
+					if (state.stage !== "submit-subscriptions") {
+						throw new IllegalTransitionError(state.stage, "submit-categories");
+					}
+
 					set(
-						() => ({ stage: "failed" }),
+						() => ({
+							stage: "submit-categories",
+							subscriptions,
+						}),
 						undefined,
-						"goNextFromSubmitSubscriptions",
+						"goPrevFromSubmitSubscriptions",
 					);
-				}
-			},
-			reset() {
-				set(
-					() => ({
-						stage: "upload-recovery",
-						categories: [],
-						subscriptions: [],
-					}),
-					undefined,
-					"reset",
-				);
-			},
-		}),
+				},
+				async goNextFromSubmitSubscriptions(
+					subscriptions: Array<SubscriptionModel>,
+				): Promise<void> {
+					const state = get();
+					if (state.stage !== "submit-subscriptions") {
+						throw new IllegalTransitionError(
+							state.stage,
+							"submit-subscriptions",
+						);
+					}
+
+					try {
+						await upsertCategoriesAndSubscriptions(
+							state.categories,
+							subscriptions,
+						);
+
+						set(
+							() => ({ stage: "completed" }),
+							undefined,
+							"goNextFromSubmitSubscriptions",
+						);
+					} catch (_e) {
+						set(
+							() => ({ stage: "failed" }),
+							undefined,
+							"goNextFromSubmitSubscriptions",
+						);
+					}
+				},
+				reset(): void {
+					set(
+						() => ({
+							stage: "upload-recovery",
+							categories: [],
+							subscriptions: [],
+						}),
+						undefined,
+						"reset",
+					);
+				},
+			}),
+		),
 		{ name: "ImportRecovery", enabled: import.meta.env.DEV },
 	),
 );
 
-type Store = ImportRecoveryState & ImportRecoveryActions;
+type Store = ReturnType<(typeof useStore)["getState"]>;
 
 function selectState({
 	stage,

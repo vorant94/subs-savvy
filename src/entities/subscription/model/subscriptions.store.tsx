@@ -1,7 +1,7 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { type PropsWithChildren, memo, useEffect, useMemo } from "react";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { combine, devtools } from "zustand/middleware";
 import type { SubscriptionModel } from "../../../shared/api/subscription.model.ts";
 import { findSubscriptions } from "../../../shared/api/subscription.table.ts";
 import { useSelectedCategory } from "../../category/model/categories.store.tsx";
@@ -36,24 +36,28 @@ export const SubscriptionsProvider = memo(({ children }: PropsWithChildren) => {
 	return <>{children}</>;
 });
 
-const useStore = create<Store>()(
+const useStore = create(
 	devtools(
-		(set) => ({
-			subscriptions: [],
-			setSubscriptions: (subscriptions) =>
-				set({ subscriptions }, undefined, {
-					type: "setSubscriptions",
-					subscriptions,
-				}),
-		}),
+		combine(
+			{
+				subscriptions: [] as ReadonlyArray<SubscriptionModel>,
+			},
+			(set) => ({
+				setSubscriptions(
+					subscriptions: ReadonlyArray<SubscriptionModel>,
+				): void {
+					set({ subscriptions }, undefined, {
+						type: "setSubscriptions",
+						subscriptions,
+					});
+				},
+			}),
+		),
 		{ name: "Subscriptions", enabled: import.meta.env.DEV },
 	),
 );
 
-interface Store {
-	subscriptions: ReadonlyArray<SubscriptionModel>;
-	setSubscriptions(subscriptions: ReadonlyArray<SubscriptionModel>): void;
-}
+type Store = ReturnType<(typeof useStore)["getState"]>;
 
 function selectSubscriptions({
 	subscriptions,
