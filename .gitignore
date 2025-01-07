@@ -10,3 +10,7 @@ test-results
 .wrangler
 .vercel
 data
+.obsidian
+.astro
+.vscode
+.husky/_

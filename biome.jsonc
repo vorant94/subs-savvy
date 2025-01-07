@@ -81,7 +81,11 @@
 			".env",
 			".wrangler",
 			".vercel",
-			"data"
+			"data",
+			".obsidian",
+			".astro",
+			".vscode",
+			".husky/_"
 		]
 	},
 	"overrides": [
@@ -124,6 +128,20 @@
 			"include": ["**/package.json"], // because NPM CLI doesn't preserve format and put new lines where it shouldn't by formatter definitions, so the only option is to obey to NPM
 			"formatter": {
 				"lineWidth": 1
+			}
+		},
+		{
+			"include": ["**/*.astro"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedImports": "off",
+						"noUnusedVariables": "off"
+					},
+					"style": {
+						"useFilenamingConvention": "off"
+					}
+				}
 			}
 		}
 	]

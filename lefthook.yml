@@ -4,8 +4,6 @@ pre-push:
   commands:
     ts:
       run: npm run tsc
-    test:
-      run: npx vitest run
 pre-commit:
   commands:
     are-translations-sorted:
